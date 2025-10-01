@@ -8,10 +8,10 @@
 
 // Structures.
 
-#define	SPRRECT_MAX_ZONES	3	// Nb de zones max à relire.
+#define	SPRRECT_MAX_ZONES	3	// Nb de zones max ï¿½ relire.
 enum
 {
-	e_SprRect_NDef = 0,		// Zone non définie.
+	e_SprRect_NDef = 0,		// Zone non dï¿½finie.
 	e_SprRect_Point,		// C'est un point : (x1, y1).
 	e_SprRect_Rect,			// C'est un rectangle.
 };
@@ -42,8 +42,8 @@ struct SSprite
 		u8	*pGfx8;
 		u32	nGfx8Offset;	// Pour stockage temporaire de l'offset pendant la lecture des planches.
 	};
-//	u32	nRemapPalNo;		// N° de la palette de remappage.
-	u16	nRemapPalNo;		// N° de la palette de remappage.
+//	u32	nRemapPalNo;		// Nï¿½ de la palette de remappage.
+	u16	nRemapPalNo;		// Nï¿½ de la palette de remappage.
 
 	struct SSprRect	pRect[SPRRECT_MAX_ZONES];	// Rectangles, points...
 
@@ -78,7 +78,7 @@ u32 SprCheckColBox(u32 nSpr1, s32 nPosX1, s32 nPosY1, u32 nSpr2, s32 nPosX2, s32
 u32 SprGetRect(u32 nSprNo, u32 nZone, struct SSprRect *pRectDst);
 
 //#ifdef __LINUX__
-#if defined (__LINUX__) || defined (__APPLE__)
+#if defined (__LINUX__) || defined (__APPLE__) || defined (__EMSCRIPTEN__)
 int stricmp(char *pStr1, char *pStr2);
 #endif
 

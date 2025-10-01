@@ -1,11 +1,11 @@
 // Gestion des sprites.
-// Code: 17o2!! (Clément CORDE)
+// Code: 17o2!! (Clï¿½ment CORDE)
 
 #include "includes.h"
 #include "sprites_inc.h"
 
-#define	SPRGRAB_DISPLAY_INFO	0		// Mettre à 0 pour ne pas afficher les infos de capture / 1 pour affichage.
-#define	SPRPAL_SUB_ON	1				// Mettre à 1 pour sauver des palettes par x couleurs au lieu de 256.
+#define	SPRGRAB_DISPLAY_INFO	0		// Mettre ï¿½ 0 pour ne pas afficher les infos de capture / 1 pour affichage.
+#define	SPRPAL_SUB_ON	1				// Mettre ï¿½ 1 pour sauver des palettes par x couleurs au lieu de 256.
 //#define	DEBUG_INFO	1	// Commenter pour supprimer.
 
 #if	SPRPAL_SUB_ON == 1
@@ -15,8 +15,8 @@
 #endif
 
 //#ifdef __LINUX__
-#if defined (__LINUX__) || defined (__APPLE__)
-// stricmp n'existe pas en Linux : C'est strcasecmp à la place, dans strings.h.
+#if defined (__LINUX__) || defined (__APPLE__) || defined (__EMSCRIPTEN__)
+// stricmp n'existe pas en Linux : C'est strcasecmp ï¿½ la place, dans strings.h.
 int stricmp(char *pStr1, char *pStr2)
 {
 	return (strcasecmp(pStr1, pStr2));
@@ -26,25 +26,25 @@ int stricmp(char *pStr1, char *pStr2)
 
 // Pour capture des sprites.
 #define	SPRDEF_ALLOC_UNIT	256
-struct SSprite	*gpSprDef;	// Définitions des sprites.
+struct SSprite	*gpSprDef;	// Dï¿½finitions des sprites.
 u32	gnSprNbSprDefMax;	// Nb de sprites max capturables jusqu'au prochain realloc.
-u32	gnSprNbSprites;		// Nb de sprites capturés.
+u32	gnSprNbSprites;		// Nb de sprites capturï¿½s.
 
 #define	SPRBUF_ALLOC_UNIT	(1024 * 1024)
 u8	*gpSprBuf;		// Datas des sprites.
 u32	gnSprBufSz;		// Taille du buffer de data.
-u32	gnSprBufAllocSz;	// Taille du buffer de data allouée pour ne pas faire de réallocs sans arrêt.
+u32	gnSprBufAllocSz;	// Taille du buffer de data allouï¿½e pour ne pas faire de rï¿½allocs sans arrï¿½t.
 
-u16	*gpSprRemapPalettes;	// Palettes de remappage des sprites bout à bout. 1 u16 par couleur au format écran (càd pas RGB), x u16 par pal (voir SPRPAL_SUB_ON et SPR_PAL_SZ).
+u16	*gpSprRemapPalettes;	// Palettes de remappage des sprites bout ï¿½ bout. 1 u16 par couleur au format ï¿½cran (cï¿½d pas RGB), x u16 par pal (voir SPRPAL_SUB_ON et SPR_PAL_SZ).
 u32	gnSprRemapPalettesNb;	// Nb de palettes.
 u8	*gpSprPal3Bytes;		// Les couleurs sur 3 bytes.
 
-u16	*gpSprFlipBuf;		// Buffer pour créer les images flippées.
+u16	*gpSprFlipBuf;		// Buffer pour crï¿½er les images flippï¿½es.
 
-extern u8	*gpRotBuf;	// Buffer pour rendu de la rotation. Sz = ROT2D_BUF_Width * ROT2D_BUF_Height. Pas dans le .H car n'a pas a être connu d'autre chose que le moteur de sprites.
+extern u8	*gpRotBuf;	// Buffer pour rendu de la rotation. Sz = ROT2D_BUF_Width * ROT2D_BUF_Height. Pas dans le .H car n'a pas a ï¿½tre connu d'autre chose que le moteur de sprites.
 
 
-// Pour tri des sprites à chaque frame.
+// Pour tri des sprites ï¿½ chaque frame.
 struct SSprStockage
 {
 	u32 nSprNo;
@@ -57,12 +57,12 @@ struct SSprStockage
 		u16	nZoomY;
 		u8	nAngle;
 	};
-	void	*pFct;			// Ptr sur fct de pré-rendu puis de rendu (màj par fct de pré-rendu) de zoom ou de rotozoom. NULL pour un sprite normal.
+	void	*pFct;			// Ptr sur fct de prï¿½-rendu puis de rendu (mï¿½j par fct de prï¿½-rendu) de zoom ou de rotozoom. NULL pour un sprite normal.
 };
 #define	SPR_STO_MAX	512
 struct SSprStockage	gpSprSto[SPR_STO_MAX];
 struct SSprStockage	*gpSprSort[SPR_STO_MAX];	// Pour tri.
-u32	gnSprSto;			// Nb de sprites stockés pour affichage.
+u32	gnSprSto;			// Nb de sprites stockï¿½s pour affichage.
 
 
 // Initialisation du moteur (1 fois !).
@@ -70,21 +70,21 @@ void SprInitEngine(void)
 {
 //printf("SSprStockage sz = %d\n", sizeof(struct SSprStockage));
 
-	gpSprDef = NULL;		// Définitions des sprites.
+	gpSprDef = NULL;		// Dï¿½finitions des sprites.
 	gnSprNbSprDefMax = 0;	// Nb de sprites max capturables jusqu'au prochain realloc.
-	gnSprNbSprites = 0;		// Nb de sprites capturés.
+	gnSprNbSprites = 0;		// Nb de sprites capturï¿½s.
 
 	gpSprBuf = NULL;	// Datas des sprites.
 	gnSprBufSz = 0;		// Taille du buffer de data.
-	gnSprBufAllocSz = 0;		// Taille du buffer de data allouée pour ne pas faire de réallocs sans arrêt.
+	gnSprBufAllocSz = 0;		// Taille du buffer de data allouï¿½e pour ne pas faire de rï¿½allocs sans arrï¿½t.
 
-	gnSprSto = 0;		// Nb de sprites stockés pour affichage.
+	gnSprSto = 0;		// Nb de sprites stockï¿½s pour affichage.
 
 	gpSprRemapPalettes = NULL;	// Palettes de remappage.
 	gnSprRemapPalettesNb = 0;	// Nb de palettes.
 	gpSprPal3Bytes = NULL;		// Les couleurs sur 3 bytes.
 
-	gpSprFlipBuf = NULL;	// Buffer pour créer les images flippées.
+	gpSprFlipBuf = NULL;	// Buffer pour crï¿½er les images flippï¿½es.
 	gpRotBuf = NULL;		// Buffer pour rendu de la rotation.
 
 	#if CACHE_ON == 1
@@ -156,7 +156,7 @@ printf("File '%s', Checksum: %x\n", pFilename, nChecksum);
 // Sauvegarde des sprites en fichiers binaires.
 void SprBinariesSave(void)
 {
-	// Définitions.
+	// Dï¿½finitions.
 #if defined (CPU64)
 	SprBinSave_sub("gfx/sprdef64.bin", (u8 *)gpSprDef, sizeof(struct SSprite) * gnSprNbSprites);
 #else
@@ -176,7 +176,7 @@ u8 * SprBinLoad_sub(char *pFilename, u32 *pnSz)
 	u8	*pBuf;
 	u32	nChkRead, nChkCalc;
 
-	// Définitions.
+	// Dï¿½finitions.
 	fPt = sec_fopen(pFilename, "rb");
 	fseek(fPt, 0, SEEK_END);
 	nSz1 = ftell(fPt);
@@ -226,7 +226,7 @@ void SprBinariesLoad(void)
 {
 	u32	nSz;
 
-	// Définitions.
+	// Dï¿½finitions.
 #if defined (CPU64)
 	gpSprDef = (struct SSprite *)SprBinLoad_sub("gfx/sprdef64.bin", &nSz);
 #else
@@ -258,7 +258,7 @@ void SprEndCapture(void)
 	nHtMax = 0;
 	for (i = 0; i < gnSprNbSprites; i++)
 	{
-		// Replace le pointeur (offset sauvé dans l'union à la lecture).
+		// Replace le pointeur (offset sauvï¿½ dans l'union ï¿½ la lecture).
 		gpSprDef[i].pGfx8 = gpSprBuf + gpSprDef[i].nGfx8Offset;
 		// Recherche lg et ht max.
 		if (gpSprDef[i].nLg > nLgMax) nLgMax = gpSprDef[i].nLg;
@@ -267,11 +267,11 @@ void SprEndCapture(void)
 #ifdef DEBUG_INFO
 printf("Spr biggest sz: lg=%d ht=%d\n", (int)nLgMax, (int)nHtMax);
 #endif
-	// Pour la gestion des Roto/Zooms, on prévoit au minimum la taille du buffer de rendu de rotations.
+	// Pour la gestion des Roto/Zooms, on prï¿½voit au minimum la taille du buffer de rendu de rotations.
 	if (nLgMax < ROT2D_BUF_Width) nLgMax = ROT2D_BUF_Width;
 	if (nHtMax < ROT2D_BUF_Height) nHtMax = ROT2D_BUF_Height;
 
-	// Allocation d'un buffer pour "depacker" les sprites de 8 à 16 bits, + génération du masque.
+	// Allocation d'un buffer pour "depacker" les sprites de 8 ï¿½ 16 bits, + gï¿½nï¿½ration du masque.
 	if (nLgMax == 0 || nHtMax == 0)
 	{
 		fprintf(stderr, "SprEndCapture(): Zero max with/height found. Aborted.\n");
@@ -288,7 +288,7 @@ printf("Spr biggest sz: lg=%d ht=%d\n", (int)nLgMax, (int)nHtMax);
 		exit(1);
 	}
 
-	// Alloc mémoire palettes de remappage.
+	// Alloc mï¿½moire palettes de remappage.
 	if ((gpSprRemapPalettes = (u16 *)malloc(gnSprRemapPalettesNb * SPR_PAL_SZ * sizeof(u16))) == NULL)
 	{
 		printf("SprEndCapture(): malloc failed (gpSprRemapPalettes).\n");
@@ -307,18 +307,18 @@ printf("gnSprRemapPalettesNb=%d\n", gnSprRemapPalettesNb);
 // Nettoyage (1 fois !).
 void SprRelease(void)
 {
-	free(gpSprBuf);		// On libère les datas.
-	free(gpSprDef);		// On libère les définitions.
-	free(gpSprRemapPalettes);	// On libère les palettes de remappage.
+	free(gpSprBuf);		// On libï¿½re les datas.
+	free(gpSprDef);		// On libï¿½re les dï¿½finitions.
+	free(gpSprRemapPalettes);	// On libï¿½re les palettes de remappage.
 	free(gpSprPal3Bytes);		// Les couleurs sur 3 bytes.
-	free(gpSprFlipBuf);	// Buffer pour créer les images flippées.
-	free(gpRotBuf);		// Buffer pour génération des images roto/zoomées.
+	free(gpSprFlipBuf);	// Buffer pour crï¿½er les images flippï¿½es.
+	free(gpRotBuf);		// Buffer pour gï¿½nï¿½ration des images roto/zoomï¿½es.
 
 }
 
 
 #if SPR_SAVE == 1
-// Realloc des definitions de sprites quand toutes les struct dispo ont été remplies.
+// Realloc des definitions de sprites quand toutes les struct dispo ont ï¿½tï¿½ remplies.
 void SprDefRealloc(void)
 {
 	gnSprNbSprDefMax += SPRDEF_ALLOC_UNIT;
@@ -359,11 +359,11 @@ u16 * SprRemapPalGet(u32 nPalNo)
 }
 
 /*
-// Alloue de la mémoire pour une nouvelle palette de remappage.
-// In: nNbPalToAdd = Nombre de palettes de x couleurs supplémentaires à allouer.
+// Alloue de la mï¿½moire pour une nouvelle palette de remappage.
+// In: nNbPalToAdd = Nombre de palettes de x couleurs supplï¿½mentaires ï¿½ allouer.
 u16 * SprRemapPalAlloc(u32 nNbPalToAdd)
 {
-	// Alloc mémoire palettes de remappage.
+	// Alloc mï¿½moire palettes de remappage.
 	if ((gpSprRemapPalettes = (u16 *)realloc(gpSprRemapPalettes, (gnSprRemapPalettesNb + nNbPalToAdd) * SPR_PAL_SZ * sizeof(u16))) == NULL)
 	{
 		printf("SprRemapPalAlloc(): realloc failed.\n");
@@ -376,11 +376,11 @@ u16 * SprRemapPalAlloc(u32 nNbPalToAdd)
 }
 */
 
-// Alloue de la mémoire pour les palettes des sprites.
-// In: nNbPalToAdd = Nombre de palettes de x couleurs supplémentaires à allouer.
+// Alloue de la mï¿½moire pour les palettes des sprites.
+// In: nNbPalToAdd = Nombre de palettes de x couleurs supplï¿½mentaires ï¿½ allouer.
 u8 * SprPal3BytesAlloc(u32 nNbPalToAdd)
 {
-	// Alloc mémoire pour palettes RGB.
+	// Alloc mï¿½moire pour palettes RGB.
 	if ((gpSprPal3Bytes = (u8 *)realloc(gpSprPal3Bytes, (gnSprRemapPalettesNb + nNbPalToAdd) * SPR_PAL_SZ * 3)) == NULL)
 	{
 		printf("SprPal3BytesAlloc(): realloc failed.\n");
@@ -392,7 +392,7 @@ u8 * SprPal3BytesAlloc(u32 nNbPalToAdd)
 }
 
 // Convertit la palette RGB 3 bytes en couleurs SDL 16 bits.
-// Conversion séparée pour pouvoir au cas ou la refaire quand changement de mode vidéo.
+// Conversion sï¿½parï¿½e pour pouvoir au cas ou la refaire quand changement de mode vidï¿½o.
 void SprPaletteConversion(void)
 {
 	u32	i;
@@ -406,19 +406,19 @@ void SprPaletteConversion(void)
 }
 
 #if SPR_SAVE == 1
-// Récupération des sprites d'une planche.
+// Rï¿½cupï¿½ration des sprites d'une planche.
 void SprLoadBMP(char *pFilename)
 {
 	SDL_Surface	*pPlanche;
 	u32	nNbSprPlanche = 0;
 //	u16	*pRemapRGB;		// Table pour remapper les index en couleurs 16 bits.
 	u32	ix, iy;
-	u8	nBkgClr;		// N° de la couleur de fond de la planche.
+	u8	nBkgClr;		// Nï¿½ de la couleur de fond de la planche.
 
 	#if	SPRPAL_SUB_ON == 1
-	u8	nClrMax = 0;	// Couleur max de la planche pour nb de palettes de x couleurs à sauver.
+	u8	nClrMax = 0;	// Couleur max de la planche pour nb de palettes de x couleurs ï¿½ sauver.
 	#else
-	u8	nClrMax = 255;	// Couleur max de la planche pour nb de palettes de x couleurs à sauver.
+	u8	nClrMax = 255;	// Couleur max de la planche pour nb de palettes de x couleurs ï¿½ sauver.
 	#endif
 
 	// Lecture du BMP.
@@ -430,7 +430,7 @@ void SprLoadBMP(char *pFilename)
 	//printf("Load ok!\n");
 
 /*
-	// Création de la table de remappage.
+	// Crï¿½ation de la table de remappage.
 	pRemapRGB = SprRemapPalAlloc(1);
 	for (ix = 0; ix < 256; ix++)
 	{
@@ -439,12 +439,12 @@ void SprLoadBMP(char *pFilename)
 			pPlanche->format->palette->colors[ix].g,
 			pPlanche->format->palette->colors[ix].b);
 	}
-	pRemapRGB[0] = 0;	// Couleur 0 à 0, car utilisée dans l'affichage avec un OR.
+	pRemapRGB[0] = 0;	// Couleur 0 ï¿½ 0, car utilisï¿½e dans l'affichage avec un OR.
 */
 
 	// On parcourt la planche pour en extraire les sprites.
 	u8	*pPix = (u8 *)pPlanche->pixels;
-	nBkgClr = *pPix;		// N° de la couleur de fond de la planche.
+	nBkgClr = *pPix;		// Nï¿½ de la couleur de fond de la planche.
 //printf("bkg clr idx=%d\n", nBkgClr);
 	#if SPRGRAB_DISPLAY_INFO == 1
 	printf("w = %d / h = %d\n", pPlanche->w, pPlanche->h);
@@ -468,7 +468,7 @@ void SprLoadBMP(char *pFilename)
 				u32	PtRefX, PtRefY;		// Pts de ref.
 				u32	ii, ij, ik;
 
-				// Recherche des largeurs extérieures (cadre de 1 pixel). + Pts de ref (encoches en haut et sur le côté gauche).
+				// Recherche des largeurs extï¿½rieures (cadre de 1 pixel). + Pts de ref (encoches en haut et sur le cï¿½tï¿½ gauche).
 				PtRefX = 0;
 				LgExt = 1;
 				ii = ix + 1;
@@ -503,12 +503,12 @@ void SprLoadBMP(char *pFilename)
 				u32	nSprBufAddSz;
 
 				nSprBufAddSz = gpSprDef[gnSprNbSprites].nLg * gpSprDef[gnSprNbSprites].nHt;	// Taille spr en 8 bits.
-				while (gnSprBufSz + nSprBufAddSz >= gnSprBufAllocSz) SprBufRealloc();	// Realloc quand nécessaire.
+				while (gnSprBufSz + nSprBufAddSz >= gnSprBufAllocSz) SprBufRealloc();	// Realloc quand nï¿½cessaire.
 
-				// On garde les index dans les ptrs (union) pour réaffectation finale APRES lecture de tous les sprites (avec le realloc, le bloc peut bouger en mémoire).
+				// On garde les index dans les ptrs (union) pour rï¿½affectation finale APRES lecture de tous les sprites (avec le realloc, le bloc peut bouger en mï¿½moire).
 				gpSprDef[gnSprNbSprites].nGfx8Offset = gnSprBufSz;
-//				gpSprDef[gnSprNbSprites].nRemapPalNo = gnSprRemapPalettesNb - 1;	// N° de la palette de remappage.
-				gpSprDef[gnSprNbSprites].nRemapPalNo = gnSprRemapPalettesNb;	// N° de la palette de remappage.
+//				gpSprDef[gnSprNbSprites].nRemapPalNo = gnSprRemapPalettesNb - 1;	// Nï¿½ de la palette de remappage.
+				gpSprDef[gnSprNbSprites].nRemapPalNo = gnSprRemapPalettesNb;	// Nï¿½ de la palette de remappage.
 
 				pSpr8Gfx = gpSprBuf + gpSprDef[gnSprNbSprites].nGfx8Offset;
 				// Sz.
@@ -520,7 +520,7 @@ void SprLoadBMP(char *pFilename)
 					gpSprDef[gnSprNbSprites].pRect[ik].nType = e_SprRect_NDef;
 				}
 
-				// Récupération du sprite.
+				// Rï¿½cupï¿½ration du sprite.
 				ik = 0;
 				for (ij = 0; ij < HtExt - 2; ij++)
 				{
@@ -543,7 +543,7 @@ void SprLoadBMP(char *pFilename)
 					}
 				}
 
-				// Terminé.
+				// Terminï¿½.
 				nNbSprPlanche++;
 				gnSprNbSprites++;
 
@@ -552,7 +552,7 @@ void SprLoadBMP(char *pFilename)
 		}
 	}
 
-	// Création de la table de remappage.
+	// Crï¿½ation de la table de remappage.
 	u32	nNbPal;
 	#if	SPRPAL_SUB_ON == 1
 	nNbPal = (nClrMax / SPR_PAL_SZ) + 1;
@@ -569,7 +569,7 @@ void SprLoadBMP(char *pFilename)
 			pPlanche->format->palette->colors[ix].g,
 			pPlanche->format->palette->colors[ix].b);
 	}
-	pRemapRGB[0] = 0;	// Couleur 0 à 0, car utilisée dans l'affichage avec un OR.
+	pRemapRGB[0] = 0;	// Couleur 0 ï¿½ 0, car utilisï¿½e dans l'affichage avec un OR.
 */
 	// Stockage simple.
 	u8	*pRGB3;
@@ -580,12 +580,12 @@ void SprLoadBMP(char *pFilename)
 		pRGB3[(ix * 3) + 1] = pPlanche->format->palette->colors[ix].g;
 		pRGB3[(ix * 3) + 2] = pPlanche->format->palette->colors[ix].b;
 	}
-	pRGB3[0] = pRGB3[1] = pRGB3[2] = 0;	// Couleur 0 à 0, car utilisée dans l'affichage avec un OR.
+	pRGB3[0] = pRGB3[1] = pRGB3[2] = 0;	// Couleur 0 ï¿½ 0, car utilisï¿½e dans l'affichage avec un OR.
 
 	printf(">\nTotal sprites in '%s': %d.\n", pFilename, (int)nNbSprPlanche);
 	printf("Total sprites: %d.\n>\n", (int)gnSprNbSprites);
 
-	// On libère la surface.
+	// On libï¿½re la surface.
 	SDL_FreeSurface(pPlanche);
 
 }
@@ -597,12 +597,12 @@ void SprLoadPSD(char *pFilename)
 	u32	nNbSprPlanche = 0;
 //	u16	*pRemapRGB;		// Table pour remapper les index en couleurs 16 bits.
 	s32	ix, iy;
-	u8	nBkgClr;		// N° de la couleur de fond de la planche.
+	u8	nBkgClr;		// Nï¿½ de la couleur de fond de la planche.
 
 	#if	SPRPAL_SUB_ON == 1
-	u8	nClrMax = 0;	// Couleur max de la planche pour nb de palettes de x couleurs à sauver.
+	u8	nClrMax = 0;	// Couleur max de la planche pour nb de palettes de x couleurs ï¿½ sauver.
 	#else
-	u8	nClrMax = 255;	// Couleur max de la planche pour nb de palettes de x couleurs à sauver.
+	u8	nClrMax = 255;	// Couleur max de la planche pour nb de palettes de x couleurs ï¿½ sauver.
 	#endif
 
 	// Lecture de la planche.
@@ -616,7 +616,7 @@ void SprLoadPSD(char *pFilename)
 	//printf("Load ok!\n");
 
 /*
-	// Création de la table de remappage.
+	// Crï¿½ation de la table de remappage.
 	pRemapRGB = SprRemapPalAlloc(1);
 	for (ix = 0; ix < 256; ix++)
 	{
@@ -625,12 +625,12 @@ void SprLoadPSD(char *pFilename)
 			pPlanche->pColors[ix].g,
 			pPlanche->pColors[ix].b);
 	}
-	pRemapRGB[0] = 0;	// Couleur 0 à 0, car utilisée dans l'affichage avec un OR.
+	pRemapRGB[0] = 0;	// Couleur 0 ï¿½ 0, car utilisï¿½e dans l'affichage avec un OR.
 */
 
 	// On parcourt la planche pour en extraire les sprites.
 	u8	*pPix = pPlanche->pPlanes;
-	nBkgClr = *pPix;		// N° de la couleur de fond de la planche.
+	nBkgClr = *pPix;		// Nï¿½ de la couleur de fond de la planche.
 //printf("bkg clr idx=%d\n", nBkgClr);
 	#if SPRGRAB_DISPLAY_INFO == 1
 	printf("w = %d / h = %d\n", (int)pPlanche->nWidth, (int)pPlanche->nHeight);
@@ -653,7 +653,7 @@ void SprLoadPSD(char *pFilename)
 				u32	nLgExt, nHtExt;
 				s32	ii, ij, ik, ip;
 
-				// Recherche des largeurs extérieures.
+				// Recherche des largeurs extï¿½rieures.
 				nLgExt = 0;
 				ii = ix;
 				while(*(pPix + (iy * pPlanche->nWidth) + ii) != nBkgClr)
@@ -681,7 +681,7 @@ void SprLoadPSD(char *pFilename)
 				}
 
 
-				// Recadrage du sprite au plus près (bounding box).
+				// Recadrage du sprite au plus prï¿½s (bounding box).
 				u32	nLgInt, nHtInt;
 				s32	nBBoxX1, nBBoxY1, nBBoxX2, nBBoxY2;
 				// Haut.
@@ -723,7 +723,7 @@ void SprLoadPSD(char *pFilename)
 					printf("Pic '%s' sprite #%d: Empty sprite?\n", pFilename, (int)nNbSprPlanche);
 				}
 				if (nBBoxY2 <= nBBoxY1)	// == => sprite de 1 pixel.
-//				if (nBBoxY2 < nBBoxY1)	// le < au lieu du <= fonctionne à la capture, mais ça pose un pb à l'affichage.
+//				if (nBBoxY2 < nBBoxY1)	// le < au lieu du <= fonctionne ï¿½ la capture, mais ï¿½a pose un pb ï¿½ l'affichage.
 				{
 					nBBoxY1 = iy;
 					nBBoxY2 = iy + nHtExt - 1;
@@ -735,11 +735,11 @@ void SprLoadPSD(char *pFilename)
 //printf("lgint = %d / htint = %d\n", nLgInt, nHtInt);
 
 
-				//... Insérer ici le parcours de l'image si jamais il faut faire le stockage sur 4 bits.
+				//... Insï¿½rer ici le parcours de l'image si jamais il faut faire le stockage sur 4 bits.
 
 
 				// !!! On ne capture que la bounding box !!!
-				// !!! Par contre, on recherche dans les couches alpha sur la totalité du rectangle ext !!!
+				// !!! Par contre, on recherche dans les couches alpha sur la totalitï¿½ du rectangle ext !!!
 
 
 				// Stockage des valeurs.
@@ -753,12 +753,12 @@ void SprLoadPSD(char *pFilename)
 				u32	nSprBufAddSz;// = gpSprDef[gnSprNbSprites].nLg * gpSprDef[gnSprNbSprites].nHt * 2 * sizeof(u16);
 
 				nSprBufAddSz = gpSprDef[gnSprNbSprites].nLg * gpSprDef[gnSprNbSprites].nHt;	// Taille spr en 8 bits.
-				while (gnSprBufSz + nSprBufAddSz >= gnSprBufAllocSz) SprBufRealloc();	// Realloc quand nécessaire.
+				while (gnSprBufSz + nSprBufAddSz >= gnSprBufAllocSz) SprBufRealloc();	// Realloc quand nï¿½cessaire.
 
-				// On garde les index dans les ptrs (union) pour réaffectation finale APRES lecture de tous les sprites (avec le realloc, le bloc peut bouger en mémoire).
+				// On garde les index dans les ptrs (union) pour rï¿½affectation finale APRES lecture de tous les sprites (avec le realloc, le bloc peut bouger en mï¿½moire).
 				gpSprDef[gnSprNbSprites].nGfx8Offset = gnSprBufSz;
-//				gpSprDef[gnSprNbSprites].nRemapPalNo = gnSprRemapPalettesNb - 1;	// N° de la palette de remappage.
-				gpSprDef[gnSprNbSprites].nRemapPalNo = gnSprRemapPalettesNb;	// N° de la palette de remappage.
+//				gpSprDef[gnSprNbSprites].nRemapPalNo = gnSprRemapPalettesNb - 1;	// Nï¿½ de la palette de remappage.
+				gpSprDef[gnSprNbSprites].nRemapPalNo = gnSprRemapPalettesNb;	// Nï¿½ de la palette de remappage.
 
 				pSpr8Gfx = gpSprBuf + gpSprDef[gnSprNbSprites].nGfx8Offset;
 				// Sz.
@@ -770,7 +770,7 @@ void SprLoadPSD(char *pFilename)
 					gpSprDef[gnSprNbSprites].pRect[ip].nType = e_SprRect_NDef;
 				}
 
-				// Récupération du sprite.
+				// Rï¿½cupï¿½ration du sprite.
 				ik = 0;
 				for (ij = 0; ij < nHtInt; ij++)
 				{
@@ -828,7 +828,7 @@ void SprLoadPSD(char *pFilename)
 //printf("\n");
 					} // for ij
 				} // for couche
-				// On prend le point de la première couche alpha comme point de référence.
+				// On prend le point de la premiï¿½re couche alpha comme point de rï¿½fï¿½rence.
 				if (gpSprDef[gnSprNbSprites].pRect[0].nType == e_SprRect_Point)
 				{
 					gpSprDef[gnSprNbSprites].nPtRefX = gpSprDef[gnSprNbSprites].pRect[0].nX1;
@@ -841,7 +841,7 @@ void SprLoadPSD(char *pFilename)
 				{
 					printf("Picture '%s' sprite #%d: No ref point found!\n", pFilename, (int)nNbSprPlanche);
 				}
-				// On fait une passe pour décaler tout par rapport au point de ref (Sauf la première couche alpha, évidement).
+				// On fait une passe pour dï¿½caler tout par rapport au point de ref (Sauf la premiï¿½re couche alpha, ï¿½videment).
 				for (ip = 1; ip < SPRRECT_MAX_ZONES; ip++)
 				{
 					gpSprDef[gnSprNbSprites].pRect[ip].nX1 -= gpSprDef[gnSprNbSprites].nPtRefX;
@@ -868,7 +868,7 @@ void SprLoadPSD(char *pFilename)
 					}
 				}
 
-				// Terminé.
+				// Terminï¿½.
 				nNbSprPlanche++;
 				gnSprNbSprites++;
 
@@ -878,7 +878,7 @@ void SprLoadPSD(char *pFilename)
 	}
 
 
-	// Création de la table de remappage.
+	// Crï¿½ation de la table de remappage.
 	u32	nNbPal;
 	#if	SPRPAL_SUB_ON == 1
 	nNbPal = (nClrMax / SPR_PAL_SZ) + 1;
@@ -895,7 +895,7 @@ void SprLoadPSD(char *pFilename)
 			pPlanche->pColors[ix].g,
 			pPlanche->pColors[ix].b);
 	}
-	pRemapRGB[0] = 0;	// Couleur 0 à 0, car utilisée dans l'affichage avec un OR.
+	pRemapRGB[0] = 0;	// Couleur 0 ï¿½ 0, car utilisï¿½e dans l'affichage avec un OR.
 */
 	// Stockage simple.
 	u8	*pRGB3;
@@ -906,7 +906,7 @@ void SprLoadPSD(char *pFilename)
 		pRGB3[(ix * 3) + 1] = pPlanche->pColors[ix].g;
 		pRGB3[(ix * 3) + 2] = pPlanche->pColors[ix].b;
 	}
-	pRGB3[0] = pRGB3[1] = pRGB3[2] = 0;	// Couleur 0 à 0, car utilisée dans l'affichage avec un OR.
+	pRGB3[0] = pRGB3[1] = pRGB3[2] = 0;	// Couleur 0 ï¿½ 0, car utilisï¿½e dans l'affichage avec un OR.
 
 	printf(">\nTotal sprites in '%s': %d.\n", pFilename, (int)nNbSprPlanche);
 	printf("Total sprites: %d.\n>\n", (int)gnSprNbSprites);
@@ -949,8 +949,8 @@ struct SSprite *SprGetDesc(u32 nSprNo)
 
 
 
-// Récupère des pointeurs sur l'image du sprite et son masque.
-// L'image est dépackée (8 bits > 16 bits) et le masque généré.
+// Rï¿½cupï¿½re des pointeurs sur l'image du sprite et son masque.
+// L'image est dï¿½packï¿½e (8 bits > 16 bits) et le masque gï¿½nï¿½rï¿½.
 void SprGetGfxMskPtr(u32 nSprFlags, u16 **ppGfx, u16 **ppMsk, struct SSprite *pSprDesc, struct SSprStockage *pSprSto)
 {
 	s32	i, j, nSz;
@@ -984,7 +984,7 @@ void SprGetGfxMskPtr(u32 nSprFlags, u16 **ppGfx, u16 **ppMsk, struct SSprite *pS
 	}
 	*ppGfx = pDstG = gpSprFlipBuf;
 	*ppMsk = pDstM = gpSprFlipBuf + nSz;
-	//*** Sans cache, on doit pouvoir se passer des paramètres ppGfx et ppMsk.
+	//*** Sans cache, on doit pouvoir se passer des paramï¿½tres ppGfx et ppMsk.
 	#endif
 
 
@@ -1042,7 +1042,7 @@ void SprGetGfxMskPtr(u32 nSprFlags, u16 **ppGfx, u16 **ppMsk, struct SSprite *pS
 }
 
 // Affichage d'un sprite.
-// Avec écran locké.
+// Avec ï¿½cran lockï¿½.
 void SprDisplayLock(struct SSprStockage *pSprSto)
 {
 	s32	nXMin, nXMax, nYMin, nYMax;
@@ -1062,7 +1062,7 @@ void SprDisplayLock(struct SSprStockage *pSprSto)
 	}
 	else
 	{
-		// Sprite roto/zoomé, appel de la fonction de pré-rendu qui va bien.
+		// Sprite roto/zoomï¿½, appel de la fonction de prï¿½-rendu qui va bien.
 		pSprDesc = ((pRZFctPreRender)pSprSto->pFct)(nSprFlags, pSprSto->nZoomX, pSprSto->nZoomY, &pSprSto->pFct);
 		if (pSprDesc == NULL) return;	// Il y a eu un pb, abort.
 	}
@@ -1070,13 +1070,13 @@ void SprDisplayLock(struct SSprStockage *pSprSto)
 	// Point de ref.
 	nPtRefX = pSprDesc->nPtRefX;
 	nPtRefY = pSprDesc->nPtRefY;
-	// Décalage pt de ref selon les flags (flip x : refX = nLg - refX).
+	// Dï¿½calage pt de ref selon les flags (flip x : refX = nLg - refX).
 //	if (nSprFlags & SPR_Flip_X) nPtRefX = pSprDesc->nLg - nPtRefX;
 //	if (nSprFlags & SPR_Flip_Y) nPtRefY = pSprDesc->nHt - nPtRefY;
 	if (nSprFlags & SPR_Flip_X) nPtRefX = (pSprDesc->nLg - 1) - nPtRefX;
 	if (nSprFlags & SPR_Flip_Y) nPtRefY = (pSprDesc->nHt - 1) - nPtRefY;
 
-	// Préparation du tracé.
+	// Prï¿½paration du tracï¿½.
 	nXMin = pSprSto->nPosX - nPtRefX;
 	nXMax = nXMin + pSprDesc->nLg - 1;
 	nYMin = pSprSto->nPosY - nPtRefY;
@@ -1098,7 +1098,7 @@ void SprDisplayLock(struct SSprStockage *pSprSto)
 		diff = nXMax - (SCR_Width - 1);
 		nSprXMax -= diff;
 	}
-	// Sprite complètement en dehors ?
+	// Sprite complï¿½tement en dehors ?
 //	if (nSprXMin - nSprXMax >= 0) return;	//< bug
 	if (nSprXMin - nSprXMax > 0) return;
 	//
@@ -1112,7 +1112,7 @@ void SprDisplayLock(struct SSprStockage *pSprSto)
 		diff = nYMax - (SCR_Height - 1);
 		nSprYMax -= diff;
 	}
-	// Sprite complètement en dehors ?
+	// Sprite complï¿½tement en dehors ?
 //	if (nSprYMin - nSprYMax >= 0) return;	//< bug
 	if (nSprYMin - nSprYMax > 0) return;
 
@@ -1154,7 +1154,7 @@ tst3 |= tst3 << 16;
 
 //A			for (ix = nSprXMin; b4 && *(u32 *)(pMsk + ix) == 0xFFFFFFFF; b4--, ix += 2);	// Skippe les premiers pixels vides.
 //A			for (; b4; b4--, ix += 2)
-//A = timé, c'est kif kif, peut-être même pire, c'est dur à dire.
+//A = timï¿½, c'est kif kif, peut-ï¿½tre mï¿½me pire, c'est dur ï¿½ dire.
 			for (ix = nSprXMin; b4; b4--, ix += 2)
 			{
 				*(u32 *)(pScr + ix) &= *(u32 *)(pMsk + ix);
@@ -1197,7 +1197,7 @@ tst3 |= tst3 << 16;
 
 //A			for (ix = nSprXMin; b4 && *(u32 *)(pMsk + ix) == 0xFFFFFFFF; b4--, ix += 2);	// Skippe les premiers pixels vides.
 //A			for (; b4; b4--, ix += 2)
-//A = timé, c'est kif kif, peut-être même pire, c'est dur à dire.
+//A = timï¿½, c'est kif kif, peut-ï¿½tre mï¿½me pire, c'est dur ï¿½ dire.
 			for (ix = nSprXMin; b4; b4--, ix += 2)
 			{
 				*(u32 *)(pScr + ix) &= *(u32 *)(pMsk + ix);
@@ -1228,7 +1228,7 @@ tst3 |= tst3 << 16;
 }
 
 
-// Macros pour éviter des calls :
+// Macros pour ï¿½viter des calls :
 #define	SPR_ADD_TO_LIST(POSX, POSY, PRIO, FPTR) \
 	if (gnSprSto >= SPR_STO_MAX) { fprintf(stderr, "Sprites: Out of slots!\n"); return; } \
 	if ((nSprNo & ~(SPR_Flip_X | SPR_Flip_Y)) == SPR_NoSprite) return; \
@@ -1244,7 +1244,7 @@ tst3 |= tst3 << 16;
 	gpSprSort[gnSprSto] = &gpSprSto[gnSprSto]; \
 	gnSprSto++;
 
-// Inscrit les sprites dans une liste, position relative par rapport à la map.
+// Inscrit les sprites dans une liste, position relative par rapport ï¿½ la map.
 void SprDisplay(u32 nSprNo, s32 nPosX, s32 nPosY, u16 nPrio)
 {
 	SPR_ADD_TO_LIST(nPosX - (gScrollPos.nPosX >> 8), nPosY - (gScrollPos.nPosY >> 8), nPrio, NULL)
@@ -1266,13 +1266,13 @@ void SprDisplayZoom(u32 nSprNo, s32 nPosX, s32 nPosY, u16 nPrio, u16 nZoomX, u16
 // Sprites en rotation.
 void SprDisplayRotoZoom(u32 nSprNo, s32 nPosX, s32 nPosY, u16 nPrio, u8 nAngle, u16 nZoom)
 {
-	// Pas de rot ? => On envoie un sprite zoomé simple.
+	// Pas de rot ? => On envoie un sprite zoomï¿½ simple.
 	if (nAngle == 0)
 	{
 		SprDisplayZoom(nSprNo, nPosX, nPosY, nPrio, nZoom, nZoom);
 		return;
 	}
-	// Angle == 128 => On envoie un sprite zoomé simple avec flips X et Y.
+	// Angle == 128 => On envoie un sprite zoomï¿½ simple avec flips X et Y.
 	if (nAngle == 128)
 	{
 		SprDisplayZoom(nSprNo ^ SPR_Flip_X ^ SPR_Flip_Y, nPosX, nPosY, nPrio, nZoom, nZoom);
@@ -1306,13 +1306,13 @@ void SprDisplayZoomAbsolute(u32 nSprNo, s32 nPosX, s32 nPosY, u16 nPrio, u16 nZo
 // Sprites en rotation.
 void SprDisplayRotoZoomAbsolute(u32 nSprNo, s32 nPosX, s32 nPosY, u16 nPrio, u8 nAngle, u16 nZoom)
 {
-	// Pas de rot ? => On envoie un sprite zoomé simple.
+	// Pas de rot ? => On envoie un sprite zoomï¿½ simple.
 	if (nAngle == 0)
 	{
 		SprDisplayZoomAbsolute(nSprNo, nPosX, nPosY, nPrio, nZoom, nZoom);
 		return;
 	}
-	// Angle == 128 => On envoie un sprite zoomé simple avec flips X et Y.
+	// Angle == 128 => On envoie un sprite zoomï¿½ simple avec flips X et Y.
 	if (nAngle == 128)
 	{
 		SprDisplayZoomAbsolute(nSprNo ^ SPR_Flip_X ^ SPR_Flip_Y, nPosX, nPosY, nPrio, nZoom, nZoom);
@@ -1340,8 +1340,8 @@ void SprDisplayAll(void)
 {
 	u32	i;
 
-//	if (gnSprSto == 0)	// Rien à faire ?
-	if (gnSprSto == 0 || gnFrameMissed)	// Rien à faire ?
+//	if (gnSprSto == 0)	// Rien ï¿½ faire ?
+	if (gnSprSto == 0 || gnFrameMissed)	// Rien ï¿½ faire ?
 	{
 		gnSprSto = 0;			// RAZ pour le prochain tour (frame miss).
 		#if CACHE_ON == 1
@@ -1350,7 +1350,7 @@ void SprDisplayAll(void)
 		return;
 	}
 
-	// Tri sur la priorité.
+	// Tri sur la prioritï¿½.
 	qsort(gpSprSort, gnSprSto, sizeof(struct SSprStockage *), qscmp);
 
 	// Affichage.
@@ -1372,21 +1372,21 @@ void SprDisplayAll(void)
 
 u32	gnSprPass2Idx, gnSprPass2Last;
 
-// Idem SprDisplayAll, mais séparé en 2 appels pour le plan de masquage.
-// Première passe.
+// Idem SprDisplayAll, mais sï¿½parï¿½ en 2 appels pour le plan de masquage.
+// Premiï¿½re passe.
 void SprDisplayAll_Pass1(void)
 {
 	u32	i;
 
-//	if (gnSprSto == 0)	// Rien à faire ?
-	if (gnSprSto == 0 || gnFrameMissed)	// Rien à faire ?
+//	if (gnSprSto == 0)	// Rien ï¿½ faire ?
+	if (gnSprSto == 0 || gnFrameMissed)	// Rien ï¿½ faire ?
 	{
 		gnSprSto = 0;			// RAZ pour le prochain tour (frame miss).
 		gnSprPass2Last = 0;		// Pour Pass2.
 		return;
 	}
 
-	// Tri sur la priorité.
+	// Tri sur la prioritï¿½.
 	qsort(gpSprSort, gnSprSto, sizeof(struct SSprStockage *), qscmp);
 
 	// Affichage.
@@ -1409,14 +1409,14 @@ void SprDisplayAll_Pass1(void)
 
 }
 
-// Deuxième passe pour les sprites affichés au dessus du plan de masquage.
+// Deuxiï¿½me passe pour les sprites affichï¿½s au dessus du plan de masquage.
 // A appeler une fois par frame, APRES SprDisplayAll_Pass1 !
 void SprDisplayAll_Pass2(void)
 {
 	u32	i;
 
 	if (gnFrameMissed == 0)
-	if (gnSprPass2Last)		// Quelque chose à faire ?
+	if (gnSprPass2Last)		// Quelque chose ï¿½ faire ?
 	{
 		// Affichage.
 		SDL_LockSurface(gVar.pScreen);
@@ -1466,8 +1466,8 @@ u32 SprCheckColBox(u32 nSpr1, s32 nPosX1, s32 nPosY1, u32 nSpr2, s32 nPosX2, s32
 }
 
 
-// Récupère un rectangle (ou point) pour un sprite. Prise en compte des bits de flip.
-// Out : 0 = Pas bon. 1 = Ok, et rectangle copié dans pRectDst.
+// Rï¿½cupï¿½re un rectangle (ou point) pour un sprite. Prise en compte des bits de flip.
+// Out : 0 = Pas bon. 1 = Ok, et rectangle copiï¿½ dans pRectDst.
 u32 SprGetRect(u32 nSprNo, u32 nZone, struct SSprRect *pRectDst)
 {
 	struct SSprite *pSprDesc;
