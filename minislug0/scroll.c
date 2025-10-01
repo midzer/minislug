@@ -1,5 +1,5 @@
 // Scroll multidirectionnel.
-// Méthode de la mémoire "à rouleaux".
+// Mï¿½thode de la mï¿½moire "ï¿½ rouleaux".
 //
 // Code: 17o2!! / Contact: Clement CORDE, c1702@yahoo.com
 
@@ -13,14 +13,14 @@ struct SScrollMulti
 	struct SDL_Surface	*ppPlanesScrollBuf[MAP_PLANES_MAX];	// Buffers de scroll des plans.
 	s32	pPlanePosX[MAP_PLANES_MAX];	// Positions de chaque plan.
 	s32	pPlanePosY[MAP_PLANES_MAX];
-	s32	pPlaneNewPosX[MAP_PLANES_MAX];	// Nouvelles positions de chaque plan, utilisées lors du calcul du différentiel.
+	s32	pPlaneNewPosX[MAP_PLANES_MAX];	// Nouvelles positions de chaque plan, utilisï¿½es lors du calcul du diffï¿½rentiel.
 	s32	pPlaneNewPosY[MAP_PLANES_MAX];
 
 };
 struct SScrollMulti	gScrollM;
 
 
-#define	SCROLLBUF_LG	512		// Taille du buffer à rouleaux (en pixels).
+#define	SCROLLBUF_LG	512		// Taille du buffer ï¿½ rouleaux (en pixels).
 #define	SCROLLBUF_HT	256
 
 // Alloue les buffers de scroll. 1 seule fois !
@@ -42,7 +42,7 @@ void ScrollAllocate(void)
 
 }
 
-// Libère les buffers de scroll. 1 seule fois !
+// Libï¿½re les buffers de scroll. 1 seule fois !
 void ScrollRelease(void)
 {
 	u32	i;
@@ -61,7 +61,7 @@ void Scr_sub_NewCol(u32 nPlane, s32 sBlMapX, s32 sBlMapY)
 	u32	nBlX, nBlY;
 	u16	*pSrc, *pDst;
 
-	// Cas extrème, complètement à droite. Il y a un appel sur la 1ere colonne derrière la map lors du scroll vers la droite.
+	// Cas extrï¿½me, complï¿½tement ï¿½ droite. Il y a un appel sur la 1ere colonne derriï¿½re la map lors du scroll vers la droite.
 //b	if ((u32)sBlMapX >= gMap.nMapLg) return;
 	if ((u32)sBlMapX >= gMap.pPlanesLg[nPlane]) return;
 
@@ -72,7 +72,7 @@ void Scr_sub_NewCol(u32 nPlane, s32 sBlMapX, s32 sBlMapY)
 	for (j = 0; j < (SCR_Height / 16) + 1 && sBlMapY + j < gMap.pPlanesHt[nPlane]; j++)
 	{
 		nBlockNo = *(*(gMap.ppPlanesBlocks + nPlane) + ((sBlMapY + j) * gMap.nMapLg) + sBlMapX);
-		// Coordonées x,y du bloc dans son plan.
+		// Coordonï¿½es x,y du bloc dans son plan.
 		nBlY = nBlockNo / (gMap.ppPlanesGfx[nPlane]->w / 16);
 		nBlX = nBlockNo - (nBlY * (gMap.ppPlanesGfx[nPlane]->w / 16));
 		// Src et Dst.
@@ -98,7 +98,7 @@ void Scr_sub_NewCol(u32 nPlane, s32 sBlMapX, s32 sBlMapY)
 	}
 	SDL_UnlockSurface(gScrollM.ppPlanesScrollBuf[nPlane]);
 
-	AnmBlkScrollNewCol(nPlane, sBlMapX, sBlMapY);	// Update des blocs animés entrant sur la colonne.
+	AnmBlkScrollNewCol(nPlane, sBlMapX, sBlMapY);	// Update des blocs animï¿½s entrant sur la colonne.
 
 }
 
@@ -110,7 +110,7 @@ void Scr_sub_NewLn(u32 nPlane, s32 sBlMapX, s32 sBlMapY)
 	u32	nBlX, nBlY;
 	u16	*pSrc, *pDst;
 
-	// Cas extrème, complètement en bas. Il y a un appel sur la 1ere ligne sous la map lors du scroll vers le bas.
+	// Cas extrï¿½me, complï¿½tement en bas. Il y a un appel sur la 1ere ligne sous la map lors du scroll vers le bas.
 //b	if ((u32)sBlMapY >= gMap.nMapHt) return;
 	if ((u32)sBlMapY >= gMap.pPlanesHt[nPlane]) return;
 
@@ -121,7 +121,7 @@ void Scr_sub_NewLn(u32 nPlane, s32 sBlMapX, s32 sBlMapY)
 	for (i = 0; i < (SCR_Width / 16) + 1 && sBlMapX + i < gMap.pPlanesLg[nPlane]; i++)
 	{
 		nBlockNo = *(*(gMap.ppPlanesBlocks + nPlane) + (sBlMapY * gMap.nMapLg) + sBlMapX + i);
-		// Coordonées x,y du bloc dans son plan.
+		// Coordonï¿½es x,y du bloc dans son plan.
 		nBlY = nBlockNo / (gMap.ppPlanesGfx[nPlane]->w / 16);
 		nBlX = nBlockNo - (nBlY * (gMap.ppPlanesGfx[nPlane]->w / 16));
 		// Src et Dst.
@@ -147,19 +147,19 @@ void Scr_sub_NewLn(u32 nPlane, s32 sBlMapX, s32 sBlMapY)
 	}
 	SDL_UnlockSurface(gScrollM.ppPlanesScrollBuf[nPlane]);
 
-	AnmBlkScrollNewLn(nPlane, sBlMapX, sBlMapY);	// Update des blocs animés entrant sur la ligne.
+	AnmBlkScrollNewLn(nPlane, sBlMapX, sBlMapY);	// Update des blocs animï¿½s entrant sur la ligne.
 
 }
 
 #define	SCROLL_SPDX		0x400
 #define	SCROLL_SPDY		0x400
 #define SCROLL_SPDY_MAX	SPDY_MAX	//0x800
-	// = Gravité. (voir si on peut faire un #define	SCROLL_SPD_Y GRAVITY dans les .h)	// A mettre en commun dans le game.h
+	// = Gravitï¿½. (voir si on peut faire un #define	SCROLL_SPD_Y GRAVITY dans les .h)	// A mettre en commun dans le game.h
 
 //>tst
 s32	gnScrollLimitXMin;	// Avec 8 bits de virgule fixe.
 s32	gnScrollLimitXMax;
-//s32	gnScrollLastPosX;	// Pour empêcher le retour en arrière.
+//s32	gnScrollLastPosX;	// Pour empï¿½cher le retour en arriï¿½re.
 
 s32	gnScrollLimitYMin;	// Avec 8 bits de virgule fixe.
 s32	gnScrollLimitYMax;
@@ -169,7 +169,7 @@ s32	gnScrollLimitYMax;
 //extern u32	gnScrollLockOrgX;
 //gnScrollLockOrgX = gScrollPos.nPosX;
 
-//// En macro car ça ne sert que dans ScrollPosition et une seule fois dans InitScreen. => Appel de fonction pas rentable.
+//// En macro car ï¿½a ne sert que dans ScrollPosition et une seule fois dans InitScreen. => Appel de fonction pas rentable.
 //#define	SCROLL_PLYR_POSX	( gShoot.nPlayerPosX - (((gShoot.nPlayerDir ? 3 : 1) * (SCR_Width / 16) / 4) << 12) )
 //#define	SCROLL_PLYR_POSY	( gShoot.nPlayerPosY - ((2 * (SCR_Height / 16) / 3) << 12) )
 
@@ -185,7 +185,7 @@ s32 Scroll_sub_PlayerPosX(void)
 		return ( gShoot.nPlayerPosX - (((SCR_Width / 16) / 2) << 12) );
 		break;
 	}
-	// Par défaut, "free", on excentre le perso à 1/4 d'écran.
+	// Par dï¿½faut, "free", on excentre le perso ï¿½ 1/4 d'ï¿½cran.
 	return ( gShoot.nPlayerPosX - (((gShoot.nPlayerDir ? 3 : 1) * (SCR_Width / 16) / 4) << 12) );
 }
 s32 Scroll_sub_PlayerPosY(void)
@@ -194,8 +194,8 @@ s32 Scroll_sub_PlayerPosY(void)
 }
 */
 
-// Détermine la position du scroll par rapport au héros.
-// Out : gScrollM.nPosX et gScrollM.nPosY sont aux nouvelles coordonées.
+// Dï¿½termine la position du scroll par rapport au hï¿½ros.
+// Out : gScrollM.nPosX et gScrollM.nPosY sont aux nouvelles coordonï¿½es.
 void ScrollPosition(void)
 {
 	s32	nPos;
@@ -214,13 +214,13 @@ void ScrollPosition(void)
 	if (gShoot.nPlayerPosY > nPos + ((3 * (SCR_Height / 16) / 4) << 12) )
 	{
 		nPos = gShoot.nPlayerPosY - ((3 * (SCR_Height / 16) / 4) << 12);
-		nSpd = SCROLL_SPDY_MAX;		// A ce moment là, on permet de descendre plus vite (à la vitesse Y max du joueur).
+		nSpd = SCROLL_SPDY_MAX;		// A ce moment lï¿½, on permet de descendre plus vite (ï¿½ la vitesse Y max du joueur).
 	}
 	nDiff = (nPos - gScrollPos.nPosY) / 2;
 	if (ABS(nDiff) > nSpd) nDiff = SGN(nDiff) * nSpd;
 	gScrollPos.nPosY += nDiff;
 
-	// Empèche le retour arrière dans les scrolls e_ScrollType_RightOnly.
+	// Empï¿½che le retour arriï¿½re dans les scrolls e_ScrollType_RightOnly.
 	if (gnScrollLimitXMin == -1)
 	if (gScrollPos.nScrollType == e_ScrollType_RightOnly)
 		if (gScrollPos.nPosX < gScrollPos.nLastPosX - (((SCR_Width / 16) / 3) << 12) ) gScrollPos.nPosX = gScrollPos.nLastPosX - (((SCR_Width / 16) / 3) << 12);
@@ -242,11 +242,11 @@ void ScrollPosition(void)
 	if ((gScrollPos.nPosY >> 12) + (SCR_Height / 16) >= gMap.pPlanesHt[gMap.nHeroPlane]) gScrollPos.nPosY = ((gMap.pPlanesHt[gMap.nHeroPlane] - (SCR_Height / 16)) << 12);// - 0x100;
 	if (gScrollPos.nPosY < 0) gScrollPos.nPosY = 0;
 
-	// Suppression du désagréable effet de scintillement sur le joueur !
+	// Suppression du dï¿½sagrï¿½able effet de scintillement sur le joueur !
 	gScrollPos.nPosX &= ~0xFF;
 	gScrollPos.nPosY &= ~0xFF;
 
-	// MAJ LastPos si le scroll n'est pas bloqué.
+	// MAJ LastPos si le scroll n'est pas bloquï¿½.
 	if (gnScrollLimitXMin == -1)
 	{
 		switch (gScrollPos.nScrollType)
@@ -255,7 +255,7 @@ void ScrollPosition(void)
 			if (gScrollPos.nPosX > gScrollPos.nLastPosX) gScrollPos.nLastPosX = gScrollPos.nPosX;
 			break;
 		default:
-			gScrollPos.nLastPosX = gScrollPos.nPosX;	// < Au cas ou on passe d'un type de scroll à un autre.
+			gScrollPos.nLastPosX = gScrollPos.nPosX;	// < Au cas ou on passe d'un type de scroll ï¿½ un autre.
 			break;
 		}
 	}
@@ -295,12 +295,12 @@ void ScrollDifferentiel(void)
 
 
 
-// Defines spécifiques.
+// Defines spï¿½cifiques.
 #define	SCROLL_L08_POSX_INIT	0
 #define	SCROLL_L11_SPDY_INIT	-0x0040//-0x100//
 #define	SCROLL_L02_SPDX_INIT	0x0040
 
-// Initialise l'écran une fois avant le scroll.
+// Initialise l'ï¿½cran une fois avant le scroll.
 void ScrollInitScreen(u32 nScrollType)
 {
 	s32	i;
@@ -308,12 +308,12 @@ void ScrollInitScreen(u32 nScrollType)
 
 	gScrollPos.nScrollType = nScrollType;		// Stockage du type du scroll.
 
-	gScrollPos.nPosX = SCROLL_PLYR_POSX;	// Init position fenêtre.
-	//gScrollPos.nPosX = Scroll_sub_PlayerPosX();	// Init position fenêtre.
+	gScrollPos.nPosX = SCROLL_PLYR_POSX;	// Init position fenï¿½tre.
+	//gScrollPos.nPosX = Scroll_sub_PlayerPosX();	// Init position fenï¿½tre.
 gScrollPos.nLastPosX = gScrollPos.nPosX;
 	gScrollPos.nPosY = SCROLL_PLYR_POSY;
 	//gScrollPos.nPosY = Scroll_sub_PlayerPosY();
-//	gScrollPos.nLockX = 0;		// 0 : Normal / 1 : Locké, ne bouge plus.
+//	gScrollPos.nLockX = 0;		// 0 : Normal / 1 : Lockï¿½, ne bouge plus.
 
 //tst
 //gnScrollLimitXMin = 0;
@@ -327,7 +327,7 @@ gnScrollLimitYMin = gnScrollLimitYMax = -1;
 //printf("scroll init: posx=%d posy=%d\n", (int)gScrollPos.nPosX, (int)gScrollPos.nPosY);
 //printf("scroll init: posx=%d posy=%d\n", (int)gScrollPos.nPosX>>12, (int)gScrollPos.nPosY>>12);
 
-	// Initialise les blocs de l'écran sur tous les plans.
+	// Initialise les blocs de l'ï¿½cran sur tous les plans.
 	for (nPlane = 0; nPlane < gMap.nPlanesNb; nPlane++)
 	{
 		gScrollM.pPlanePosX[nPlane] = gScrollM.pPlaneNewPosX[nPlane];	// A l'init, pour initialiser pPlanePosX et pPlanePosY.
@@ -338,11 +338,11 @@ gnScrollLimitYMin = gnScrollLimitYMax = -1;
 			Scr_sub_NewCol(nPlane, (gScrollM.pPlanePosX[nPlane] >> 12) + i, gScrollM.pPlanePosY[nPlane] >> 12);
 		}
 		// Transparence.
-		if (nPlane) SDL_SetColorKey(gScrollM.ppPlanesScrollBuf[nPlane], SDL_SRCCOLORKEY, gMap.nTranspColorKey);	// Enable transparence.
+		if (nPlane) SDL_SetColorKey(gScrollM.ppPlanesScrollBuf[nPlane], SDL_TRUE, gMap.nTranspColorKey);	// Enable transparence.
 	}
 
 	// Initialisation des monstres.
-	// On boucle sur les colonnes, init recherche X en même temps.
+	// On boucle sur les colonnes, init recherche X en mï¿½me temps.
 	gLoadedMst.nMstRechIdxX = 0;
 	nPlane = gMap.nHeroPlane;
 	for (i = -MST_CLIP_VAL; i <= (SCR_Width / 16) + MST_CLIP_VAL; i++)
@@ -355,7 +355,7 @@ gnScrollLimitYMin = gnScrollLimitYMax = -1;
 //printf("> initscreen end\n");
 
 
-	// Initialisation d'une variable spéciale pour certains niveaux. (Si téléportation dans un niveau, il faudra changer ça de place).
+	// Initialisation d'une variable spï¿½ciale pour certains niveaux. (Si tï¿½lï¿½portation dans un niveau, il faudra changer ï¿½a de place).
 	static s32	gSpecialVarTb[LEVEL_MAX] =
 	{
 		0, 0,
@@ -390,7 +390,7 @@ void ScrollPatchLev11(void)
 		gScrollM.pPlaneNewPosY[0] += 16 << 12;
 	}
 
-	// Scroll du plan du héros (sauf quand mort).
+	// Scroll du plan du hï¿½ros (sauf quand mort).
 	if (gShoot.nDeathFlag == 0)
 	{
 		gScrollM.pPlaneNewPosY[1] += gScrollPos.nL11SpdY;
@@ -411,11 +411,11 @@ void ScrollPatchLev02(void)
 	if (gScrollM.pPlaneNewPosX[i] + (SCR_Width << 8) >= gMap.pPlanesLg[i] << 12)
 	{
 		gScrollM.pPlanePosX[i] &= ~(-1 << 8);
-		gScrollM.pPlanePosX[i] -= 1 << 8;	// Pour forcer la mise à jour de la première colonne à droite de l'écran lors du loop. Lev2, plan 1, le plan mesure 2 fois la largeur du buffer, si on ne force pas l'affichage lors du loop, une col n'est pas mise à jour.
+		gScrollM.pPlanePosX[i] -= 1 << 8;	// Pour forcer la mise ï¿½ jour de la premiï¿½re colonne ï¿½ droite de l'ï¿½cran lors du loop. Lev2, plan 1, le plan mesure 2 fois la largeur du buffer, si on ne force pas l'affichage lors du loop, une col n'est pas mise ï¿½ jour.
 		gScrollM.pPlaneNewPosX[i] &= ~(-1 << 8);
 	}
 
-	// Scroll du plan du héros (sauf quand mort).
+	// Scroll du plan du hï¿½ros (sauf quand mort).
 	if (gShoot.nDeathFlag == 0)
 	{
 		gScrollM.pPlaneNewPosX[gMap.nHeroPlane] += gScrollPos.nL02SpdX;
@@ -432,23 +432,23 @@ void ScrollPatchLev08(void)
 
 	s32	nOldPosX;
 	u32	nHeroPlane_sav;
-s32	nSPosX_sav, nSPosY_sav;		//*** Avec scroll modifié
+s32	nSPosX_sav, nSPosY_sav;		//*** Avec scroll modifiï¿½
 	u32	i;
 
-	// Le bruit des roues. (Placement pas génial, mais bref...).
+	// Le bruit des roues. (Placement pas gï¿½nial, mais bref...).
 	if ((gnFrame & 63) == 0 || (gnFrame & 63) == 24)
 		Sfx_PlaySfx(e_Sfx_Fx_TrainClang, e_SfxPrio_0);
 
 	nHeroPlane_sav = gMap.nHeroPlane;
-	ScrollPosition();	// On récupère la position de la fenêtre par rapport au joueur. => Position dans le plan du train.
-nSPosX_sav = gScrollPos.nPosX;	//*** Avec scroll modifié
-nSPosY_sav = gScrollPos.nPosY;	//*** Avec scroll modifié
+	ScrollPosition();	// On rï¿½cupï¿½re la position de la fenï¿½tre par rapport au joueur. => Position dans le plan du train.
+nSPosX_sav = gScrollPos.nPosX;	//*** Avec scroll modifiï¿½
+nSPosY_sav = gScrollPos.nPosY;	//*** Avec scroll modifiï¿½
 //		nOldPosX = nPosX;
-//		nPosX += gScrollPos.nPosX - gScrollM.pPlanePosX[gMap.nHeroPlane];	// On ajoute au background le même décalage que le plan du train.
+//		nPosX += gScrollPos.nPosX - gScrollM.pPlanePosX[gMap.nHeroPlane];	// On ajoute au background le mï¿½me dï¿½calage que le plan du train.
 //nPosX += 0x200;//0x080;//0x200;		// + la vitesse du train.
 //if (nPosX < 0) nPosX = 0;
 	nOldPosX = gScrollPos.nL08PosX;
-	gScrollPos.nL08PosX += gScrollPos.nPosX - gScrollM.pPlanePosX[gMap.nHeroPlane];	// On ajoute au background le même décalage que le plan du train.
+	gScrollPos.nL08PosX += gScrollPos.nPosX - gScrollM.pPlanePosX[gMap.nHeroPlane];	// On ajoute au background le mï¿½me dï¿½calage que le plan du train.
 	gScrollPos.nL08PosX += 0x200;//0x080;//0x200;		// + la vitesse du train.
 if (gScrollPos.nL08PosX < 0) gScrollPos.nL08PosX = 0;
 
@@ -456,7 +456,7 @@ if (gScrollPos.nL08PosX < 0) gScrollPos.nL08PosX = 0;
 //		if ((nPosX >> 12) == 208)
 	if ((gScrollPos.nL08PosX >> 12) == 208)
 	{
-		// On calcule les différentes positions des plans à la position de loop (pour éviter de scroller en arrière jusqu'à la position de loop).
+		// On calcule les diffï¿½rentes positions des plans ï¿½ la position de loop (pour ï¿½viter de scroller en arriï¿½re jusqu'ï¿½ la position de loop).
 		nOldPosX -= (208 - 48) << 12;
 		gScrollPos.nPosX = nOldPosX;
 		gMap.nHeroPlane = gMap.nHeroPlane - 1;
@@ -476,12 +476,12 @@ if (gScrollPos.nL08PosX < 0) gScrollPos.nL08PosX = 0;
 //		gScrollPos.nPosX = nPosX;
 	gScrollPos.nPosX = gScrollPos.nL08PosX;
 	gMap.nHeroPlane = gMap.nHeroPlane - 1;
-	ScrollDifferentiel();	// On calcule le différentiel en prenant comme référentiel le plan de background. (On se fout de la position qui va être affectée au plan du train, on va la réécraser plus tard).
+	ScrollDifferentiel();	// On calcule le diffï¿½rentiel en prenant comme rï¿½fï¿½rentiel le plan de background. (On se fout de la position qui va ï¿½tre affectï¿½e au plan du train, on va la rï¿½ï¿½craser plus tard).
 	gMap.nHeroPlane = nHeroPlane_sav;
 
-gScrollPos.nPosX = nSPosX_sav;	//*** Avec scroll modifié
-gScrollPos.nPosY = nSPosY_sav;	//*** Avec scroll modifié
-//		ScrollPosition();	// Re-scrollposition pour remettre gScrollPos.nPosX et Y par rapport au héros (important pour l'affichage des sprites).
+gScrollPos.nPosX = nSPosX_sav;	//*** Avec scroll modifiï¿½
+gScrollPos.nPosY = nSPosY_sav;	//*** Avec scroll modifiï¿½
+//		ScrollPosition();	// Re-scrollposition pour remettre gScrollPos.nPosX et Y par rapport au hï¿½ros (important pour l'affichage des sprites).
 	gScrollM.pPlaneNewPosX[gMap.nHeroPlane] = gScrollPos.nPosX;		// Et on force la position du plan du train.
 	gScrollM.pPlaneNewPosY[gMap.nHeroPlane] = gScrollPos.nPosY;
 
@@ -493,7 +493,7 @@ typedef void (*pFctScrollPatch) (void);
 void ScrollManage(void)
 {
 //	u32	nOldOffs, nNewOffs;
-	s32	nOldOffs, nNewOffs;		// Passé en s32 à cause de patch du lev2.
+	s32	nOldOffs, nNewOffs;		// Passï¿½ en s32 ï¿½ cause de patch du lev2.
 	u32	nPlane;
 	u32	i;
 
@@ -511,7 +511,7 @@ void ScrollManage(void)
 	// Gestion de la position du scroll.
 	if (gpFctPatch[gGameVar.nLevel] != NULL)
 	{
-		// Gestion particulière du scroll.
+		// Gestion particuliï¿½re du scroll.
 		gpFctPatch[gGameVar.nLevel]();
 	}
 	else
@@ -524,7 +524,7 @@ void ScrollManage(void)
 	// Scroll.
 	for (i = 0; i < gMap.nPlanesNb; i++)
 	{
-		nPlane = i;		// quand finalisé, remplacer l'index de boucle i par nPlane.
+		nPlane = i;		// quand finalisï¿½, remplacer l'index de boucle i par nPlane.
 
 		// Scroll horizontal ?
 		nOldOffs = gScrollM.pPlanePosX[i] >> 12;
@@ -598,7 +598,7 @@ void ScrollManage(void)
 
 extern	u8	gnFrameMissed;
 
-// Blitte le plan x à l'écran.
+// Blitte le plan x ï¿½ l'ï¿½cran.
 void ScrollDisplayPlane(u32 nPlaneNo)
 {
 	SDL_Rect	sRctSrc;
@@ -608,7 +608,7 @@ void ScrollDisplayPlane(u32 nPlaneNo)
 //	if (nPlaneNo >= gMap.nPlanesNb) return;
 	if (nPlaneNo >= gMap.nPlanesNb || gnFrameMissed) return;
 
-	// Coordonées de la fenêtre de base.
+	// Coordonï¿½es de la fenï¿½tre de base.
 	nX1 = (gScrollM.pPlanePosX[nPlaneNo] >> 8) % SCROLLBUF_LG;
 	nY1 = (gScrollM.pPlanePosY[nPlaneNo] >> 8) % SCROLLBUF_HT;
 	nX2 = nX1 + SCR_Width - 1;
@@ -719,14 +719,14 @@ void ScrollDisplayPlane(u32 nPlaneNo)
 
 //=============================================================================
 
-// Pour les blocs animés, on a besoin de savoir ou se trouve chaque plan.
+// Pour les blocs animï¿½s, on a besoin de savoir ou se trouve chaque plan.
 void ScrollGetPlanePosXY(s32 *pPosX, s32 *pPosY, u32 nPlane)
 {
 	*pPosX = gScrollM.pPlanePosX[nPlane];
 	*pPosY = gScrollM.pPlanePosY[nPlane];
 }
 
-// Update du dessin d'un bloc pour les blocs animés.
+// Update du dessin d'un bloc pour les blocs animï¿½s.
 void Scroll_BlkAnm_BlockUpdate(u32 nPlane, s32 sBlMapX, s32 sBlMapY, s32 nOffset)
 {
 	u32	k;
@@ -738,7 +738,7 @@ void Scroll_BlkAnm_BlockUpdate(u32 nPlane, s32 sBlMapX, s32 sBlMapY, s32 nOffset
 	SDL_LockSurface(gScrollM.ppPlanesScrollBuf[nPlane]);
 
 	nBlockNo = *(*(gMap.ppPlanesBlocks + nPlane) + (sBlMapY * gMap.nMapLg) + sBlMapX) + nOffset;
-	// Coordonées x,y du bloc dans son plan.
+	// Coordonï¿½es x,y du bloc dans son plan.
 	nBlY = nBlockNo / (gMap.ppPlanesGfx[nPlane]->w / 16);
 	nBlX = nBlockNo - (nBlY * (gMap.ppPlanesGfx[nPlane]->w / 16));
 	// Src et Dst.

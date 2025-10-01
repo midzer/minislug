@@ -3,12 +3,12 @@
 #include "monsters_inc.h"
 
 //=============================================================================
-// Mst 30 : Générateur de squids.
+// Mst 30 : Gï¿½nï¿½rateur de squids.
 
 /*
 [mst30] Squid Generator
-Zone W = 0:7:			; Largeur de la zone dans laquelle générer les squids.
-Zone H = 8:15:			; Hauteur de la zone dans laquelle générer les squids.
+Zone W = 0:7:			; Largeur de la zone dans laquelle gï¿½nï¿½rer les squids.
+Zone H = 8:15:			; Hauteur de la zone dans laquelle gï¿½nï¿½rer les squids.
 Type = 16:17: Squids - Piranhas - Jellyfishes
 prm = 18:23:
 */
@@ -20,15 +20,15 @@ enum
 	e_Mst30_Generate,
 };
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst30_SquidGenerator0
 {
-	u8	nZoneW;			// Largeur de la zone dans laquelle générer les squids.
-	u8	nZoneH;			// Hauteur de la zone dans laquelle générer les squids.
+	u8	nZoneW;			// Largeur de la zone dans laquelle gï¿½nï¿½rer les squids.
+	u8	nZoneH;			// Hauteur de la zone dans laquelle gï¿½nï¿½rer les squids.
 	u8	nCnt0;
-	u8	nType;			// Type de monstres. 0 = Squids / 1 = Méduses.
+	u8	nType;			// Type de monstres. 0 = Squids / 1 = Mï¿½duses.
 
-	u16	nMstNb;			// Nb de monstres à générer.
+	u16	nMstNb;			// Nb de monstres ï¿½ gï¿½nï¿½rer.
 	u8	nDist;
 };
 
@@ -39,13 +39,13 @@ void Mst30_Init_SquidGenerator0(struct SMstCommon *pMst, u8 *pData)
 	struct SMst30_SquidGenerator0	*pSpe = (struct SMst30_SquidGenerator0 *)pMst->pData;
 	s32	nVal;
 
-	nVal = GetBits(0, 7, pData, 0);			// Largeur de la zone dans laquelle générer les squids.
+	nVal = GetBits(0, 7, pData, 0);			// Largeur de la zone dans laquelle gï¿½nï¿½rer les squids.
 	pSpe->nZoneW = nVal;
-	pSpe->nMstNb = 16;						// Nb de monstres à générer.
+	pSpe->nMstNb = 16;						// Nb de monstres ï¿½ gï¿½nï¿½rer.
 	pSpe->nDist = 0;
-	nVal = GetBits(8, 15, pData, 0);		// Hauteur de la zone dans laquelle générer les squids.
+	nVal = GetBits(8, 15, pData, 0);		// Hauteur de la zone dans laquelle gï¿½nï¿½rer les squids.
 	pSpe->nZoneH = nVal;
-	nVal = GetBits(16, 17, pData, 0);		// Type de monstres à générer.
+	nVal = GetBits(16, 17, pData, 0);		// Type de monstres ï¿½ gï¿½nï¿½rer.
 	pSpe->nType = nVal;
 
 	pMst->nPosX &= ~0xFFF;	// Replacement dans le bloc.
@@ -68,7 +68,7 @@ SprDisplay(e_Spr_Tstrct_CornerDR, ((pMst->nPosX & ~0xFFF) >> 8) + ((u32)pSpe->nZ
 
 	switch (pMst->nPhase)
 	{
-	case e_Mst30_WaitX:			// Attend que le début de zone (le monstre) entre dans l'écran.
+	case e_Mst30_WaitX:			// Attend que le dï¿½but de zone (le monstre) entre dans l'ï¿½cran.
 		if (pMst->nPosX < gScrollPos.nPosX)
 		{
 			pMst->nPhase = e_Mst30_Generate;
@@ -76,7 +76,7 @@ SprDisplay(e_Spr_Tstrct_CornerDR, ((pMst->nPosX & ~0xFFF) >> 8) + ((u32)pSpe->nZ
 		}
 		break;
 
-	case e_Mst30_Generate:		// On génère des squids.
+	case e_Mst30_Generate:		// On gï¿½nï¿½re des squids.
 /*
 {
 //>tst
@@ -89,7 +89,7 @@ Font_Print(10, 170, pTb, 0);
 //<tst
 }
 */
-		// Au fur et a mesure qu'on avance, on augmente le nombre de monstres à générer.
+		// Au fur et a mesure qu'on avance, on augmente le nombre de monstres ï¿½ gï¿½nï¿½rer.
 		if (gScrollPos.nPosX >> 12 > (pMst->nPosX >> 12) + (u32)pSpe->nDist)
 		{
 			pSpe->nDist += 4;		// Par pas de 4 blocs.
@@ -115,7 +115,7 @@ prm = 4:7:			; tmp.
 			{
 /*
 [mst10] Jellyfish
-Type = 0:3: Small - 	// << mais inutilisé.
+Type = 0:3: Small - 	// << mais inutilisï¿½.
 */
 //pData[0] = xxx;	// Rien pour le moment.
 				MstAdd(e_Mst10_Jellyfish, (gScrollPos.nPosX >> 8) + (rand() % (SCR_Width + (SCR_Width/2))), (gScrollPos.nPosY >> 8) + SCR_Height + 16, pData, -1);
@@ -125,7 +125,7 @@ Type = 0:3: Small - 	// << mais inutilisé.
 			pSpe->nCnt0 = MST30_TIMER0;
 			pSpe->nMstNb--;
 		}
-		// La zone du générateur sort de l'écran ? (Uniquement par la gauche).
+		// La zone du gï¿½nï¿½rateur sort de l'ï¿½cran ? (Uniquement par la gauche).
 		if (pMst->nPosX + (((u32)pSpe->nZoneW * 16) << 8) < gScrollPos.nPosX) return (e_MstState_Dead);
 		break;
 	}
@@ -142,7 +142,7 @@ Type = 0:3: Squid - Piranha
 prm = 4:7:			; tmp.
 */
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst31_Squid0
 {
 	u8	nType;		// 0 = Squid / 1 = Piranha.
@@ -183,7 +183,7 @@ s32 Mst31_Main_Squid0(struct SMstCommon *pMst)
 	u32	nSpr;
 	nSpr = AnmGetImage(pMst->nAnm);
 
-	// Déplacement.
+	// Dï¿½placement.
 	pMst->nPosX += ((s32)gVar.pCos[pMst->nAngle] * pMst->nSpd) >> 8;
 	pMst->nPosY += ((s32)gVar.pSin[pMst->nAngle] * pMst->nSpd) >> 8;
 	//
@@ -194,7 +194,7 @@ s32 Mst31_Main_Squid0(struct SMstCommon *pMst)
 		pMst->nAngle = -pMst->nAngle;
 	}
 
-	// Sortie de l'écran ?
+	// Sortie de l'ï¿½cran ?
 	if (pMst->nPosX + (64 << 8) < gScrollPos.nPosX) return (e_MstState_Dead);
 
 	// Se prend un tir ?
@@ -211,7 +211,7 @@ _31SquidDeath:
 	if (sRect1.nType == e_SprRect_Rect)
 	if (Enemy_PlayerBlowRect(&sRect1, pMst->nPosX, pMst->nPosY, MST_DAMAGE_EXPLO)) goto _31SquidDeath;
 
-	ChaserTarget_AddToList(pMst->nPosX >> 8, (pMst->nPosY >> 8));	// Ajout dans la table de visée des missiles.
+	ChaserTarget_AddToList(pMst->nPosX >> 8, (pMst->nPosY >> 8));	// Ajout dans la table de visï¿½e des missiles.
 
 	// Affichage.
 	if (pSpe->nHitCnt) pSpe->nHitCnt--;
@@ -221,7 +221,7 @@ _31SquidDeath:
 }
 
 //=============================================================================
-// Mst 32 : L11 Scroll control : Arrête/redémarre le scroll sur le plan des monstres en fct d'une item.
+// Mst 32 : L11 Scroll control : Arrï¿½te/redï¿½marre le scroll sur le plan des monstres en fct d'une item.
 
 // Phases.
 enum
@@ -230,7 +230,7 @@ enum
 	e_Mst32_Stop,
 };
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst32_ScrollCtrl
 {
 	s32	nSpdSav;	// Sauvegarde de la vitesse du scroll.
@@ -248,7 +248,7 @@ s32 Mst32_Main_L11ScrollCtrl(struct SMstCommon *pMst)
 {
 	struct SMst32_ScrollCtrl	*pSpe = (struct SMst32_ScrollCtrl *)pMst->pData;
 
-//if (gVar.pKeys[SDLK_j]) { gpMstQuestItems[MST_QUEST_ITEM_MST32] ^= 1; gVar.pKeys[SDLK_j] = 0; }	// tst
+//if (gVar.pKeys[SDL_SCANCODE_J]) { gpMstQuestItems[MST_QUEST_ITEM_MST32] ^= 1; gVar.pKeys[SDL_SCANCODE_J] = 0; }	// tst
 
 	switch (pMst->nPhase)
 	{
@@ -263,7 +263,7 @@ s32 Mst32_Main_L11ScrollCtrl(struct SMstCommon *pMst)
 
 	case e_Mst32_Stop:
 		if (gpMstQuestItems[MST_QUEST_ITEM_MST32] == 0)
-		{	// Redémarre.
+		{	// Redï¿½marre.
 			pMst->nPhase = e_Mst32_Move;
 			gScrollPos.nL11SpdY = pSpe->nSpdSav;
 		}
@@ -283,12 +283,12 @@ void Scroll_HeroPlaneScrollPosXY_Get(s32 *pnPosX, s32 *pnPosY);
 Type = 0:3: MarsEyeTIE - MarsEye2 - Asteroids - Big_Asteroids - MarsUFO - L02_FlyingTara - L11_EndOfLevel -
 Drop = 4:7: Nothing - H_Machinegun - Gas_Tank -
 Nb(1) = 8:11:
-Offset = 12:15:			; Décalage Y pour ceux qui viennent des côtés.
-Scroll Stop = 16:17: No - While_gen - After_last_disp	; Stoppe le scroll pendant cette séquence ? (Non - Pendant la génération - Jusqu'à disparition du dernier monstre).
+Offset = 12:15:			; Dï¿½calage Y pour ceux qui viennent des cï¿½tï¿½s.
+Scroll Stop = 16:17: No - While_gen - After_last_disp	; Stoppe le scroll pendant cette sï¿½quence ? (Non - Pendant la gï¿½nï¿½ration - Jusqu'ï¿½ disparition du dernier monstre).
 prm0 = 18:19:			; tmp
 Shot Pattern = 20:23: One_By_One - All_Together	; Type de tir : Un par un - Tous ensemble.
-Shot 1st Delay = 24:27:		; Délai avant le premier tir (* 16 frames).
-Shot Delay = 28:31:		; Délai entre les tirs (* 16 frames).
+Shot 1st Delay = 24:27:		; Dï¿½lai avant le premier tir (* 16 frames).
+Shot Delay = 28:31:		; Dï¿½lai entre les tirs (* 16 frames).
 Shot Nb = 32:35:		; Nb de tirs.
 Scroll type = 36:36: Y - X	; Scroll V ou H.
 prm1 = 37:39:			; tmp
@@ -304,16 +304,16 @@ enum
 #define	MST33_TIMER0	24
 #define	MST33_TIMER_FTARA0	(24+32)
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst33_L11Generator0
 {
 	u8	nType;			// Type des monstres.
-	u8	nDrop;			// Item lachée par le dernier monstre de la séquence.
-	u8	nNb;			// Nb de monstres à générer.
-	u8	nOffset;		// Décalage Y pour ceux qui viennent des côtés.
-	u8	nScrollStop;	// Stoppe le scroll pendant cette séquence.
-	u8	nSeqNo;			// N° de la séquence.
-	u8	nOrder;			// Incrément pour compter les monstres dans une séquence.
+	u8	nDrop;			// Item lachï¿½e par le dernier monstre de la sï¿½quence.
+	u8	nNb;			// Nb de monstres ï¿½ gï¿½nï¿½rer.
+	u8	nOffset;		// Dï¿½calage Y pour ceux qui viennent des cï¿½tï¿½s.
+	u8	nScrollStop;	// Stoppe le scroll pendant cette sï¿½quence.
+	u8	nSeqNo;			// Nï¿½ de la sï¿½quence.
+	u8	nOrder;			// Incrï¿½ment pour compter les monstres dans une sï¿½quence.
 	u8	nCnt0;
 
 	u16	sav_nShot;		// Sauvegarde des prm de tir.
@@ -331,7 +331,7 @@ void Mst33_Init_L11Generator0(struct SMstCommon *pMst, u8 *pData)
 	pSpe->nDrop = nVal;
 	nVal = GetBits(8, 11, pData, 0);
 	if (nVal < 1) nVal = 1;
-	if (pSpe->nType == 2) nVal *= 16;		// Multiplicateur pour les astéroïdes.
+	if (pSpe->nType == 2) nVal *= 16;		// Multiplicateur pour les astï¿½roï¿½des.
 	else if (pSpe->nType == 4) nVal = 3;	// Chiffre fixe pour les Mars UFO.
 	pSpe->nNb = nVal;
 	nVal = GetBits(12, 15, pData, 0);
@@ -361,7 +361,7 @@ s32 Mst33_Main_L11Generator0(struct SMstCommon *pMst)
 	u8	pData[5];
 	s32	nPosX, nPosY;
 
-	// Cas de la disparition après la dernière disparition de monstre.
+	// Cas de la disparition aprï¿½s la derniï¿½re disparition de monstre.
 	if (pMst->nPhase == e_Mst33_WaitLastMstDisp)
 	{
 		if (gMstMisc.pSeqCount2[pSpe->nSeqNo] == 0)
@@ -372,7 +372,7 @@ s32 Mst33_Main_L11Generator0(struct SMstCommon *pMst)
 		return (e_MstState_Managed);
 	}
 
-	// Cas normal, génération.
+	// Cas normal, gï¿½nï¿½ration.
 	if (--pSpe->nCnt0 == 0)
 	{
 		switch (pSpe->nType)
@@ -385,12 +385,12 @@ s32 Mst33_Main_L11Generator0(struct SMstCommon *pMst)
 [mst34] L11 Mars Eye
 Type = 0:3: MarsEyeTIE - MarsEye2 -
 Drop = 4:7: Nothing - H_Machinegun - Gas_Tank -
-SeqNo = 8:11:	; No de la séquence.
+SeqNo = 8:11:	; No de la sï¿½quence.
 Offset = 12:15:	; Offset.
-Order = 16:19:			; N° d'ordre dans la séquence (pour trouver le leader).
+Order = 16:19:			; Nï¿½ d'ordre dans la sï¿½quence (pour trouver le leader).
 Shot Pattern = 20:23: One_By_One - All_Together	; Type de tir : Un par un - Tous ensemble.
-Shot 1st Delay = 24:27:		; Délai avant le premier tir (* 16 frames).
-Shot Delay = 28:31:		; Délai entre les tirs (* 16 frames).
+Shot 1st Delay = 24:27:		; Dï¿½lai avant le premier tir (* 16 frames).
+Shot Delay = 28:31:		; Dï¿½lai entre les tirs (* 16 frames).
 Shot Nb = 32:35:		; Nb de tirs.
 Scroll type = 36:36: Y - X	; Scroll V ou H.
 prm = 37:39:			; tmp
@@ -408,7 +408,7 @@ prm = 37:39:			; tmp
 			if (pSpe->nType == 4)
 			{	// Mars UFO.
 				u32	nRnd = rand();
-				// On génère les 3 monstres d'un coup.
+				// On gï¿½nï¿½re les 3 monstres d'un coup.
 				MstAdd(e_Mst41_L11MarsUFO0, (gScrollPos.nPosX >> 8) + SCR_Width + 32, (gScrollPos.nPosY >> 8) + (nRnd & 0x7F), pData, -1);
 				pSpe->nOrder++;
 				pData[2] &= 0xF0;
@@ -420,7 +420,7 @@ prm = 37:39:			; tmp
 				pData[2] |= pSpe->nOrder;
 				nRnd += 32;
 				MstAdd(e_Mst41_L11MarsUFO0, (gScrollPos.nPosX >> 8) - 32, (gScrollPos.nPosY >> 8) + (nRnd & 0x7F), pData, -1);
-				pSpe->nNb = 1;		// ...Et on arrête la génération.
+				pSpe->nNb = 1;		// ...Et on arrï¿½te la gï¿½nï¿½ration.
 			}
 			else
 			{	// Mars Eye / Mars TIE.
@@ -436,7 +436,7 @@ prm = 37:39:			; tmp
 			// Add monstre.
 /*
 [mst36] L11 Asteroids
-SeqNo = 0:3:		; No de la séquence.
+SeqNo = 0:3:		; No de la sï¿½quence.
 prm = 4:7:			; tmp
 */
 			// Position au hasard.
@@ -448,17 +448,17 @@ prm = 4:7:			; tmp
 			MstAdd(e_Mst36_L11Asteroid0, nPosX >> 8, nPosY >> 8, pData, -1);
 
 			// Reinit compteur.
-			pSpe->nCnt0 = MST33_TIMER0 - (pSpe->nOffset << 2);  // Pour les astéroïdes, on se sert de l'offset pour augmenter la fréquence d'apparition.
+			pSpe->nCnt0 = MST33_TIMER0 - (pSpe->nOffset << 2);  // Pour les astï¿½roï¿½des, on se sert de l'offset pour augmenter la frï¿½quence d'apparition.
 			break;
 
 		case 3:		// Big Asteroid
-			gMstMisc.pSeqCount2[pSpe->nSeqNo] = 3;	// On va génèrer 3 astéroïdes.
+			gMstMisc.pSeqCount2[pSpe->nSeqNo] = 3;	// On va gï¿½nï¿½rer 3 astï¿½roï¿½des.
 			pSpe->nNb = 1;		// Au cas ou...
 			// Add monstre.
 /*
 [mst37] L11 Big Asteroids
-SeqNo = 0:3:		; No de la séquence.
-Order = 4:7:		; N° d'ordre dans la séquence (pour trouver le leader).
+SeqNo = 0:3:		; No de la sï¿½quence.
+Order = 4:7:		; Nï¿½ d'ordre dans la sï¿½quence (pour trouver le leader).
 */
 			// Au milieu.
 			nPosX = (SCR_Width / 2) << 8;
@@ -486,9 +486,9 @@ Order = 4:7:		; N° d'ordre dans la séquence (pour trouver le leader).
 		case 5:		// Flying Tara.
 /*
 [mst43] Flying Tara
-SeqNo = 0:3:	; No de la séquence.
-Order = 4:7:	; N° d'ordre dans la séquence (pour trouver le leader).
-Drop = 8:11: Nothing - H_Machinegun - Gas_Tank - Ammo_Box1	; H non utilisé.
+SeqNo = 0:3:	; No de la sï¿½quence.
+Order = 4:7:	; Nï¿½ d'ordre dans la sï¿½quence (pour trouver le leader).
+Drop = 8:11: Nothing - H_Machinegun - Gas_Tank - Ammo_Box1	; H non utilisï¿½.
 Mode = 12:14: L02_Path - L02_To_Player - Std_Level -
 prm = 15:15:			; tmp
 */
@@ -506,7 +506,7 @@ prm = 15:15:			; tmp
 			{
 				s32	nPlane1PosX, nPlane1PosY;
 				Scroll_HeroPlaneScrollPosXY_Get(&nPlane1PosX, &nPlane1PosY);
-				// On dépasse la position de fin ?
+				// On dï¿½passe la position de fin ?
 				if (pMst->nPosY >= nPlane1PosY)
 				{
 					// Donne l'item qui va bien.
@@ -548,15 +548,15 @@ Location = 5:6: Normal - Space - Underwater - Air
 
 		}
 
-		// Tous les monstres ont été générés.
+		// Tous les monstres ont ï¿½tï¿½ gï¿½nï¿½rï¿½s.
 		if (--pSpe->nNb == 0)
 		switch (pSpe->nScrollStop)
 		{
-		case 1:		// Stop pendant la génération.
+		case 1:		// Stop pendant la gï¿½nï¿½ration.
 			gpMstQuestItems[MST_QUEST_ITEM_MST32]--;		// -- sur l'item de stop.
 		default:	// Pas de stop.
 			return (e_MstState_Dead);
-		case 2:		// Passe en phase d'attente que le dernier monstre de la série disparaisse.
+		case 2:		// Passe en phase d'attente que le dernier monstre de la sï¿½rie disparaisse.
 			pMst->nPhase = e_Mst33_WaitLastMstDisp;
 			break;
 		}
@@ -573,8 +573,8 @@ Location = 5:6: Normal - Space - Underwater - Air
 struct SMstPath
 {
 	s32	nPathPosX, nPathPosY;	// Pour recherche des chemins.
-	s16 nSpdGoal;		// Pour accélérations.
-	u8	nNewAngle;		// Nouvel angle à atteindre quand on tourne.
+	s16 nSpdGoal;		// Pour accï¿½lï¿½rations.
+	u8	nNewAngle;		// Nouvel angle ï¿½ atteindre quand on tourne.
 	s8	nSensRot;		// Sens de rotation.
 };
 */
@@ -591,10 +591,10 @@ void Mst_PathInit(struct SMstCommon *pMst, struct SMstPath *pPath, s32 nSpdInit,
 	pMst->nPosY |= 0x800;
 	pMst->nSpd = nSpdInit;
 	pPath->nSpdGoal = pMst->nSpd;
-	pPath->nPathPosX = pMst->nPosX;	// Svg des pos de départ.
+	pPath->nPathPosX = pMst->nPosX;	// Svg des pos de dï¿½part.
 	pPath->nPathPosY = pMst->nPosY;
 	// Un bloc de chemin ?
-	pMst->nAngle = nAngInit;				// Direction par défaut.
+	pMst->nAngle = nAngInit;				// Direction par dï¿½faut.
 	if ((nVal = Map_PathGndGetBlock(pMst->nPosX >> 12, (pMst->nPosY >> 12) + 1)) != -1)
 	if (nVal < 16)
 	{
@@ -606,20 +606,20 @@ void Mst_PathInit(struct SMstCommon *pMst, struct SMstPath *pPath, s32 nSpdInit,
 
 }
 
-// Déplacement sur un chemin.
+// Dï¿½placement sur un chemin.
 void Mst_PathMove(struct SMstCommon *pMst, struct SMstPath *pPath, s32 nSpdAcc, u32 nPhaseTurn)
 {
 	s32	nSpdX, nSpdY;
 	s32	nVal;
 
-	// Accélération ?
+	// Accï¿½lï¿½ration ?
 	if (pMst->nSpd != (s32)pPath->nSpdGoal)
 	{
 		nVal = ABS(pMst->nSpd - (s32)pPath->nSpdGoal);
 		if (nVal < nSpdAcc) nSpdAcc = nVal;
 		pMst->nSpd += ((s32)pPath->nSpdGoal > pMst->nSpd ? nSpdAcc : -nSpdAcc);
 	}
-	// Déplacement du monstre.
+	// Dï¿½placement du monstre.
 	nSpdX = (gVar.pCos[pMst->nAngle] * pMst->nSpd) >> 8;
 	nSpdY = (gVar.pSin[pMst->nAngle] * pMst->nSpd) >> 8;
 	pMst->nPosX += nSpdX;
@@ -639,7 +639,7 @@ void Mst_PathMove(struct SMstCommon *pMst, struct SMstPath *pPath, s32 nSpdAcc, 
 			if (nNew != -1)
 			{
 //printf("Order=%d / x=%d y=%d / pathx=%d pathy=%d\n",pMst->nLoadIdx, pMst->nPosX>>12, pMst->nPosY>>12, pPath->nPathPosX>>12, pPath->nPathPosY>>12);
-				// Recalage au centre du bloc de path pour les recherches à suivre.
+				// Recalage au centre du bloc de path pour les recherches ï¿½ suivre.
 				pPath->nPathPosX &= ~0xFFF;
 				pPath->nPathPosX |= 0x700;	//0x800;
 				pPath->nPathPosY &= ~0xFFF;
@@ -648,7 +648,7 @@ void Mst_PathMove(struct SMstCommon *pMst, struct SMstPath *pPath, s32 nSpdAcc, 
 				if (nNew < 16)	// Direction.
 				{
 					u8	nDiff;
-					// Détermine le sens de rotation.
+					// Dï¿½termine le sens de rotation.
 					pPath->nNewAngle = nNew << 4;
 					nDiff = pMst->nAngle - pPath->nNewAngle;
 					pPath->nSensRot = (nDiff & 128 ? 2 : -2);
@@ -675,12 +675,12 @@ void Mst_PathMove(struct SMstCommon *pMst, struct SMstPath *pPath, s32 nSpdAcc, 
 [mst34] L11 Mars Eye
 Type = 0:3: MarsEyeTIE - MarsEye2 -
 Drop = 4:7: Nothing - H_Machinegun - Gas_Tank -
-SeqNo = 8:11:			; No de la séquence.
+SeqNo = 8:11:			; No de la sï¿½quence.
 Offset = 12:15:			; Offset.
-Order = 16:19:			; N° d'ordre dans la séquence (pour trouver le leader).
+Order = 16:19:			; Nï¿½ d'ordre dans la sï¿½quence (pour trouver le leader).
 Shot Pattern = 20:23: One_By_One - All_Together	; Type de tir : Un par un - Tous ensemble.
-Shot 1st Delay = 24:27:		; Délai avant le premier tir (* 16 frames).
-Shot Delay = 28:31:		; Délai entre les tirs (* 16 frames).
+Shot 1st Delay = 24:27:		; Dï¿½lai avant le premier tir (* 16 frames).
+Shot Delay = 28:31:		; Dï¿½lai entre les tirs (* 16 frames).
 Shot Nb = 32:35:		; Nb de tirs.
 Scroll type = 36:36: Y - X	; Scroll V ou H.
 prm = 37:39:			; tmp
@@ -695,14 +695,14 @@ enum
 
 #define	MST34_SCREEN_OFFSET	24
 
-// Structure spécifique. !!! Attention, MST41 utilise la même struct !!!
+// Structure spï¿½cifique. !!! Attention, MST41 utilise la mï¿½me struct !!!
 struct SMst34_L11MarsEye0
 {
 	struct SMstPath	sPath;
 	u8	nType;			// Type des monstres.
-	u8	nDrop;			// Item lachée par le dernier monstre de la séquence.
-	u8	nSeqNo;			// N° de la séquence.
-	u8	nOrder;			// N° d'ordre dans la séquence.
+	u8	nDrop;			// Item lachï¿½e par le dernier monstre de la sï¿½quence.
+	u8	nSeqNo;			// Nï¿½ de la sï¿½quence.
+	u8	nOrder;			// Nï¿½ d'ordre dans la sï¿½quence.
 	u8	nHitCnt, nLife;
 
 	s8	nShotAnm;
@@ -730,9 +730,9 @@ void Mst34_Init_L11MarsEye0(struct SMstCommon *pMst, u8 *pData)
 	pSpe->nDrop = gpnMst34ItmTb[nVal];
 //pSpe->nDrop = gnItmTb[2];//2;	//test test test test
 	nVal = GetBits(8, 11, pData, 0);
-	pSpe->nSeqNo = nVal;	// N° de séquence.
+	pSpe->nSeqNo = nVal;	// Nï¿½ de sï¿½quence.
 	nVal = GetBits(16, 19, pData, 0);
-	pSpe->nOrder = nVal;	// N° d'ordre dans la séquence.
+	pSpe->nOrder = nVal;	// Nï¿½ d'ordre dans la sï¿½quence.
 	nOffset = GetBits(12, 15, pData, 0);
 	// Bits leader.
 	gMstMisc.pSeqLeader[pSpe->nSeqNo] |= 1 << pSpe->nOrder;	// Pour recherche des leaders.
@@ -749,13 +749,13 @@ void Mst34_Init_L11MarsEye0(struct SMstCommon *pMst, u8 *pData)
 	pSpe->nShotCnt = nVal << 4;
 	nVal = GetBits(20, 23, pData, 0);	// Shot pattern. 0 = 1 par 1 / 1 = Tous ensemble.
 	if (nVal)
-		pSpe->nShotCnt -= (24 * pSpe->nOrder);		// Tous ensemble => On décale le timer mst par mst.
-	nVal = GetBits(28, 31, pData, 0);	// Fréquence.
+		pSpe->nShotCnt -= (24 * pSpe->nOrder);		// Tous ensemble => On dï¿½cale le timer mst par mst.
+	nVal = GetBits(28, 31, pData, 0);	// Frï¿½quence.
 	pSpe->nShotFreq = nVal << 4;
 	nVal = GetBits(32, 35, pData, 0);	// Nb de tirs.
 	pSpe->nShotNb = nVal;
 
-	// Replacement aux abords de l'écran.
+	// Replacement aux abords de l'ï¿½cran.
 	nVal = GetBits(36, 36, pData, 0);
 	pSpe->nScrollXY = nVal;
 	if (pSpe->nScrollXY)
@@ -768,7 +768,7 @@ void Mst34_Init_L11MarsEye0(struct SMstCommon *pMst, u8 *pData)
 		pMst->nPosY = gScrollPos.nPosY;
 		pMst->nPosY += nOffset << 12;
 	}
-	// Et décalage en dehors.
+	// Et dï¿½calage en dehors.
 	Mst_PutOutOfScreen(pMst, MST34_SCREEN_OFFSET);
 
 }
@@ -788,17 +788,17 @@ u32 Mst34_41_Common(struct SMstCommon *pMst)
 	{
 		gShoot.nPlayerScore += gpMstTb[pMst->nMstNo].nPoints;	// Score.
 _34MarsEyeDeath:
-		// Différents dusts.
+		// Diffï¿½rents dusts.
 		DustSet(gAnm_Explosion0_Medium_Dust, pMst->nPosX, pMst->nPosY + (5 << 8), e_Prio_DustUnder, 0);
 //	DustSetMvt(gAnm_Debris_Metal0_Dust, pMst->nPosX, pMst->nPosY, 0x180, -0x480, e_Prio_DustUnder - 1, e_DustFlag_Gravity);
 //	DustSetMvt(gAnm_Debris_Metal0_Dust, pMst->nPosX, pMst->nPosY, -0x180, -0x380, e_Prio_DustUnder - 1, e_DustFlag_Gravity);
 		// Cleare le bit de lead.
 		gMstMisc.pSeqLeader[pSpe->nSeqNo] &= ~(1 << pSpe->nOrder);
-		// Décrémente la séquence.
+		// Dï¿½crï¿½mente la sï¿½quence.
 		if (--gMstMisc.pSeqCount[pSpe->nSeqNo] == 0)
 		if (pSpe->nDrop)
 		{
-			// Largage d'une item quand le dernier monstre de la séquence explose.
+			// Largage d'une item quand le dernier monstre de la sï¿½quence explose.
 /*
 [mst4] Weapon Capsule
 Type = 0:3: S_Shotgun - H_Machinegun - F_Flamethrower - R_Rocket - Gas_Tank - Ammo_Box1
@@ -822,10 +822,10 @@ Location = 5:6: Normal - Space - Underwater - Air
 	if (Enemy_PlayerBlowRect(&sRect1, pMst->nPosX, pMst->nPosY, MST_DAMAGE_EXPLO)) goto _34MarsEyeDeath;
 
 	// Est-on le leader ? (ok mais inutile pour l'instant)
-//	u32	nLeader = ((gMstMisc.pSeqLeader[pSpe->nSeqNo] & ~(0xFF << (pSpe->nOrder + 1))) == 1 << pSpe->nOrder ? 1 : 0);	// Le leader = le bit le plus à droite !
+//	u32	nLeader = ((gMstMisc.pSeqLeader[pSpe->nSeqNo] & ~(0xFF << (pSpe->nOrder + 1))) == 1 << pSpe->nOrder ? 1 : 0);	// Le leader = le bit le plus ï¿½ droite !
 
-	// Déclenchement de l'anim de tir ?
-	if (MST_SHOT_COND)		// Si le héros n'est pas mort...
+	// Dï¿½clenchement de l'anim de tir ?
+	if (MST_SHOT_COND)		// Si le hï¿½ros n'est pas mort...
 	if (pSpe->nShotCnt) pSpe->nShotCnt--;
 	if (pSpe->nShotCnt == 1)
 	{
@@ -865,7 +865,7 @@ Location = 5:6: Normal - Space - Underwater - Air
 	// Affichage body.
 	if (pSpe->nHitCnt) pSpe->nHitCnt--;
 	SprDisplay((nSpr | (pSpe->nHitCnt ? SPR_Flag_HitPal : 0)) ^ (pMst->nFlipX ? SPR_Flip_X : 0), pMst->nPosX >> 8, pMst->nPosY >> 8, e_Prio_Ennemies + gnMstPrio);
-	// Affichage de l'éclat du tir.
+	// Affichage de l'ï¿½clat du tir.
 	if (nSprShot != SPR_NoSprite)
 		SprDisplay(nSprShot | (pSpe->nHitCnt ? SPR_Flag_HitPal : 0), (pMst->nPosX >> 8) + nShotOffsX, (pMst->nPosY >> 8) + nShotOffsY, e_Prio_Ennemies + 1 + gnMstPrio);
 
@@ -882,11 +882,11 @@ s32 Mst34_Main_L11MarsEye0(struct SMstCommon *pMst)
 {
 	struct SMst34_L11MarsEye0	*pSpe = (struct SMst34_L11MarsEye0 *)pMst->pData;
 
-	// Sortie de l'écran ?
+	// Sortie de l'ï¿½cran ?
 	if (Screen_ObjectOut(pMst->nPosX, pMst->nPosY))
 	{
 		gMstMisc.pSeqCount2[pSpe->nSeqNo]--;
-		if (pSpe->nShotAnm != -1) AnmReleaseSlot(pSpe->nShotAnm);	// Libère le slot de tir.
+		if (pSpe->nShotAnm != -1) AnmReleaseSlot(pSpe->nShotAnm);	// Libï¿½re le slot de tir.
 		return (e_MstState_Dead);
 	}
 
@@ -914,7 +914,7 @@ s32 Mst34_Main_L11MarsEye0(struct SMstCommon *pMst)
 		break;
 	}
 
-	// Déplacement sur path.
+	// Dï¿½placement sur path.
 	Mst_PathMove(pMst, &pSpe->sPath, MST34_ACC, e_Mst34_Turn);
 
 	// Affichage, tir, contact, etc...
@@ -941,10 +941,10 @@ struct SL11SpaceRock
 	u8	nType;
 	u8	nCnt;
 };
-struct SL11SpaceRock	gpL11SpaceRocks[L11SPACEROCKS_MAX];	// Tableau général pour stockage des cailloux.
+struct SL11SpaceRock	gpL11SpaceRocks[L11SPACEROCKS_MAX];	// Tableau gï¿½nï¿½ral pour stockage des cailloux.
 u8	gnL11SpaceRockAngle;	// Angle, utile pour les mst 35 et 36.
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst35_L11SpaceRocks0
 {
 	u32	nPrevBlkY;
@@ -969,13 +969,13 @@ void Mst35_Init_L11SpaceRocks0(struct SMstCommon *pMst, u8 *pData)
 	struct SMst35_L11SpaceRocks0	*pSpe = (struct SMst35_L11SpaceRocks0 *)pMst->pData;
 	u32	i;
 
-	// Init sur tout l'écran.
+	// Init sur tout l'ï¿½cran.
 	for (i = 0; i < L11SPACEROCKS_MAX; i++)
 	{
 		Mst35_sub_NewRock(i);
 		gpL11SpaceRocks[i].nPosY = gScrollPos.nPosY + (((rand() % (SCR_Height + 20)) - 10) << 8);
 	}
-	gnL11SpaceRockAngle = 192;	// Par défaut, vers le bas.
+	gnL11SpaceRockAngle = 192;	// Par dï¿½faut, vers le bas.
 	pSpe->nReqAngle = gnL11SpaceRockAngle;
 
 	// Init du bloc Y pour recherche des chemins.
@@ -1013,11 +1013,11 @@ s32 Mst35_Main_L11SpaceRocks0(struct SMstCommon *pMst)
 	// Management des cailloux.
 	for (i = 0; i < L11SPACEROCKS_MAX; i++)
 	{
-		// Déplacement.
+		// Dï¿½placement.
 		gpL11SpaceRocks[i].nPosX += (gVar.pCos[gnL11SpaceRockAngle] * (s32)gpL11SpaceRocks[i].nSpd) >> 8;
 		gpL11SpaceRocks[i].nPosY += (gVar.pSin[gnL11SpaceRockAngle] * (s32)gpL11SpaceRocks[i].nSpd) >> 8;
 		gpL11SpaceRocks[i].nPosY += L11_SCROLLSPD;	// Scroll spd.
-		// Sortie de l'écran ?
+		// Sortie de l'ï¿½cran ?
 		if (gpL11SpaceRocks[i].nPosY > gScrollPos.nPosY + ((SCR_Height + 10) << 8))
 			Mst35_sub_NewRock(i);
 		// Affichage.
@@ -1033,11 +1033,11 @@ s32 Mst35_Main_L11SpaceRocks0(struct SMstCommon *pMst)
 
 /*
 [mst36] L11 Asteroids
-SeqNo = 0:3:		; No de la séquence.
+SeqNo = 0:3:		; No de la sï¿½quence.
 prm = 4:7:			; tmp
 */
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst36_L11Asteroid0
 {
 	u8	nHitCnt, nLife;
@@ -1063,10 +1063,10 @@ s32 Mst36_Main_L11Asteroid0(struct SMstCommon *pMst)
 	struct SMst36_L11Asteroid0	*pSpe = (struct SMst36_L11Asteroid0 *)pMst->pData;
 	u32	nSpr;
 
-	// Sortie de l'écran ?
+	// Sortie de l'ï¿½cran ?
 	if (Screen_ObjectOut(pMst->nPosX, pMst->nPosY)) { gMstMisc.pSeqCount2[pSpe->nSeqNo]--; return (e_MstState_Dead); }
 
-	// Déplacement du monstre.
+	// Dï¿½placement du monstre.
 	s32	nSpdX, nSpdY;
 	nSpdX = (gVar.pCos[gnL11SpaceRockAngle] * pMst->nSpd) >> 8;
 	nSpdY = (gVar.pSin[gnL11SpaceRockAngle] * pMst->nSpd) >> 8;
@@ -1111,8 +1111,8 @@ void Game_Player_DeathSet(void);
 
 /*
 [mst37] L11 Big Asteroids
-SeqNo = 0:3:		; No de la séquence.
-Order = 4:7:		; N° d'ordre dans la séquence (pour trouver le leader).
+SeqNo = 0:3:		; No de la sï¿½quence.
+Order = 4:7:		; Nï¿½ d'ordre dans la sï¿½quence (pour trouver le leader).
 */
 
 // Phases.
@@ -1123,14 +1123,14 @@ enum
 	e_Mst37_Broken,
 };
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst37_L11BigAsteroid0
 {
 	u8	nHitCnt, nLife;
-	u8	nSeqNo;			// N° de la séquence.
-	u8	nOrder;			// N° d'ordre dans la séquence.
+	u8	nSeqNo;			// Nï¿½ de la sï¿½quence.
+	u8	nOrder;			// Nï¿½ d'ordre dans la sï¿½quence.
 	s32	nPosX2;			// PosX seconde partie.
-	u8	nDustNo;		// Pour décalage des dusts.
+	u8	nDustNo;		// Pour dï¿½calage des dusts.
 };
 
 void Mst37_Init_L11BigAsteroid0(struct SMstCommon *pMst, u8 *pData)
@@ -1160,19 +1160,19 @@ void Mst37_Init_L11BigAsteroid0(struct SMstCommon *pMst, u8 *pData)
 s32 Mst37_Main_L11BigAsteroid0(struct SMstCommon *pMst)
 {
 	struct SMst37_L11BigAsteroid0	*pSpe = (struct SMst37_L11BigAsteroid0 *)pMst->pData;
-	u32	nSprDisp;			// Sprite à afficher (spr + spr+1).
+	u32	nSprDisp;			// Sprite ï¿½ afficher (spr + spr+1).
 	u32	pnSprCtc[2];		// Sprites de contact.
 	u32	nSprCtcInList = 0;
 	u32	i;
 
-	// Sort de l'écran par le bas ?
+	// Sort de l'ï¿½cran par le bas ?
 	if (pMst->nPosY > gScrollPos.nPosY + (SCR_Height << 8) + (7 << 12))
 	{
 //		gMstMisc.pSeqCount2[pSpe->nSeqNo]--;
 		return (e_MstState_Dead);
 	}
 
-	nSprDisp = e_Spr_BigAsteroid;	// Spr par défaut.
+	nSprDisp = e_Spr_BigAsteroid;	// Spr par dï¿½faut.
 
 	switch (pMst->nPhase)
 	{
@@ -1190,7 +1190,7 @@ s32 Mst37_Main_L11BigAsteroid0(struct SMstCommon *pMst)
 	case e_Mst37_Cracks:
 		nSprDisp = AnmGetImage(pMst->nAnm);
 		pnSprCtc[nSprCtcInList++] = nSprDisp;	// Sprite de contact.
-		// Dusts quand signal donné.
+		// Dusts quand signal donnï¿½.
 		if (AnmCheckStepFlag(pMst->nAnm))
 		{
 			DustSetMvt(gAnm_BigAsteroid_Cracks_Dust, pMst->nPosX + ((pSpe->nDustNo & 1) << (3+8)), pMst->nPosY - ((80 - (23 * pSpe->nDustNo)) << 8), pMst->nSpd, pMst->nSpdY, e_Prio_DustOver, 0);
@@ -1215,22 +1215,22 @@ s32 Mst37_Main_L11BigAsteroid0(struct SMstCommon *pMst)
 		break;
 	}
 
-	// Déplacement du monstre.
+	// Dï¿½placement du monstre.
 	s32	nOldY = pMst->nPosY;
 	pMst->nPosX += pMst->nSpd;
 	pSpe->nPosX2 += pMst->nSpd;
 	pMst->nPosY += pMst->nSpdY;
 
-	// Décrémente la séquence ?
+	// Dï¿½crï¿½mente la sï¿½quence ?
 	if (nOldY < gScrollPos.nPosY + ((SCR_Height - 32) << 8) && pMst->nPosY >= gScrollPos.nPosY + ((SCR_Height - 32) << 8))
 		gMstMisc.pSeqCount2[pSpe->nSeqNo]--;
 
-	// Blocage des tirs + touchés.
+	// Blocage des tirs + touchï¿½s.
 	for (i = 0; i < nSprCtcInList; i++)
 	{
 		u32	nSpr;
 		nSpr = pnSprCtc[i];
-		// Blocage des tirs (sans dégats sur le monstre, gérés plus haut dans la phase e_Mst37_Fly).
+		// Blocage des tirs (sans dï¿½gats sur le monstre, gï¿½rï¿½s plus haut dans la phase e_Mst37_Fly).
 		FireHitCheck(nSpr, (i == 0 ? pMst->nPosX : pSpe->nPosX2), pMst->nPosY, e_ShotOrg_Player, 1);
 
 		// Contact avec le joueur ?
@@ -1242,7 +1242,7 @@ s32 Mst37_Main_L11BigAsteroid0(struct SMstCommon *pMst)
 			// Rect ennemi.
 			if (SprGetRect(nSpr, e_SprRectZone_RectCol, &sRect1) == 0) continue;
 			if (sRect1.nType != e_SprRect_Rect) continue;
-			// Appel du dégat normal pour dégager les cannons. > Ou pas ?
+			// Appel du dï¿½gat normal pour dï¿½gager les cannons. > Ou pas ?
 //			if (gShoot.nVehicleHitCnt == 0)
 //				Enemy_PlayerBlowRect(&sRect1, (i == 0 ? pMst->nPosX : pSpe->nPosX2), pMst->nPosY, MST_DAMAGE_BULLET);
 			// Rect joueur.
@@ -1274,7 +1274,7 @@ s32 Mst37_Main_L11BigAsteroid0(struct SMstCommon *pMst)
 
 				if (nCtrX2 >= nXMin1 && nCtrX2 <= nXMax1 &&
 					nCtrY2 >= nYMin1 && nCtrY2 <= nYMax1)
-				{	// Si le centre du vaisseau du héros est dans l'astéroïde (fin d'invulnérabilité...), mort immédiate.
+				{	// Si le centre du vaisseau du hï¿½ros est dans l'astï¿½roï¿½de (fin d'invulnï¿½rabilitï¿½...), mort immï¿½diate.
 					Player_Damage(SLUG_ENERGY_MAX);
 				}
 				else
@@ -1295,7 +1295,7 @@ s32 Mst37_Main_L11BigAsteroid0(struct SMstCommon *pMst)
 						gShoot.nPlayerPosX += nDX;
 				}
 
-				// Si on s'est fait pousser hors de l'écran, mort immédiate.
+				// Si on s'est fait pousser hors de l'ï¿½cran, mort immï¿½diate.
 				if (Rocket_EnemyCheckScreenOut()) Player_Damage(SLUG_ENERGY_MAX);
 			}
 		}
@@ -1315,8 +1315,8 @@ s32 Mst37_Main_L11BigAsteroid0(struct SMstCommon *pMst)
 
 /*
 [mst38] Big Jellyfish (half-boss)
-Wait itm = 0:7:			; N° item de quête attendu pour démarrer.
-Give itm = 8:15:		; N° item de quête à donner une fois mort pour libérer le scroll.
+Wait itm = 0:7:			; Nï¿½ item de quï¿½te attendu pour dï¿½marrer.
+Give itm = 8:15:		; Nï¿½ item de quï¿½te ï¿½ donner une fois mort pour libï¿½rer le scroll.
 */
 
 // Phases.
@@ -1329,7 +1329,7 @@ enum
 
 };
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 #define	MST38_SAT_OFFSET	48
 #define	MST38_SAT_NB		8
 #define	MST38_WAVES_NB		3
@@ -1337,20 +1337,20 @@ enum
 #define	MST38_STOP_FRM		(196 - (MST38_WAVES_NB * MST38_WAVES_MULT))
 struct SMst38_BigJellyfish0
 {
-	u8	nItemWait;	// N° item de quête attendu pour démarrer.
-	u8	nItemGive;	// N° item de quête à donner une fois mort pour libérer le scroll.
+	u8	nItemWait;	// Nï¿½ item de quï¿½te attendu pour dï¿½marrer.
+	u8	nItemGive;	// Nï¿½ item de quï¿½te ï¿½ donner une fois mort pour libï¿½rer le scroll.
 
 	u8	nHitCnt, nLife;
 
 	u8	nAngle;		// Angle pour faire tourner les "satellites".
-	u16	nSatPres;	// Bits pour la présence des satellites. 0 = Tous morts.
-	u8	pnSatLife[MST38_SAT_NB];	// Vie des différents satellites.
-	u8	pnSatHitCnt[MST38_SAT_NB];	// HitCnt des différents satellites.
+	u16	nSatPres;	// Bits pour la prï¿½sence des satellites. 0 = Tous morts.
+	u8	pnSatLife[MST38_SAT_NB];	// Vie des diffï¿½rents satellites.
+	u8	pnSatHitCnt[MST38_SAT_NB];	// HitCnt des diffï¿½rents satellites.
 	u8	nOffset;
-	u8	nWavesNb;		// Nb de cercles successifs de méduses.
+	u8	nWavesNb;		// Nb de cercles successifs de mï¿½duses.
 
-	s32	nTargetX, nTargetY;		// Cible du déplacement.
-	u8	nStopWait;				// Attente après déplacement.
+	s32	nTargetX, nTargetY;		// Cible du dï¿½placement.
+	u8	nStopWait;				// Attente aprï¿½s dï¿½placement.
 
 };
 
@@ -1359,9 +1359,9 @@ void Mst38_Init_BigJellyfish0(struct SMstCommon *pMst, u8 *pData)
 	struct SMst38_BigJellyfish0	*pSpe = (struct SMst38_BigJellyfish0 *)pMst->pData;
 	u32	nVal;
 
-	nVal = GetBits(0, 7, pData, 0);		// N° item de quête attendu pour démarrer.
+	nVal = GetBits(0, 7, pData, 0);		// Nï¿½ item de quï¿½te attendu pour dï¿½marrer.
 	pSpe->nItemWait = nVal;
-	nVal = GetBits(8, 15, pData, 0);	// N° item de quête à donner une fois mort pour libérer le scroll.
+	nVal = GetBits(8, 15, pData, 0);	// Nï¿½ item de quï¿½te ï¿½ donner une fois mort pour libï¿½rer le scroll.
 	pSpe->nItemGive = nVal;
 
 	pSpe->nHitCnt = 0;
@@ -1385,7 +1385,7 @@ void Mst38_sub_SatellitesInit(struct SMst38_BigJellyfish0 *pSpe, u32 nOffset)
 		pSpe->pnSatLife[i] = 4;
 		pSpe->pnSatHitCnt[i] = 0;
 	}
-	pSpe->nSatPres = (1 << MST38_SAT_NB) - 1;	// Bits à 1 pour les présents.
+	pSpe->nSatPres = (1 << MST38_SAT_NB) - 1;	// Bits ï¿½ 1 pour les prï¿½sents.
 	pSpe->nOffset = nOffset;
 
 }
@@ -1399,12 +1399,12 @@ s32 Mst38_Main_BigJellyfish0(struct SMstCommon *pMst)
 
 	switch (pMst->nPhase)
 	{
-	case e_Mst38_BigJellyfish_WaitItem:		// Attend une item de quête avant d'apparaître.
+	case e_Mst38_BigJellyfish_WaitItem:		// Attend une item de quï¿½te avant d'apparaï¿½tre.
 		if (gpMstQuestItems[pSpe->nItemWait])
 		{
 			// Init des satellites.
 			Mst38_sub_SatellitesInit(pSpe, MST38_SAT_OFFSET);
-			// Position. (On pourrait l'initialiser de l'autre côté en fct de la pos du joueur).
+			// Position. (On pourrait l'initialiser de l'autre cï¿½tï¿½ en fct de la pos du joueur).
 			pMst->nPosX = gScrollPos.nPosX + ((SCR_Width + 64) << 8);
 			pMst->nPosY = gScrollPos.nPosY + ((SCR_Height / 2) << 8);
 			pMst->nSpd = 0;
@@ -1415,7 +1415,7 @@ s32 Mst38_Main_BigJellyfish0(struct SMstCommon *pMst)
 		}
 		else
 		{
-			// Sortie de l'écran ?
+			// Sortie de l'ï¿½cran ?
 			if (Screen_ObjectOut(pMst->nPosX, pMst->nPosY)) return (e_MstState_Asleep);
 		}
 		return (e_MstState_Managed);
@@ -1423,8 +1423,8 @@ s32 Mst38_Main_BigJellyfish0(struct SMstCommon *pMst)
 
 	case e_Mst38_BigJellyfish_Stop:		// Attente.
 		nTouch = 1;
-		// Déclenchement du mvt (si plus de satellites, on skippe la phase de ring).
-		if (MST_SHOT_COND)	// Si le héros n'est pas mort...
+		// Dï¿½clenchement du mvt (si plus de satellites, on skippe la phase de ring).
+		if (MST_SHOT_COND)	// Si le hï¿½ros n'est pas mort...
 		if (--pSpe->nStopWait == 0)
 		{
 			pMst->nPhase = (pSpe->nSatPres ==  0 ? e_Mst38_BigJellyfish_Move : e_Mst38_BigJellyfish_JfishRing);
@@ -1434,9 +1434,9 @@ s32 Mst38_Main_BigJellyfish0(struct SMstCommon *pMst)
 		}
 		break;
 
-	case e_Mst38_BigJellyfish_JfishRing:	// Anneau qui grossit/réduit avant la charge.
-		if (pSpe->nOffset < MST38_SAT_OFFSET) break;	// Si en phase de régénération, on attend.
-		// Grossissement / Réduction.
+	case e_Mst38_BigJellyfish_JfishRing:	// Anneau qui grossit/rï¿½duit avant la charge.
+		if (pSpe->nOffset < MST38_SAT_OFFSET) break;	// Si en phase de rï¿½gï¿½nï¿½ration, on attend.
+		// Grossissement / Rï¿½duction.
 		pSpe->nOffset = MST38_SAT_OFFSET + (pSpe->nStopWait > 16 ? 32 - pSpe->nStopWait : pSpe->nStopWait);
 		// Fini ?
 		if (++pSpe->nStopWait > 32)
@@ -1446,27 +1446,27 @@ s32 Mst38_Main_BigJellyfish0(struct SMstCommon *pMst)
 		}
 		break;
 
-	case e_Mst38_BigJellyfish_Move:		// Déplacement vers sa cible.
+	case e_Mst38_BigJellyfish_Move:		// Dï¿½placement vers sa cible.
 		nTouch = 1;
 		{
 			s32	nIncX, nIncY;
-			s32	nSub = (pSpe->nWavesNb ? 0 : 0x40);		// Pour ne pas s'arrêter avant le joueur quand plus de cercles de méduses.
+			s32	nSub = (pSpe->nWavesNb ? 0 : 0x40);		// Pour ne pas s'arrï¿½ter avant le joueur quand plus de cercles de mï¿½duses.
 			// Avance vers la destination finale.
 			nIncX = (pSpe->nTargetX - pMst->nPosX) / 32;
 			nIncY = (pSpe->nTargetY - pMst->nPosY) / 32;
 			pMst->nPosX += nIncX;
 			pMst->nPosY += nIncY;
-			// Arrivé pas trop loin ?
+			// Arrivï¿½ pas trop loin ?
 			if (ABS(nIncX) < 0x80 - nSub && ABS(nIncY) < 0x80 - nSub)
 			{
 				pMst->nPhase = e_Mst38_BigJellyfish_Stop;
-				pSpe->nStopWait = MST38_STOP_FRM + (pSpe->nWavesNb * MST38_WAVES_MULT);		// Attente après déplacement.
+				pSpe->nStopWait = MST38_STOP_FRM + (pSpe->nWavesNb * MST38_WAVES_MULT);		// Attente aprï¿½s dï¿½placement.
 			}
 		}
 		break;
 	}
 
-	nSpr = AnmGetImage(pMst->nAnm);		// Maître.
+	nSpr = AnmGetImage(pMst->nAnm);		// Maï¿½tre.
 
 	// Affichage des satellites.
 	if (pSpe->nSatPres)
@@ -1474,7 +1474,7 @@ s32 Mst38_Main_BigJellyfish0(struct SMstCommon *pMst)
 		u32	i;
 		s32	nOffsX, nOffsY;
 		u8	nAng = pSpe->nAngle;
-		u32	nOffsImg = (nAng >> 2) % 10;	// Pour anim manuelle des petites méduses.
+		u32	nOffsImg = (nAng >> 2) % 10;	// Pour anim manuelle des petites mï¿½duses.
 		for (i = 0; i < MST38_SAT_NB; i++)
 		{
 			if (pSpe->nSatPres & (1 << i))
@@ -1493,7 +1493,7 @@ s32 Mst38_Main_BigJellyfish0(struct SMstCommon *pMst)
 				if (Enemy_PlayerBlowRect(&sRect1, pMst->nPosX + nOffsX, pMst->nPosY + nOffsY, MST_DAMAGE_BULLET)) goto _38SmallJellyfishDeath;
 
 				//if (nTouch)
-				if (nTouch && pSpe->nOffset > (3 * MST38_SAT_OFFSET) / 4)	// (On empêche le toucher trop tôt à cause des bombes).
+				if (nTouch && pSpe->nOffset > (3 * MST38_SAT_OFFSET) / 4)	// (On empï¿½che le toucher trop tï¿½t ï¿½ cause des bombes).
 				{
 					// Se prend un tir ?
 					if (Mst_ShotCheckLife(e_Spr_JellyfishSmall_Swim, pMst->nPosX + nOffsX, pMst->nPosY + nOffsY, &pSpe->pnSatHitCnt[i], &pSpe->pnSatLife[i]))
@@ -1507,7 +1507,7 @@ _38SmallJellyfishDeath:
 				}
 				else
 				{
-					// Interception des tirs sans dégats.
+					// Interception des tirs sans dï¿½gats.
 					u8	nHitCnt, nLife;
 					nLife = 0;
 					Mst_ShotCheckLife(e_Spr_JellyfishSmall_Swim, pMst->nPosX + nOffsX, pMst->nPosY + nOffsY, &nHitCnt, &nLife);
@@ -1517,38 +1517,38 @@ _38SmallJellyfishDeath:
 			if (++nOffsImg >= 10) nOffsImg = 0;
 		}
 //		pSpe->nAngle++;
-		pSpe->nAngle += (pSpe->nWavesNb & 1 ? 1 : -1);		// On fait tourner le cercle de méduses dans un sens ou dans l'autre.
+		pSpe->nAngle += (pSpe->nWavesNb & 1 ? 1 : -1);		// On fait tourner le cercle de mï¿½duses dans un sens ou dans l'autre.
 
-		// Ré-init des satellites.
+		// Rï¿½-init des satellites.
 		if (pSpe->nSatPres == 0)
 		if (--pSpe->nWavesNb)
 			Mst38_sub_SatellitesInit(pSpe, 0);
-		// Si l'offset n'est pas au max, on l'incrémente.
+		// Si l'offset n'est pas au max, on l'incrï¿½mente.
 		if (pSpe->nOffset < MST38_SAT_OFFSET) pSpe->nOffset++;
 
-		// Tant qu'il y a des satellites, le maître ne se prend pas de dégats.
+		// Tant qu'il y a des satellites, le maï¿½tre ne se prend pas de dï¿½gats.
 		FireHitCheck(nSpr, pMst->nPosX, pMst->nPosY, e_ShotOrg_Player, 1);
 	}
 	else
 	{
-		// Plus de satellites, dégats sur le maître. (nTouch inutile, puisqu'on ne se retrouvera pas sans satellites ici, et les satellites font le test).
+		// Plus de satellites, dï¿½gats sur le maï¿½tre. (nTouch inutile, puisqu'on ne se retrouvera pas sans satellites ici, et les satellites font le test).
 		// Se prend un tir ?
 		if (Mst_ShotCheckLife2(nSpr, pMst->nPosX, pMst->nPosY, &pSpe->nHitCnt, &pSpe->nLife, e_ShotCheck_MinimizedDamage))
 		{
 			// Mort.
 			gShoot.nPlayerScore += gpMstTb[pMst->nMstNo].nPoints;	// Score.
 			DustSet(gAnm_JellyfishBig_Death_Dust, pMst->nPosX, pMst->nPosY, e_Prio_DustUnder, 0);
-			gpMstQuestItems[pSpe->nItemGive] = 1;	// Item de quête.
+			gpMstQuestItems[pSpe->nItemGive] = 1;	// Item de quï¿½te.
 			return (e_MstState_Dead);
 		}
 	}
 
-	// Contact du corps de la méduse avec le joueur.
+	// Contact du corps de la mï¿½duse avec le joueur.
 	if (SprGetRect(nSpr, e_SprRectZone_RectCol, &sRect1))
 	if (sRect1.nType == e_SprRect_Rect)
 		Enemy_PlayerBlowRect(&sRect1, pMst->nPosX, pMst->nPosY, MST_DAMAGE_BULLET);
 
-	// Affichage du maître.
+	// Affichage du maï¿½tre.
 	if (pSpe->nHitCnt) pSpe->nHitCnt--;
 	SprDisplay(nSpr | (pSpe->nHitCnt ? SPR_Flag_HitPal : 0), pMst->nPosX >> 8, pMst->nPosY >> 8, e_Prio_Ennemies);	// + gnMstPrio => non pour ce monstre.
 
@@ -1556,14 +1556,14 @@ _38SmallJellyfishDeath:
 }
 
 //=============================================================================
-// Mst 39 : Sensor Mine (mine aimantée).
+// Mst 39 : Sensor Mine (mine aimantï¿½e).
 
 /*
 [mst39] Sensor Mine
 prm = 0:7:			; tmp
 */
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst39_SensorMine0
 {
 	u8	nHitCnt, nLife;
@@ -1587,9 +1587,9 @@ s32 Mst39_Main_SensorMine0(struct SMstCommon *pMst)
 
 	nSpr = AnmGetImage(pMst->nAnm);
 
-	ChaserTarget_AddToList(pMst->nPosX >> 8, pMst->nPosY >> 8);	// Ajout dans la table de visée des missiles.
+	ChaserTarget_AddToList(pMst->nPosX >> 8, pMst->nPosY >> 8);	// Ajout dans la table de visï¿½e des missiles.
 
-	// Si le joueur est en slug et dans le périmètre, on se dirige vers le slug.
+	// Si le joueur est en slug et dans le pï¿½rimï¿½tre, on se dirige vers le slug.
 	struct SSprRect sRect1;
 	if (gShoot.nVehicleType >= e_HeroVehicle_SlugBase)
 	if (SprGetRect(gShoot.nPlayerSprCol, e_SprRectZone_RectCol, &sRect1))
@@ -1644,7 +1644,7 @@ assert(sizeof(struct SAAD) < MST_COMMON_DATA_SZ);
 */
 
 #ifndef NDEBUG
-// Debug, vérification de la taille des structures.
+// Debug, vï¿½rification de la taille des structures.
 void Mst30CheckStructSizes(void)
 {
 	assert(sizeof(struct SMst30_SquidGenerator0) < MST_COMMON_DATA_SZ);

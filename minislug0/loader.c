@@ -3,7 +3,7 @@
 
 //
 // Routines de lecture du EDT.
-// + Fonctions de récupération de hauteur des blocs, ce genre de trucs.
+// + Fonctions de rï¿½cupï¿½ration de hauteur des blocs, ce genre de trucs.
 //
 
 #define	MAP_BLK_HERO	120
@@ -19,8 +19,8 @@ struct SLoadedMst	gLoadedMst;
 
 
 //=============================================================================
-// Le système de sprites "durs".
-// Le truc est prévu uniquement pour des objets dont la base est au sol !
+// Le systï¿½me de sprites "durs".
+// Le truc est prï¿½vu uniquement pour des objets dont la base est au sol !
 // On utilise un sprite dont les bords ne doivent pas avoir de partie "concave".
 
 #define	HARDSPR_MAX_SLOTS	16
@@ -51,7 +51,7 @@ void HardSpr_Init(void)
 }
 
 // Cherche un slot libre.
-// Out : N° d'un slot libre. -1 si erreur.
+// Out : Nï¿½ d'un slot libre. -1 si erreur.
 s32 HardSpr_GetSlot(void)
 {
 	u32	i;
@@ -68,10 +68,10 @@ s32 HardSpr_GetSlot(void)
 	return (-1);
 }
 
-// Libère un slot.
+// Libï¿½re un slot.
 void HardSpr_ReleaseSlot(u32 nSlotNo)
 {
-	// Pour accélérer la recherche des slots libres.
+	// Pour accï¿½lï¿½rer la recherche des slots libres.
 	if (nSlotNo < gnHardSprLastUsed)
 	{
 		gnHardSprLastUsed = nSlotNo;
@@ -79,7 +79,7 @@ void HardSpr_ReleaseSlot(u32 nSlotNo)
 	gpHardSprSlots[nSlotNo].nUsed = 0;
 }
 
-// Ajoute un sprite à la liste.
+// Ajoute un sprite ï¿½ la liste.
 s32 HardSpr_AddToList(u32 nSpr, s32 nPosX, s32 nPosY, u32 nFlags)
 {
 	struct SSprite	*pSpr;
@@ -92,7 +92,7 @@ s32 HardSpr_AddToList(u32 nSpr, s32 nPosX, s32 nPosY, u32 nFlags)
 	}
 
 	nSpr &= ~(SPR_Flip_X | SPR_Flip_Y);
-	// On récupère le descripteur de sprite.
+	// On rï¿½cupï¿½re le descripteur de sprite.
 	if ((pSpr = SprGetDesc(nSpr)) == NULL) { HardSpr_ReleaseSlot(nSlotNo); return (-1);	}
 	gpHardSprSlots[nSlotNo].nX1 = nPosX - pSpr->nPtRefX;
 	gpHardSprSlots[nSlotNo].nY1 = nPosY - pSpr->nPtRefY;
@@ -236,7 +236,7 @@ u32 BlockCeilingGetHeight(u32 nBlockNo, u32 nPosX)
 	pCol = gMap.ppColCodes[gMap.nHeroPlane] + nBlockNo;
 
 /*
-// Fonctionne, mais revoir pour des niveaux de plateforme. Il faudra la même chose pour le BlockGetHeight() (à l'envers bien sûr) mais surtout revoir la routine SideCheck() dans le déplacement du héros.
+// Fonctionne, mais revoir pour des niveaux de plateforme. Il faudra la mï¿½me chose pour le BlockGetHeight() (ï¿½ l'envers bien sï¿½r) mais surtout revoir la routine SideCheck() dans le dï¿½placement du hï¿½ros.
 	if ((pCol->nCol & 0x0F) == e_BlockCode_Hard)	// Test du plafond, bloc dur => On renvoie 0 si la colonne est vide, 16 dans tous les autres cas.
 	{
 		nPosX &= 0x0F;
@@ -258,7 +258,7 @@ u32 BlockCeilingGetHeight(u32 nBlockNo, u32 nPosX)
 
 // Renvoie la hauteur d'un bloc sur une colonne x.
 // Out : 0 => Rien, sinon 1>16.
-	// prévoir un code "dur" qui renvoie 16 immédiatement (?).
+	// prï¿½voir un code "dur" qui renvoie 16 immï¿½diatement (?).
 u32 BlockGetHeight(u32 nBlockNo, u32 nPosX)
 {
 	struct SBlockCol	*pCol;
@@ -279,7 +279,7 @@ u32 BlockGetHeight(u32 nBlockNo, u32 nPosX)
 
 }
 
-// Fonction pour récupérer la hauteur jusqu'au sol à partir d'un point (x,y).
+// Fonction pour rï¿½cupï¿½rer la hauteur jusqu'au sol ï¿½ partir d'un point (x,y).
 // Out : Offset. - si dans du dur, + si en l'air.
 s32 BlockGetGroundLevel2(s32 nPixPosX, s32 nPixPosY)
 {
@@ -305,7 +305,7 @@ s32 BlockGetGroundLevel2(s32 nPixPosX, s32 nPixPosY)
 	if (nHt == 0)
 	{
 		nTotHt = 16 - (nPixPosY & 0x0F);
-		// On descend jusqu'à trouver du dur.
+		// On descend jusqu'ï¿½ trouver du dur.
 		while (nHt == 0)
 		{
 			nBlkY++;
@@ -325,7 +325,7 @@ s32 BlockGetGroundLevel2(s32 nPixPosX, s32 nPixPosY)
 	if (nHt != 16) return (nTotHt);		// Stop.
 
 	// Dans du dur > On remonte.
-	// On monte jusqu'à trouver un bloc pas rempli jusqu'en haut.
+	// On monte jusqu'ï¿½ trouver un bloc pas rempli jusqu'en haut.
 	while (nHt == 16)
 	{
 		nBlkY--;
@@ -339,7 +339,7 @@ s32 BlockGetGroundLevel2(s32 nPixPosX, s32 nPixPosY)
 	return (nTotHt);
 
 }
-// Encapsulation de la fct précédente + test du hard sprite.
+// Encapsulation de la fct prï¿½cï¿½dente + test du hard sprite.
 s32 BlockGetGroundLevel(s32 nPixPosX, s32 nPixPosY)
 {
 	s32	nVal;
@@ -355,7 +355,7 @@ s32 BlockGetGroundLevel(s32 nPixPosX, s32 nPixPosY)
 s32 Map_PathGetBlock(s32 nPosX, s32 nPosY, struct SPathBlock *pCurPath, u32 nCurPathNb)
 {
 /*
-	// Recherche séquentielle.
+	// Recherche sï¿½quentielle.
 	u32	i;
 
 u32	nNbIter = 0;
@@ -397,7 +397,7 @@ printf("Not found: Nb iter=%d\n", nNbIter);
 		if (nStarting > nEnding) return (-1);
  		nLength = nEnding - nStarting;
 
-		// Les bornes se sont rejointes. Il ne reste qu'un élément à tester. C'est le bon ?
+		// Les bornes se sont rejointes. Il ne reste qu'un ï¿½lï¿½ment ï¿½ tester. C'est le bon ?
 		if (nLength == 0)
 		{
 			if (pCurPath[nStarting].nPosY == nPosY && pCurPath[nStarting].nPosX == nPosX)
@@ -423,15 +423,15 @@ printf("Not found: Nb iter=%d\n", nNbIter);
 		{
 //			return mid
 
-			// Au même Y, choix sur le X.
-//			if (pCurPath[nMid].nPosY == nPosY && pCurPath[nMid].nPosX == nPosX)		// le test du Y doit être inutile...
+			// Au mï¿½me Y, choix sur le X.
+//			if (pCurPath[nMid].nPosY == nPosY && pCurPath[nMid].nPosX == nPosX)		// le test du Y doit ï¿½tre inutile...
 			if (pCurPath[nMid].nPosX == nPosX)
 			{
 //printf("Found2: Nb iter=%d\n", nNbIter);
 				return (pCurPath[nMid].nBlockNo);
 			}
 
-			// Optim possible, sur le même Y, rechercher séquentiellement.
+			// Optim possible, sur le mï¿½me Y, rechercher sï¿½quentiellement.
 
 			if (nPosX < pCurPath[nMid].nPosX)
 			{
@@ -451,13 +451,13 @@ printf("Not found: Nb iter=%d\n", nNbIter);
 
 }
 
-// Récupération d'un bloc de path au sol.
+// Rï¿½cupï¿½ration d'un bloc de path au sol.
 s32 Map_PathGndGetBlock(s32 nPosX, s32 nPosY)
 {
 	if (gMap.pPathGnd == NULL) return (-1);
 	return (Map_PathGetBlock(nPosX, nPosY, gMap.pPathGnd, gMap.nPathGndNb));
 }
-// Récupération d'un bloc de path en l'air.
+// Rï¿½cupï¿½ration d'un bloc de path en l'air.
 s32 Map_PathAirGetBlock(s32 nPosX, s32 nPosY)
 {
 	if (gMap.pPathAir == NULL) return (-1);
@@ -485,7 +485,7 @@ u32 ChecksumCalc(u8 *pBuf, u32 nSz)
 	return (nSum);
 }
 
-// Lecture du fichier, calcul du checksum et comparaison avec le checksum sauvegardé.
+// Lecture du fichier, calcul du checksum et comparaison avec le checksum sauvegardï¿½.
 // Out: 1 = Ok / 0 = Failed.
 u32 ChecksumVerify(u32 nLevNo)
 {
@@ -501,7 +501,7 @@ u32 ChecksumVerify(u32 nLevNo)
 		fprintf(stderr, "ChecksumVerify(): Error opening file '%s'.\n", pFilename);
 		goto _err_exit1;
 	}
-	// Récupération de la taille du fichier.
+	// Rï¿½cupï¿½ration de la taille du fichier.
 	s32	nFileSzToLoad, nSz;
 	fseek(fPt, 0L, SEEK_END);
 	nFileSzToLoad = ftell(fPt);
@@ -547,7 +547,7 @@ _err_exit1:
 
 //=============================================================================
 
-// Libère les ressources utilisées par le niveau en cours.
+// Libï¿½re les ressources utilisï¿½es par le niveau en cours.
 void LevelRelease(void)
 {
 	u32	i;
@@ -562,7 +562,7 @@ void LevelRelease(void)
 	}
 	gMap.nPlanesNb = 0;
 
-	// Libère les ressources des monstres.
+	// Libï¿½re les ressources des monstres.
 	if (gLoadedMst.pMstData != NULL) free(gLoadedMst.pMstData);
 	gLoadedMst.pMstData = NULL;
 	if (gLoadedMst.ppMstPtrX != NULL) free(gLoadedMst.ppMstPtrX);	// Les ptrs pointent dans pMstData.
@@ -580,7 +580,7 @@ void LevelRelease(void)
 	gMap.pPathAir = NULL;
 	gMap.nPathAirNb = 0;
 
-	// Blocs animés.
+	// Blocs animï¿½s.
 	if (gMap.pBlkAnmMem != NULL) free(gMap.pBlkAnmMem);
 	gMap.pBlkAnmMem = NULL;
 	for (i = 0; i < MAP_PLANES_MAX; i++) gMap.ppBlkAnmPlanes[i] = NULL;		// Seulement des pointeurs, pointant dans gMap.pBlkAnmMem.
@@ -598,7 +598,7 @@ int qscmpMstXY(const void *pEl1, const void *pEl2)
 		return ((*(struct SMst0 **)pEl1)->nPosX - (*(struct SMst0 **)pEl2)->nPosX);
 }
 /*
-//>> Ok, mais inutile, les monstres sont enregistrés de gauche à droite et de haut en bas.
+//>> Ok, mais inutile, les monstres sont enregistrï¿½s de gauche ï¿½ droite et de haut en bas.
 // La comparaison du qsort pour trier les monstres sur le Y (puis sur le X).
 int qscmpMstYX(const void *pEl1, const void *pEl2)
 {
@@ -609,7 +609,7 @@ int qscmpMstYX(const void *pEl1, const void *pEl2)
 }
 */
 
-// Différents types de sections du fichier EDT.
+// Diffï¿½rents types de sections du fichier EDT.
 enum
 {
 	e_FileSection_Map = 0,
@@ -619,7 +619,7 @@ enum
 };
 
 
-// Pragma pack 1 sur les structures à lire/écrire.
+// Pragma pack 1 sur les structures ï¿½ lire/ï¿½crire.
 #pragma pack(1)
 
 // Header de chaque container.
@@ -641,8 +641,8 @@ struct SMap0
 struct SPlane2
 {
 	u32	nPlaneNo, nFlags, nWndPosX, nWndPosY;
-	u32	nBlkLg, nBlkHt;			// Largeur et hauteur du plan en blocs 16. Pour éventuel remap à la relecture.
-	u8	nHasCmd;				// Sera surtout utile à la lecture par le jeu, pour skipper le plan et récupérer les monstres dans la section suivante.
+	u32	nBlkLg, nBlkHt;			// Largeur et hauteur du plan en blocs 16. Pour ï¿½ventuel remap ï¿½ la relecture.
+	u8	nHasCmd;				// Sera surtout utile ï¿½ la lecture par le jeu, pour skipper le plan et rï¿½cupï¿½rer les monstres dans la section suivante.
 	u8	nPad0, nPad1, nPad2;	// Padding.
 };
 
@@ -658,7 +658,7 @@ struct SMisc0
 	u32	nBlank0, nBlank1, nBlank2, nBlank3;	// Au cas ou on ait besoin de sauver plus de trucs par la suite.
 };
 */
-// Struct pour datas misc. (Hum, corrigée et paddée correctement pour pack).
+// Struct pour datas misc. (Hum, corrigï¿½e et paddï¿½e correctement pour pack).
 struct SMisc0
 {
 	u32	nFlags;						// gMisc.nFlags.
@@ -672,7 +672,7 @@ struct SMisc0
 #pragma pack()
 
 // Lecture d'un fichier EdTile.
-// In : No du level. On lit le fichier "lev<no>.edt" dans le répertoire "lev<no>".
+// In : No du level. On lit le fichier "lev<no>.edt" dans le rï¿½pertoire "lev<no>".
 void LevelLoad(u32 nLevelNo)
 {
 	FILE	*fPt;
@@ -683,15 +683,15 @@ void LevelLoad(u32 nLevelNo)
 	u32	j, k;
 	u32	nType;
 	u32	nMapSection = 0;	// Flag, on doit trouver une section map avant de trouver des plans.
-	u32	nPlaneNext = 0;		// Pour controler l'ordre de lecture des plans. Doit être dans l'ordre.
+	u32	nPlaneNext = 0;		// Pour controler l'ordre de lecture des plans. Doit ï¿½tre dans l'ordre.
 	//char	pFilename[256];
 	//CPlane	*pPlane;
 	struct SMap0	sMap;
-	u32	nPlaneSav_BlkLg, nPlaneSav_BlkHt;	// Lg et Ht de la planche sauvée dans le EDT.
+	u32	nPlaneSav_BlkLg, nPlaneSav_BlkHt;	// Lg et Ht de la planche sauvï¿½e dans le EDT.
 
-	char	pDir[256];	// Pour créer le nom du répertoire, à ajouter avant les noms de fichiers.
-	char	pLevFilename[256];	// Nom du fichier, précédé du répertoire.
-	char	pFilename[256];		// Noms de fichiers annexes à lire (planches...).
+	char	pDir[256];	// Pour crï¿½er le nom du rï¿½pertoire, ï¿½ ajouter avant les noms de fichiers.
+	char	pLevFilename[256];	// Nom du fichier, prï¿½cï¿½dï¿½ du rï¿½pertoire.
+	char	pFilename[256];		// Noms de fichiers annexes ï¿½ lire (planches...).
 
 
 	// RAZ monstres.
@@ -713,7 +713,7 @@ void LevelLoad(u32 nLevelNo)
 	}
 */
 
-	// Création du nom du répertoire et du nom de fichier.
+	// Crï¿½ation du nom du rï¿½pertoire et du nom de fichier.
 //	itoa(nLevelNo, pFilename, 10);
 /*
 	snprintf(pFilename, sizeof(pFilename), "%d", (int)nLevelNo);
@@ -738,7 +738,7 @@ printf("lev fn: %s\n", pLevFilename);
 		fprintf(stderr, "LoadLevel(): Error opening file '%s'.\n", pLevFilename);
 		exit(1);
 	}
-	// Récupération de la taille du fichier. (Note : Les containers sont lus un par un, donc on alloue déjà trop, mais c'est pas bien grave).
+	// Rï¿½cupï¿½ration de la taille du fichier. (Note : Les containers sont lus un par un, donc on alloue dï¿½jï¿½ trop, mais c'est pas bien grave).
 	s32	nFileSzToLoad;
 	fseek(fPt, 0L, SEEK_END);
 	nFileSzToLoad = ftell(fPt);
@@ -753,15 +753,15 @@ printf("lev fn: %s\n", pLevFilename);
 	}
 
 
-	// En-tête.
+	// En-tï¿½te.
 	fread(pBuf, 1, 5, fPt);
-	// Vérif "EDT".
+	// Vï¿½rif "EDT".
 	if (strncmp((char *)pBuf, "EDT", 3) != 0)
 	{
 		fprintf(stderr, "LoadLevel(): Wrong header.\n");
 		exit(1);
 	}
-	// Vérif version du fichier.
+	// Vï¿½rif version du fichier.
 	if (*(u16 *)(pBuf + 3) != 0x0100)
 	{
 		fprintf(stderr, "LoadLevel(): Unknown file version.\n");
@@ -785,7 +785,7 @@ printf("Header ok.\n");
 		nSz = ((struct SContainer0 *)pBuf)->nSz;
 		nType = ((struct SContainer0 *)pBuf)->nType;
 
-		// Lecture des données.
+		// Lecture des donnï¿½es.
 		nSz -= sizeof(struct SContainer0);
 		fread(pBuf, 1, nSz, fPt);
 
@@ -818,7 +818,7 @@ printf("Header ok.\n");
 			printf("lg=%d / ht=%d / nb pln=%d\n", (int)gMap.nMapLg, (int)gMap.nMapHt, (int)sMap.nPlanesNb);
 #endif
 
-			// Par défaut, position de départ du joueur.
+			// Par dï¿½faut, position de dï¿½part du joueur.
 			gMap.nPlayerStartPosX = 5;//gMap.nMapLg / 2;
 			gMap.nPlayerStartPosY = 5;//gMap.nMapHt - 2;
 
@@ -846,7 +846,7 @@ printf("Header ok.\n");
 
 
 			// Si c'est un plan de monstres, on recherche les chemins, puis break.
-			// On va séparer les chemins de type air et les chemins de type sol.
+			// On va sï¿½parer les chemins de type air et les chemins de type sol.
 			if (((struct SPlane2 *)pBuf)->nHasCmd)
 			{
 #ifdef DEBUG_INFO
@@ -862,7 +862,7 @@ printf("Header ok.\n");
 				gMap.nPathAirNb = 0;
 				for (j = 0; j < gMap.nMapLg * gMap.nMapHt; j++)
 				{
-					// Au passage, note la position de départ du héros.
+					// Au passage, note la position de dï¿½part du hï¿½ros.
 					if (*(((s32 *)pCur) + j) == MAP_BLK_HERO)
 					{
 						u32	nBlX, nBlY;
@@ -870,7 +870,7 @@ printf("Header ok.\n");
 						nBlX = j - (nBlY * gMap.nMapLg);
 						gMap.nPlayerStartPosX = nBlX;
 						gMap.nPlayerStartPosY = nBlY;
-						gMap.nHeroPlane = gMap.nPlanesNb - 1;	// -1 car le plan des monstres est le plan suivant ! Donc gMap.nPlanesNb a déjà été incrémenté.
+						gMap.nHeroPlane = gMap.nPlanesNb - 1;	// -1 car le plan des monstres est le plan suivant ! Donc gMap.nPlanesNb a dï¿½jï¿½ ï¿½tï¿½ incrï¿½mentï¿½.
 #ifdef DEBUG_INFO
 printf("Hero at (%d, %d), Ref Plane #%d.\n", (int)gMap.nPlayerStartPosX, (int)gMap.nPlayerStartPosY, (int)gMap.nHeroPlane);
 #endif
@@ -962,7 +962,7 @@ printf("Path: (%d, %d) Blk:%d.\n", (int)pPathBlk->nPosX, (int)pPathBlk->nPosY, (
 
 
 
-			// On récupère les datas qui seront utiles plus tard.
+			// On rï¿½cupï¿½re les datas qui seront utiles plus tard.
 			nPlaneSav_BlkLg = ((struct SPlane2 *)pBuf)->nBlkLg;
 			nPlaneSav_BlkHt = ((struct SPlane2 *)pBuf)->nBlkHt;
 
@@ -990,7 +990,7 @@ printf("Path: (%d, %d) Blk:%d.\n", (int)pPathBlk->nPosX, (int)pPathBlk->nPosY, (
 
 			// Lecture de la planche de blocs.
 /*
-// C'était ça qui fonctionnait à l'origine.
+// C'ï¿½tait ï¿½a qui fonctionnait ï¿½ l'origine.
 			// Lecture du BMP.
 			// Lecture du BMP et conversion en 16 bits.
 			SDL_Surface	*pGfx2;
@@ -1005,7 +1005,7 @@ printf("Path: (%d, %d) Blk:%d.\n", (int)pPathBlk->nPosX, (int)pPathBlk->nPosY, (
 				fprintf(stderr, "LoadLevel(): '%s': 16 bits conversion failed.\n", pFilename);
 				exit(1);
 			}
-			SDL_FreeSurface(pGfx2);	// Libère le gfx 8 bits.
+			SDL_FreeSurface(pGfx2);	// Libï¿½re le gfx 8 bits.
 */
 
 
@@ -1041,7 +1041,7 @@ printf("Path: (%d, %d) Blk:%d.\n", (int)pPathBlk->nPosX, (int)pPathBlk->nPosY, (
 					exit(1);
 				}
 				// Recopie de la palette.
-				SDL_SetColors(pGfx2, pPlanche->pColors, 0, 256);
+				SDL_SetPaletteColors(pGfx2->format->palette, pPlanche->pColors, 0, 256);
 				// Recopie du premier plan.
 				SDL_LockSurface(pGfx2);
 //sans pitch				memcpy((u8 *)pGfx2->pixels, pPlanche->pPlanes, pPlanche->nWidth * pPlanche->nHeight);
@@ -1050,8 +1050,8 @@ printf("Path: (%d, %d) Blk:%d.\n", (int)pPathBlk->nPosX, (int)pPathBlk->nPosY, (
 					memcpy((u8 *)pGfx2->pixels + (k * pGfx2->pitch), pPlanche->pPlanes + (k * pPlanche->nWidth), pPlanche->nWidth);
 				SDL_UnlockSurface(pGfx2);
 
-				// Libère les ressources du PSD.
-				//free(pPlanche->pPlanes);		// > On garde la planche en mémoire pour l'alpha, traité plus bas.
+				// Libï¿½re les ressources du PSD.
+				//free(pPlanche->pPlanes);		// > On garde la planche en mï¿½moire pour l'alpha, traitï¿½ plus bas.
 				//free(pPlanche);
 			}
 			else
@@ -1060,7 +1060,7 @@ printf("Path: (%d, %d) Blk:%d.\n", (int)pPathBlk->nPosX, (int)pPathBlk->nPosY, (
 				exit(1);
 			}
 
-			// On vérifie que la taille de la planche soit bien égale à celle sauvegardée.
+			// On vï¿½rifie que la taille de la planche soit bien ï¿½gale ï¿½ celle sauvegardï¿½e.
 			if (nPlaneSav_BlkLg != (pGfx2->w / 16) || nPlaneSav_BlkHt != (pGfx2->h / 16))
 			{
 				fprintf(stderr, "LoadLevel(): Size of graphic file '%s' has changed since last edition of level '%s'. Please edit and save level.\n", pFilename, pLevFilename);
@@ -1079,7 +1079,7 @@ printf("Path: (%d, %d) Blk:%d.\n", (int)pPathBlk->nPosX, (int)pPathBlk->nPosY, (
 
 
 
-			// Une page de codes est présente ?
+			// Une page de codes est prï¿½sente ?
 			*(gMap.ppColCodes + gMap.nPlanesNb) = NULL;
 			if (((struct SPlane2 *)pBuf)->nFlags & e_FlgFile_Plane_Codes)
 			{
@@ -1132,7 +1132,7 @@ printf("Plane #%d, codes found.\n", (int)gMap.nPlanesNb);
 							for (ri = 0; ri < 16; ri++)
 							{
 
-								// Plafond ? On fait un NOT sur la hauteur (On sauve les hauteurs du négatif du bloc).
+								// Plafond ? On fait un NOT sur la hauteur (On sauve les hauteurs du nï¿½gatif du bloc).
 								if ((nCode & 0x0F) == e_BlockCode_Ceiling)
 								{
 									for (rj = 0; rj < 16; rj++)
@@ -1162,7 +1162,7 @@ nCode, (*(pCodes + (k * nPlaneSav_BlkLg) + j)).nZero, (*(pCodes + (k * nPlaneSav
 				// Avance le pointeur.
 				pCur += nPlaneSav_BlkLg * nPlaneSav_BlkHt;
 			}
-			// Si nécessaire, libère les ressources du PSD.
+			// Si nï¿½cessaire, libï¿½re les ressources du PSD.
 			if (pPlanche != NULL)
 			{
 				free(pPlanche->pPlanes);
@@ -1178,12 +1178,12 @@ nCode, (*(pCodes + (k * nPlaneSav_BlkLg) + j)).nZero, (*(pCodes + (k * nPlaneSav
 				exit(1);
 			}
 /*
-//> v.1.0 - ok. Il faut rajouter la détection des tailles des plans.
+//> v.1.0 - ok. Il faut rajouter la dï¿½tection des tailles des plans.
 			// Lecture des blocs.
 			for (j = 0; j < gMap.nMapLg * gMap.nMapHt; j++)
 			{
-				*(*(gMap.ppPlanesBlocks + gMap.nPlanesNb) + j) = *(s32 *)pCur;	// < On pourrait tester les n°s de blocs ici (càd que ça ne dépasse pas le n° maximum du bloc de la planche).
-				// Tests sur les n°s de blocs.
+				*(*(gMap.ppPlanesBlocks + gMap.nPlanesNb) + j) = *(s32 *)pCur;	// < On pourrait tester les nï¿½s de blocs ici (cï¿½d que ï¿½a ne dï¿½passe pas le nï¿½ maximum du bloc de la planche).
+				// Tests sur les nï¿½s de blocs.
 				if (*(s32 *)pCur == -1)
 				{
 					u32	nBlX, nBlY;
@@ -1255,11 +1255,11 @@ printf("Plane #%d, lg=%d, ht=%d\n", (int)gMap.nPlanesNb, (int)gMap.pPlanesLg[gMa
 
 			gMap.nPlanesNb++;	// Un plan en plus.
 
-			// Le prochain qui arrivera devrait être le...
+			// Le prochain qui arrivera devrait ï¿½tre le...
 			nPlaneNext++;
 			break;
 
-		case e_FileSection_Cmd :		// On rajoute le fichier de commandes au dernier plan ajouté.
+		case e_FileSection_Cmd :		// On rajoute le fichier de commandes au dernier plan ajoutï¿½.
 #ifdef DEBUG_INFO
 			printf("Cmd section\n");
 #endif
@@ -1311,7 +1311,7 @@ printf("Plane #%d, lg=%d, ht=%d\n", (int)gMap.nPlanesNb, (int)gMap.pPlanesLg[gMa
 			// On arrive aux monstres. On va stocker la liste directement.
 
 			// u32 : Nb de monstres.
-			// x : Datas des monstres, les uns à la suite des autres : SMst0 + x bytes de data.
+			// x : Datas des monstres, les uns ï¿½ la suite des autres : SMst0 + x bytes de data.
 			j = *(u32 *)pCur;
 			pCur += 4;
 
@@ -1323,7 +1323,7 @@ printf("Plane #%d, lg=%d, ht=%d\n", (int)gMap.nPlanesNb, (int)gMap.pPlanesLg[gMa
 			// Allocations.
 //***			if ((gLoadedMst.pMstData = (u8 *)malloc((pBuf + nSz) - pCur)) == NULL)	// Pour copie directe.
 //printf("SMst0:%d / SMstEdt0:%d / diff:%d\n", sizeof(struct SMst0), sizeof(struct SMstEdt0), sizeof(struct SMst0) - sizeof(struct SMstEdt0) );
-			if ((gLoadedMst.pMstData = (u8 *)malloc( ((pBuf + nSz) - pCur) + (j * (sizeof(struct SMst0) - sizeof(struct SMstEdt0))) ) ) == NULL)	// Pour insertion n° ordre.
+			if ((gLoadedMst.pMstData = (u8 *)malloc( ((pBuf + nSz) - pCur) + (j * (sizeof(struct SMst0) - sizeof(struct SMstEdt0))) ) ) == NULL)	// Pour insertion nï¿½ ordre.
 			{
 				fprintf(stderr, "Load/cmd: malloc (#2) failed.\n");
 				exit(1);
@@ -1345,8 +1345,8 @@ printf("Plane #%d, lg=%d, ht=%d\n", (int)gMap.nPlanesNb, (int)gMap.pPlanesLg[gMa
 //***			// Copie des datas.
 //***			memcpy(gLoadedMst.pMstData, pCur, (pBuf + nSz) - pCur);	// on rajoute l'index => plus de memcpy possible...
 
-			// Copie des datas + insertion d'un n° d'ordre.
-			// Ce n° d'ordre sera utile pour l'accès à la table pMstState. Avec deux listes de ptrs sur les datas, c'est obligatoire.
+			// Copie des datas + insertion d'un nï¿½ d'ordre.
+			// Ce nï¿½ d'ordre sera utile pour l'accï¿½s ï¿½ la table pMstState. Avec deux listes de ptrs sur les datas, c'est obligatoire.
 			{
 				u8	*pSrcPt, *pDstPt;
 				u32	nb, m;
@@ -1360,7 +1360,7 @@ printf("Plane #%d, lg=%d, ht=%d\n", (int)gMap.nPlanesNb, (int)gMap.pPlanesLg[gMa
 					// Header.
 					memcpy(pDstPt, pSrcPt, sizeof(struct SMstEdt0));
 					pSrcPt += sizeof(struct SMstEdt0);
-					(*(struct SMst0 *)pDstPt).nIdx = k;		// Le fameux n° d'ordre.
+					(*(struct SMst0 *)pDstPt).nIdx = k;		// Le fameux nï¿½ d'ordre.
 					m = (*(struct SMst0 *)pDstPt).nNbBytes;	// Nb de bytes de datas.
 					pDstPt += sizeof(struct SMst0);
 					// Datas.
@@ -1378,7 +1378,7 @@ printf("Plane #%d, lg=%d, ht=%d\n", (int)gMap.nPlanesNb, (int)gMap.pPlanesLg[gMa
 
 /*
 // shoot
-			// Initialisation des pointeurs. On en profite pour retourner la liste : de bas en haut (et de droite à gauche, mais c'est pas important).
+			// Initialisation des pointeurs. On en profite pour retourner la liste : de bas en haut (et de droite ï¿½ gauche, mais c'est pas important).
 			pCur = gLoadedMst.pMstData;
 			//k = 0;
 			while (j)
@@ -1421,11 +1421,11 @@ printf("Plane #%d, lg=%d, ht=%d\n", (int)gMap.nPlanesNb, (int)gMap.pPlanesLg[gMa
 			// Tri sur le X.
 			qsort(gLoadedMst.ppMstPtrX, gLoadedMst.nMstNbInList, sizeof(struct SMst0 *), qscmpMstXY);
 			// Tri sur le Y.
-			//>> Ok, mais inutile, les monstres sont enregistrés de gauche à droite et de haut en bas.
+			//>> Ok, mais inutile, les monstres sont enregistrï¿½s de gauche ï¿½ droite et de haut en bas.
 			//qsort(gLoadedMst.ppMstPtrY, gLoadedMst.nMstNbInList, sizeof(struct SMst0 *), qscmpMstYX);
 /*
 //>>debug:
-printf("*** Après tri X :\n");
+printf("*** Aprï¿½s tri X :\n");
 for (k = 0; k < gLoadedMst.nMstNbInList; k++)
 {
 	struct SMst0 *pMstCur;
@@ -1433,7 +1433,7 @@ for (k = 0; k < gLoadedMst.nMstNbInList; k++)
 	printf("Mst no=%d / x=%d / y=%d / nb nytes=%d\n", (int)pMstCur->nMstNo,
 		(int)pMstCur->nPosX, (int)pMstCur->nPosY, (int)pMstCur->nNbBytes);
 }
-printf("*** Après tri Y :\n");
+printf("*** Aprï¿½s tri Y :\n");
 for (k = 0; k < gLoadedMst.nMstNbInList; k++)
 {
 	struct SMst0 *pMstCur;
@@ -1462,7 +1462,7 @@ for (k = 0; k < gLoadedMst.nMstNbInList; k++)
 				j--;
 			}
 
-			// Compare le fichier de commandes chargé et celui sur disque. Et fait ce qu'il faut.
+			// Compare le fichier de commandes chargï¿½ et celui sur disque. Et fait ce qu'il faut.
 			pPlane->CmdFileCompare();
 */
 			break;
@@ -1522,7 +1522,7 @@ printf("Level loaded.\n");
 		printf("LoadLevel(): malloc (gMap.pBlkAnmMem) failed.\n");
 		return;
 	}
-	memset(gMap.pBlkAnmMem, -1, gMap.nPlanesNb * gMap.nMapLg * gMap.nMapHt);	// Tout à 0xFF.
+	memset(gMap.pBlkAnmMem, -1, gMap.nPlanesNb * gMap.nMapLg * gMap.nMapHt);	// Tout ï¿½ 0xFF.
 	for (j = 0; j < gMap.nPlanesNb; j++) gMap.ppBlkAnmPlanes[j] = gMap.pBlkAnmMem + (j * gMap.nMapLg * gMap.nMapHt);
 
 }

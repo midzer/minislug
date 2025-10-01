@@ -6,10 +6,10 @@
 void Mst_PlayerBlock(s32 nPosX, u32 nSide);
 
 /*
-// Version qui renvoie le dernier dégat. Ok, mais voir si ça sert à quelque chose.
+// Version qui renvoie le dernier dï¿½gat. Ok, mais voir si ï¿½a sert ï¿½ quelque chose.
 
 // Idem Mst_ShotCheckLife mais en passant un rectangle au lieu d'un sprite.
-// Out: 0 = Le monstre n'est pas mort / !0 = Le dernier dégat (utile pour le type de dégats).
+// Out: 0 = Le monstre n'est pas mort / !0 = Le dernier dï¿½gat (utile pour le type de dï¿½gats).
 u32 Mst_ShotCheckLifeRect(struct SSprRect *pRect, s32 nPosX, s32 nPosY, u8 *pnHitCnt, u8 *pnLife)
 {
 	u32	nDamage, nPts;
@@ -88,7 +88,7 @@ u32 Mst_ShotCheckLifeRect(struct SSprRect *pRect, s32 nPosX, s32 nPosY, u8 *pnHi
 }
 
 //=============================================================================
-// Boss 1 : Avion écrasé (MS1 - Mission 1).
+// Boss 1 : Avion ï¿½crasï¿½ (MS1 - Mission 1).
 
 #define	BOSS1_SCORE		2000
 
@@ -107,29 +107,29 @@ struct SMst20_CannonUp
 	s8	nAnm;
 	s16	nOffsY;
 	u8	nShotCnt;
-	u8	nShotNo;			// Pour comptage des tirs et décalage.
+	u8	nShotNo;			// Pour comptage des tirs et dï¿½calage.
 	u8	nShotHole;			// Position du "trou" pour le joueur.
 };
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst20_Boss1
 {
 	u8	nReserved_Boss0;	// Pour mappage sur le Mst20 container.
 	//
-	u8	nWaitItm;			// Item de quête attendu pour démarrer.
+	u8	nWaitItm;			// Item de quï¿½te attendu pour dï¿½marrer.
 	u8	nHitCnt;
-	u8	nDecayState;		// Etat de délabrement [0;4].
+	u8	nDecayState;		// Etat de dï¿½labrement [0;4].
 	u8	nLife;
 	u8	nDeathCnt;
 	u8	nSoldierAppCnt;		// Compteur pour ne pas faire apparaitre les soldats trop vite.
-	u8	nExplosions;		// Compteur pour pas de touché pendant les explosions.
+	u8	nExplosions;		// Compteur pour pas de touchï¿½ pendant les explosions.
 
 	struct SMst20_CannonUp	sCannonUp;		// Canon vers le haut.
 	struct SMst20_CannonUp	sCannonFront;	// Canon frontal.
 
 };
 
-#define	BOSS1_ENERGY	30//25//20//4//50	// Vie, * nombre d'états.
+#define	BOSS1_ENERGY	30//25//20//4//50	// Vie, * nombre d'ï¿½tats.
 #define	BOSS1_DECAY_MAX	5	// 4 + 1 : Le dernier == mort.
 
 #define	BOSS1_SOLDIERAPPCNT		64
@@ -172,7 +172,7 @@ void Mst20_CannonUp_Manage(struct SMstCommon *pMst, u16 nPrio)
 
 	switch (pCannonUp->nPhase)
 	{
-	case e_MstB1_CannonUp_Wait:		// Attente caché.
+	case e_MstB1_CannonUp_Wait:		// Attente cachï¿½.
 		if (pSpe->nDecayState >= 3) pCannonUp->nPhase = e_MstB1_CannonUp_GoUp;
 		return;
 		break;
@@ -189,7 +189,7 @@ void Mst20_CannonUp_Manage(struct SMstCommon *pMst, u16 nPrio)
 		break;
 
 	case e_MstB1_CannonUp_Shot:		// En phase de tir.
-		// Déclenchement de l'anim de tir ?
+		// Dï¿½clenchement de l'anim de tir ?
 		if (AnmGetKey(pCannonUp->nAnm) == e_AnmKey_Null)
 		if ((gnFrame & 3) == 0)
 		if (--pCannonUp->nShotCnt == 0)
@@ -203,7 +203,7 @@ void Mst20_CannonUp_Manage(struct SMstCommon *pMst, u16 nPrio)
 		}
 		break;
 
-	case e_MstB1_CannonUp_GoDown:	// Cassé, descente.
+	case e_MstB1_CannonUp_GoDown:	// Cassï¿½, descente.
 		if (pCannonUp->nOffsY < BOSS1_CANNONUP_OFFSY_DOWN)
 			if (gnFrame & 1) pCannonUp->nOffsY++;	// On redescend.
 		break;
@@ -243,7 +243,7 @@ void Mst20_CannonFront_Init(struct SMst20_CannonUp *pCannonFront)
 	pCannonFront->nPhase = e_MstB1_CannonFront_Wait;
 	pCannonFront->nAnm = AnmSet(gAnm_Boss1_CannonFront_Idle, -1);	// Anim du canon frontal.
 	pCannonFront->nOffsY = BOSS1_CANNONFRONT_OFFSY_BASE;
-	pCannonFront->nShotHole = 0;		// b7 = Sens de déplacement, b0-3 compteur.
+	pCannonFront->nShotHole = 0;		// b7 = Sens de dï¿½placement, b0-3 compteur.
 }
 
 // Gestion.
@@ -278,7 +278,7 @@ void Mst20_CannonFront_Manage(struct SMstCommon *pMst, u16 nPrio)
 
 	case e_MstB1_CannonFront_Move:		// Bouge de haut en bas.
 		if (AnmGetKey(pCannonFront->nAnm) != e_AnmKey_Null) break;
-		// Déplacement.
+		// Dï¿½placement.
 		{
 			u8	nFlip = 0;
 			if (pCannonFront->nShotHole & 0x80)
@@ -295,7 +295,7 @@ void Mst20_CannonFront_Manage(struct SMstCommon *pMst, u16 nPrio)
 				if (MST_SHOT_COND) pCannonFront->nShotHole++;
 			}
 		}
-		// Déclenchement du tir ?
+		// Dï¿½clenchement du tir ?
 		if ((pCannonFront->nShotHole & 0xF) == 3)
 		{
 			pCannonFront->nPhase = e_MstB1_CannonFront_Shot;
@@ -330,7 +330,7 @@ void Mst20_Init_Boss1(struct SMstCommon *pMst, u8 *pData)
 	struct SMst20_Boss1	*pSpe = (struct SMst20_Boss1 *)pMst->pData;
 	u32	nVal;
 
-	pMst->nPosX = (gMap.pPlanesLg[gMap.nHeroPlane] - 0) << 12;		// Replace le monstre complètement à droite.
+	pMst->nPosX = (gMap.pPlanesLg[gMap.nHeroPlane] - 0) << 12;		// Replace le monstre complï¿½tement ï¿½ droite.
 	nVal = GetBits(8, 15, pData, 0);
 	pSpe->nWaitItm = nVal;
 
@@ -353,7 +353,7 @@ void Mst20_Init_Boss1(struct SMstCommon *pMst, u8 *pData)
 extern s32	gnScrollLimitYMin;
 extern s32	gnScrollLimitYMax;
 
-// Supprime les collisions des blocs demandés.
+// Supprime les collisions des blocs demandï¿½s.
 void Boss1_sub_BlkColRemove(u32 nFirst, u32 nLast)
 {
 	struct SBlockCol	*pCol;
@@ -369,7 +369,7 @@ void Boss1_sub_BlkColRemove(u32 nFirst, u32 nLast)
 }
 
 // Avance de la phase.
-	//>>> méthode pas forcément définitive, on pourrait faire ça en fct des points de vie.
+	//>>> mï¿½thode pas forcï¿½ment dï¿½finitive, on pourrait faire ï¿½a en fct des points de vie.
 void Boss1_DecayAdvance(struct SMstCommon *pMst)
 {
 	struct SMst20_Boss1	*pSpe = (struct SMst20_Boss1 *)pMst->pData;
@@ -400,7 +400,7 @@ void Boss1_DecayAdvance(struct SMstCommon *pMst)
 s32 Mst20_Main_Boss1(struct SMstCommon *pMst)
 {
 	struct SMst20_Boss1	*pSpe = (struct SMst20_Boss1 *)pMst->pData;
-	// Table de tous les sprites composant le boss, 5 états.
+	// Table de tous les sprites composant le boss, 5 ï¿½tats.
 	static u32	gpBoss1Spr[][BOSS1_PIECESNB] =
 	{
 		{ e_Spr_Boss1_P1_1, e_Spr_Boss1_P2_12, e_Spr_Boss1_P3_12345, e_Spr_Boss1_P4_12, e_Spr_Boss1_P5_12,
@@ -413,7 +413,7 @@ s32 Mst20_Main_Boss1(struct SMstCommon *pMst)
 			SPR_NoSprite, e_Spr_Boss1_P7_4, e_Spr_Boss1_P8_4, e_Spr_Boss1_P9_45, e_Spr_Boss1_P10_2345 },
 		{ e_Spr_Boss1_P1_2345, e_Spr_Boss1_P2_345, e_Spr_Boss1_P3_12345, e_Spr_Boss1_P4_345, e_Spr_Boss1_P5_5,
 			SPR_NoSprite, e_Spr_Boss1_P7_5, SPR_NoSprite, e_Spr_Boss1_P9_45, e_Spr_Boss1_P10_2345 },
-		// Le dernier état ci-dessous est identique au précédent.
+		// Le dernier ï¿½tat ci-dessous est identique au prï¿½cï¿½dent.
 		{ e_Spr_Boss1_P1_2345, e_Spr_Boss1_P2_345, e_Spr_Boss1_P3_12345, e_Spr_Boss1_P4_345, e_Spr_Boss1_P5_5,
 			SPR_NoSprite, e_Spr_Boss1_P7_5, SPR_NoSprite, e_Spr_Boss1_P9_45, e_Spr_Boss1_P10_2345 },
 	};
@@ -424,21 +424,21 @@ s32 Mst20_Main_Boss1(struct SMstCommon *pMst)
 		e_Prio_DustUnder-8, e_Prio_DustUnder-8, e_Prio_DustUnder-8, e_Prio_DustUnder-8,
 		e_Prio_DustUnder-8, e_Prio_Ennemies+34 };
 
-	u8	nTouch = 0;		// Pas de gestion du touché.
+	u8	nTouch = 0;		// Pas de gestion du touchï¿½.
 
 	// Bloque le joueur au niveau de l'avion.
 	Mst_PlayerBlock(pMst->nPosX - (8 << 12) - (12 << 8), 0);
 
 	switch (pMst->nPhase)
 	{
-	case e_MstB1_ItemWait:		// Attente de l'item de quête.
+	case e_MstB1_ItemWait:		// Attente de l'item de quï¿½te.
 		if (gpMstQuestItems[pSpe->nWaitItm]) pMst->nPhase = e_MstB1_Intro;
-		// Affichage de la bâche.
+		// Affichage de la bï¿½che.
 		SprDisplay(e_Spr_Boss1_Tarp_Idle, (pMst->nPosX >> 8) + BOSS1_TARP_OFFSX, (pMst->nPosY >> 8) + BOSS1_TARP_OFFSY, e_Prio_DustOver);
 		break;
 
-	case e_MstB1_Intro:			// Montée du scroll.
-		// Recentrage du scroll en y au début.
+	case e_MstB1_Intro:			// Montï¿½e du scroll.
+		// Recentrage du scroll en y au dï¿½but.
 		if ((u32)gnScrollLimitYMin >> 8 > 0)
 		{
 			gnScrollLimitYMin = gScrollPos.nPosY - 0x100;
@@ -447,19 +447,19 @@ s32 Mst20_Main_Boss1(struct SMstCommon *pMst)
 		else
 		{
 			pMst->nPhase = e_MstB1_Fight;
-			// Dust bâche qui dégage vers la droite.
+			// Dust bï¿½che qui dï¿½gage vers la droite.
 			DustSetMvt(gAnm_Boss1_Tarp_Dust, pMst->nPosX + (BOSS1_TARP_OFFSX << 8), pMst->nPosY + (BOSS1_TARP_OFFSY << 8), 0x200, 0, e_Prio_DustOver, 0);
 			break;
 		}
-		// Affichage de la bâche.
+		// Affichage de la bï¿½che.
 		SprDisplay(e_Spr_Boss1_Tarp_Idle, (pMst->nPosX >> 8) + BOSS1_TARP_OFFSX, (pMst->nPosY >> 8) + BOSS1_TARP_OFFSY, e_Prio_DustOver);
 		break;
 
 	case e_MstB1_Fight:
-//		nTouch = 1;				// Prise en compte des touchés.
-		nTouch = !pSpe->nExplosions;	// Prise en compte des touchés, sauf pendant les explosions.
+//		nTouch = 1;				// Prise en compte des touchï¿½s.
+		nTouch = !pSpe->nExplosions;	// Prise en compte des touchï¿½s, sauf pendant les explosions.
 
-		// Génération des soldats.
+		// Gï¿½nï¿½ration des soldats.
 		if (gpnMstCount[e_Mst14_RebelSoldier0] < 3)
 		if (--pSpe->nSoldierAppCnt == 0)
 		{
@@ -467,27 +467,27 @@ s32 Mst20_Main_Boss1(struct SMstCommon *pMst)
 /*
 [mst14] Reb Soldier 0
 Type = 0:7: Rifle - Mortar - LRAC - Gun_Grenade - RESERVED - Shield
-OffsX = -8:11:			; Décalage X.
+OffsX = -8:11:			; Dï¿½calage X.
 Move = 12:12: No - Yes		; Le soldat bouge ou pas.
-From = 13:13: Right - Left	; Apparition à droite ou à gauche de l'écran.
-Parachute = 14:14: No - Yes	; Parachuté ?
+From = 13:13: Right - Left	; Apparition ï¿½ droite ou ï¿½ gauche de l'ï¿½cran.
+Parachute = 14:14: No - Yes	; Parachutï¿½ ?
 Jump = 15:16: No - Random - Always	; Saut en bout de pf.
-Org OffsX = -17:22:		; Décalage de l'origine de la zone.
-Special Init = 23:26: None - Truck Jump - SuspSub Jump - Hero Height -	; Inits spéciales.
+Org OffsX = -17:22:		; Dï¿½calage de l'origine de la zone.
+Special Init = 23:26: None - Truck Jump - SuspSub Jump - Hero Height -	; Inits spï¿½ciales.
 RESERVED2 = 27:31:
 */
-			static u8 pM14[] = { 3, 3, 0, 1 };	// Pour générer des soldats, sauf LRAC.
+			static u8 pM14[] = { 3, 3, 0, 1 };	// Pour gï¿½nï¿½rer des soldats, sauf LRAC.
 			u32	nPrm = ((u32)pM14[rand() & 3]) | (1 << 12) | (2 << 15);	// 0 = Rifle - 1 = Mortar / 1 << 12 = Move / 2 << 15 = Jump always.
 			if (((++nSide) & 1) == 0)
 			{
-				// Arrivée par la porte à droite.
-				nPrm |= ((-8 & 0x3F) << 17);	// (x & 0x3F) << 17 = décalage org.
+				// Arrivï¿½e par la porte ï¿½ droite.
+				nPrm |= ((-8 & 0x3F) << 17);	// (x & 0x3F) << 17 = dï¿½calage org.
 				MstAdd(e_Mst14_RebelSoldier0, (241*16), (3*16), (u8 *)&nPrm, -1);
 			}
 			else
 			{
-				// Arrivée par la gauche.
-				nPrm |= ((8 & 0x3F) << 17);	// (x & 0x3F) << 17 = décalage org.
+				// Arrivï¿½e par la gauche.
+				nPrm |= ((8 & 0x3F) << 17);	// (x & 0x3F) << 17 = dï¿½calage org.
 				MstAdd(e_Mst14_RebelSoldier0, (216*16), (11*16), (u8 *)&nPrm, -1);
 			}
 
@@ -498,7 +498,7 @@ RESERVED2 = 27:31:
 				// Parachutiste.
 				nPrm &= ~0xFF;
 				nPrm |= 2;	// Type = LRAC.
-				nPrm |= 8 << 8;		// Offset, pour que le parachute arrive au bon endroit. (Pour le parachutiste, on se sert de ce décalagae comme offset dans l'écran, voir init).
+				nPrm |= 8 << 8;		// Offset, pour que le parachute arrive au bon endroit. (Pour le parachutiste, on se sert de ce dï¿½calagae comme offset dans l'ï¿½cran, voir init).
 				nPrm |= 1 << 14;	// Parachute.
 				MstAdd(e_Mst14_RebelSoldier0, ((224 + (rand() & 7))*16), (0*16), (u8 *)&nPrm, -1);
 			}
@@ -511,15 +511,15 @@ RESERVED2 = 27:31:
 //>>>
 /*
 >>todo
-					// On génère un Girida-0 depuis l'arrière.
+					// On gï¿½nï¿½re un Girida-0 depuis l'arriï¿½re.
 / *
 [mst26] Girida-0
-From = 0:0: Front - Back	; Attaque par devant ou derrière.
-ZoneMax = 1:7:			; Zone de déplacement max, 0 = pas de limite.
+From = 0:0: Front - Back	; Attaque par devant ou derriï¿½re.
+ZoneMax = 1:7:			; Zone de dï¿½placement max, 0 = pas de limite.
 * /
 					u8	pData[4];
-					s32	nGiridaPixPosX = (gScrollPos.nPosX >> 8) - (2 << 4);	// !!! Attention au décalage, sinon le tank n'apparaît pas !
-					pData[0] = 1 + (((ABS((pSpe->nPosXOrg >> 8) - nGiridaPixPosX) >> 4) - 4) << 1);		// -4 : Décalage pour ne pas monter sur le camion.
+					s32	nGiridaPixPosX = (gScrollPos.nPosX >> 8) - (2 << 4);	// !!! Attention au dï¿½calage, sinon le tank n'apparaï¿½t pas !
+					pData[0] = 1 + (((ABS((pSpe->nPosXOrg >> 8) - nGiridaPixPosX) >> 4) - 4) << 1);		// -4 : Dï¿½calage pour ne pas monter sur le camion.
 					MstAdd(e_Mst26_Girida0, nGiridaPixPosX, (pMst->nPosY >> 8) - 16, pData, -1);
 */
 //<<<
@@ -534,7 +534,7 @@ ZoneMax = 1:7:			; Zone de déplacement max, 0 = pas de limite.
 			pSpe->nDeathCnt--;
 			break;
 		}
-		gpMstQuestItems[MST_QUEST_ITEM_NEXT_LEVEL] |= 1;	// Item de quête : Fin de niveau.
+		gpMstQuestItems[MST_QUEST_ITEM_NEXT_LEVEL] |= 1;	// Item de quï¿½te : Fin de niveau.
 		break;
 
 	}
@@ -543,7 +543,7 @@ ZoneMax = 1:7:			; Zone de déplacement max, 0 = pas de limite.
 	// Se prend un tir ?
 	{
 		struct SSprRect sRect1;
-		// On créé un rectangle de collision.
+		// On crï¿½ï¿½ un rectangle de collision.
 		sRect1.nType = e_SprRect_Rect;
 		sRect1.nX1 = -100;
 		sRect1.nX2 = 0;
@@ -552,18 +552,18 @@ ZoneMax = 1:7:			; Zone de déplacement max, 0 = pas de limite.
 
 		if (nTouch)
 		{
-			// Test des tirs, avec dégats minimisés.
+			// Test des tirs, avec dï¿½gats minimisï¿½s.
 			if (Mst_ShotCheckLifeRect2(&sRect1, pMst->nPosX, pMst->nPosY, &pSpe->nHitCnt, &pSpe->nLife, e_ShotCheck_MinimizedDamage))
 			{
 				Boss1_DecayAdvance(pMst);		// On avance le decay state.
 				gpMstQuestItems[100 + pSpe->nDecayState] = 1;	// Explosions.
-				pSpe->nExplosions = 64;		// Compteur pour pas de touché pendant les explosions.
+				pSpe->nExplosions = 64;		// Compteur pour pas de touchï¿½ pendant les explosions.
 				pSpe->nLife = BOSS1_ENERGY;		// Reset energy.
 				pSpe->nHitCnt = MST_HIT_CNT;	// Pas vraiment mort, on met le hit cnt.
 				// Mort ?
 				if (pSpe->nDecayState >= BOSS1_DECAY_MAX)
 				{
-					gpMstQuestItems[MST_QUEST_ITEM_NEXT_LEVEL] |= 2;	// Item de quête : Victory.
+					gpMstQuestItems[MST_QUEST_ITEM_NEXT_LEVEL] |= 2;	// Item de quï¿½te : Victory.
 					pMst->nPhase = e_MstB1_Death;
 					pSpe->nHitCnt = 0;
 					pSpe->nDeathCnt = 96;		// Compteur pour laisser le temps aux explosions de disparaitre.
@@ -575,13 +575,13 @@ ZoneMax = 1:7:			; Zone de déplacement max, 0 = pas de limite.
 		}
 		else
 		{
-			// Interception des tirs sans dégats.
+			// Interception des tirs sans dï¿½gats.
 			u8	nHitCnt, nLife;
 			nLife = 0;
 			Mst_ShotCheckLifeRect2(&sRect1, pMst->nPosX, pMst->nPosY, &nHitCnt, &nLife, 0);
 		}
 	}
-	if (pSpe->nExplosions) pSpe->nExplosions--;		// Compteur pour pas de touché pendant les explosions.
+	if (pSpe->nExplosions) pSpe->nExplosions--;		// Compteur pour pas de touchï¿½ pendant les explosions.
 
 	// Dec compteur de hit *avant* l'affichage des canons Up et Front.
 	if (pSpe->nHitCnt) pSpe->nHitCnt--;
@@ -645,12 +645,12 @@ struct SB2A_Turret
 #define	B2A_TURRET_NB	2
 #define	B2A_TURRET_SCORE	500
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst20_Boss2A
 {
 	u8	nReserved_Boss0;	// Pour mappage sur le Mst20 container.
 	//
-	u8	nDecayState;		// Etat de délabrement [0;1].
+	u8	nDecayState;		// Etat de dï¿½labrement [0;1].
 	u8	nHitCnt;
 	u8	nLife;
 
@@ -708,7 +708,7 @@ void Mst20_Init_Boss2A(struct SMstCommon *pMst, u8 *pData)
 	pMst->nPosY = gScrollPos.nPosY + ((SCR_Height / 2) << 8);
 
 	gpMstQuestItems[MST_QUEST_ITEM_MST32]++;	// Bloque le scroll.
-	pMst->nSpd = 0x420;		// Spd empirique pour première avance.
+	pMst->nSpd = 0x420;		// Spd empirique pour premiï¿½re avance.
 */
 
 	gpMstQuestItems[MST_QUEST_ITEM_MST32]++;	// Bloque le scroll.
@@ -795,27 +795,27 @@ void B2A_FrontC_Manage(struct SMstCommon *pMst)
 			{	// Le canon explose.
 				gShoot.nPlayerScore += B2A_FRONTC_SCORE;	// Score.
 				if (pFC->nShotAnm != -1)
-				{	// Libère le slot de l'anm d'éclat du tir.
+				{	// Libï¿½re le slot de l'anm d'ï¿½clat du tir.
 					AnmReleaseSlot(pFC->nShotAnm);
 					pFC->nShotAnm = -1;
 				}
 			}
 			else
 			{	// Le canon n'est pas mort.
-				ChaserTarget_AddToList((pMst->nPosX >> 8) + B2A_FRONTCANNON_OFFSX, (pMst->nPosY >> 8) + gpnFrontCPosY[i] - 16);	// Ajout dans la table de visée des missiles.
+				ChaserTarget_AddToList((pMst->nPosX >> 8) + B2A_FRONTCANNON_OFFSX, (pMst->nPosY >> 8) + gpnFrontCPosY[i] - 16);	// Ajout dans la table de visï¿½e des missiles.
 
 				// Tir ?
 				if ((pSpe->nShotFrm & 63) == 0 && nInc == 12)
 					pFC->nShotAnm = AnmSet(gAnm_Boss2A_FrontCannon_ShotSpark, pFC->nShotAnm);
 
-				// Déclenchement d'un tir ?
+				// Dï¿½clenchement d'un tir ?
 				if (pFC->nShotAnm != -1)
 				{
 					if (AnmGetImage(pFC->nShotAnm) == -1)
-						pFC->nShotAnm = -1;		// Anim terminée.
+						pFC->nShotAnm = -1;		// Anim terminï¿½e.
 					else
 					if (AnmCheckStepFlag(pFC->nShotAnm))
-					{	// Déclenchement du tir.
+					{	// Dï¿½clenchement du tir.
 						struct SSprRect sRect1;
 						if (SprGetRect(gpnFrontCBaseSpr[i] + nInc, e_SprRectZone_ShotOrg, &sRect1))
 						if (sRect1.nType == e_SprRect_Rect)
@@ -836,7 +836,7 @@ void B2A_FrontC_Manage(struct SMstCommon *pMst)
 				x = pMst->nPosX + (B2A_FRONTCANNON_OFFSX << 8)   + (3 << 12) - ((pFC->nExplo & ~0x0F) << 8);
 				y = pMst->nPosY + (gpnFrontCPosY[i] << 8)   - (1 << 12) + ((pFC->nExplo & ~0x0F) << 7);
 				DustSet(gAnm_Explosion0_Medium_Dust, x, y, e_Prio_Ennemies+3, 0);
-				if (((pFC->nExplo >> 4) + i) & 1)	// + Débris 1 fois sur 2.
+				if (((pFC->nExplo >> 4) + i) & 1)	// + Dï¿½bris 1 fois sur 2.
 					DustSetMvt(gAnm_Debris_Metal0_Dust, x, y, -0x180, -0x380, e_Prio_Ennemies+2, e_DustFlag_Gravity);
 			}
 		}
@@ -877,7 +877,7 @@ void B2A_Turret_Manage(struct SMstCommon *pMst, u8 nTurretTouch)
 			fatan2(-((gShoot.nPlayerPosY - (2 << 12) + (gShoot.nVehicleType < e_HeroVehicle_SlugBase ? 4 << 12 : 0)) - (pMst->nPosY + (gpnTurretPosY[i] << 8) - (27 << 8)) ),
 				gShoot.nPlayerPosX - (pMst->nPosX + (gpnTurretPosX[i] << 8)));
 
-		ChaserTarget_AddToList((pMst->nPosX >> 8) + gpnTurretPosX[i], (pMst->nPosY >> 8) + gpnTurretPosY[i] - 24);	// Ajout dans la table de visée des missiles.
+		ChaserTarget_AddToList((pMst->nPosX >> 8) + gpnTurretPosX[i], (pMst->nPosY >> 8) + gpnTurretPosY[i] - 24);	// Ajout dans la table de visï¿½e des missiles.
 
 		// Tir ?
 		if ((pSpe->nShotFrm & 7) == 0 && (pSpe->nShotFrm & 64))
@@ -892,7 +892,7 @@ void B2A_Turret_Manage(struct SMstCommon *pMst, u8 nTurretTouch)
 				DustSet(gAnm_Explosion0_Big_Dust, pMst->nPosX + (gpnTurretPosX[i] << 8), pMst->nPosY + (gpnTurretPosY[i] << 8), e_Prio_Ennemies+4, 0);//e_Prio_Ennemies+3
 				gShoot.nPlayerScore += B2A_TURRET_SCORE;	// Score.
 				if (pTurret->nShotAnm != -1)
-				{	// Libère le slot de l'anm d'éclat du tir.
+				{	// Libï¿½re le slot de l'anm d'ï¿½clat du tir.
 					AnmReleaseSlot(pTurret->nShotAnm);
 					pTurret->nShotAnm = -1;
 				}
@@ -900,27 +900,27 @@ void B2A_Turret_Manage(struct SMstCommon *pMst, u8 nTurretTouch)
 		}
 		else
 		{
-			// Interception des tirs sans dégats.
+			// Interception des tirs sans dï¿½gats.
 			u8	nHitCnt, nLife;
 			nLife = 0;
 			Mst_ShotCheckLife(e_Spr_Boss2Front_Turret, pMst->nPosX + (gpnTurretPosX[i] << 8), pMst->nPosY + (gpnTurretPosY[i] << 8), &nHitCnt, &nLife);
 		}
 
-		// Déclenchement d'un tir ?
+		// Dï¿½clenchement d'un tir ?
 		if (pTurret->nShotAnm != -1)
 		{
 			if (AnmGetImage(pTurret->nShotAnm) == -1)
-				pTurret->nShotAnm = -1;		// Anim terminée.
+				pTurret->nShotAnm = -1;		// Anim terminï¿½e.
 			else
 			if (AnmCheckStepFlag(pTurret->nShotAnm))
-			{	// Déclenchement du tir.
+			{	// Dï¿½clenchement du tir.
 				struct SSprRect sRect1;
 				j = gpnTurretSprAng[((pTurret->nAngle + 4) & 0xFF) / 8];
 				if (SprGetRect(e_Spr_Boss2Front_Turret + j, e_SprRectZone_ShotOrg, &sRect1))
 				if (sRect1.nType == e_SprRect_Rect)
 				{
 					s32	x1, y1, x2, y2;
-					if ((((pTurret->nAngle + 4) & 0xFF) / 64) & 1)		// On coupe en 4, ça marche aussi pour les rectangles (plats) des angles 0, 64, 128 et 192.
+					if ((((pTurret->nAngle + 4) & 0xFF) / 64) & 1)		// On coupe en 4, ï¿½a marche aussi pour les rectangles (plats) des angles 0, 64, 128 et 192.
 					{	// Haut-gauche (1) / Bas-droite (3).
 						x1 = sRect1.nX2;
 						y1 = sRect1.nY1;
@@ -943,7 +943,7 @@ void B2A_Turret_Manage(struct SMstCommon *pMst, u8 nTurretTouch)
 	} // for / if (pSpe->sTurret[i].nLife)
 	else
 	{
-		// Fumée noire quand tourelle détruite.
+		// Fumï¿½e noire quand tourelle dï¿½truite.
 		if ((gnFrame & 15) == 0)
 			DustSetMvt(gAnm_BlackSmoke_Dust, pMst->nPosX + ((gpnTurretPosX[i] - 10) << 8), pMst->nPosY + ((gpnTurretPosY[i] - 22) << 8), 0x200, 0, e_Prio_Ennemies+3, 0);
 	}
@@ -952,7 +952,7 @@ void B2A_Turret_Manage(struct SMstCommon *pMst, u8 nTurretTouch)
 
 //===========================
 
-// Arrivée du boss (A et B), ralentissement sur la fin du mouvement.
+// Arrivï¿½e du boss (A et B), ralentissement sur la fin du mouvement.
 void Boss2_MoveIn(struct SMstCommon *pMst, s32 nSens)
 {
 	s32	nSpd = pMst->nSpd;
@@ -979,7 +979,7 @@ s32 Mst20_Main_Boss2A(struct SMstCommon *pMst)
 	u32	nInc;
 	s32	nDiff;
 
-	// Table de tous les sprites composant le boss, 2 états.
+	// Table de tous les sprites composant le boss, 2 ï¿½tats.
 	static u32	gpBoss2ASpr[][BOSS2A_PIECESNB] =
 	{
 		{ e_Spr_Boss2Front_P0_0, e_Spr_Boss2Front_P1_0, e_Spr_Boss2Front_P2_0, e_Spr_Boss2Front_P3_0 },
@@ -988,13 +988,13 @@ s32 Mst20_Main_Boss2A(struct SMstCommon *pMst)
 	static s32	gpBoss2AOffsX[BOSS2A_PIECESNB] = { 0,1,0,1 };	// Offsets x et y des sprites.
 	static s32	gpBoss2AOffsY[BOSS2A_PIECESNB] = { 0,0,1,1 };
 
-	u8	nTurretTouch = 0;	// Gestion du touché sur les tourelles.
+	u8	nTurretTouch = 0;	// Gestion du touchï¿½ sur les tourelles.
 
 /*
 // tst pour suite.
-if (gVar.pKeys[SDLK_j])
+if (gVar.pKeys[SDL_SCANCODE_J])
 {
-	gVar.pKeys[SDLK_j] = 0;
+	gVar.pKeys[SDL_SCANCODE_J] = 0;
 	gpMstQuestItems[MST_QUEST_ITEM_MST32]--;	// Relache le scroll.
 	return (e_MstState_Dead);
 }
@@ -1005,16 +1005,16 @@ if (gVar.pKeys[SDLK_j])
 	{
 		s32	nPlayerSpdX_sav = gShoot.nPlayerSpdX;
 		Mst_PlayerBlock(pMst->nPosX - (96 << 8), 0);
-		if (nPlayerSpdX_sav < 0) gShoot.nPlayerSpdX = nPlayerSpdX_sav;	// Si vitesse négative, on la remet (évite le "collé").
+		if (nPlayerSpdX_sav < 0) gShoot.nPlayerSpdX = nPlayerSpdX_sav;	// Si vitesse nï¿½gative, on la remet (ï¿½vite le "collï¿½").
 	}
 
-	// Déplacement pendant les phases d'avance.
+	// Dï¿½placement pendant les phases d'avance.
 	if (pMst->nPhase == e_MstB2A_Avance1 || pMst->nPhase == e_MstB2A_Avance2)
 		Boss2_MoveIn(pMst, -1);
 
 	switch (pMst->nPhase)
 	{
-	case e_MstB2A_ComeDistance:	// L'avion traverse l'écran au loin.
+	case e_MstB2A_ComeDistance:	// L'avion traverse l'ï¿½cran au loin.
 		// Display.
 		SprDisplay(e_Spr_Boss2_InTheDistance_FullHealth, pMst->nPosX >> 8, (pMst->nPosY >> 8) - 20, e_Prio_EnnemiesBg);
 		SprDisplay(e_Spr_Boss2_InTheDistance_FullHealth+1, pMst->nPosX >> 8, pMst->nPosY >> 8, e_Prio_EnnemiesBg);
@@ -1028,7 +1028,7 @@ if (gVar.pKeys[SDLK_j])
 			//
 			pMst->nPosX = gScrollPos.nPosX + ((SCR_Width + 72) << 8);
 			pMst->nPosY = gScrollPos.nPosY + ((SCR_Height / 2) << 8);
-			pMst->nSpd = 0x420;		// Spd empirique pour première avance.
+			pMst->nSpd = 0x420;		// Spd empirique pour premiï¿½re avance.
 		}
 		return (e_MstState_Managed);
 		//break;
@@ -1042,9 +1042,9 @@ if (gVar.pKeys[SDLK_j])
 		break;
 
 	case e_MstB2A_Phase1:	// Canons frontaux.
-//if (gVar.pKeys[SDLK_g]) { pSpe->sFrontC[0].nLife = 0; pSpe->sFrontC[1].nLife = 0; gVar.pKeys[SDLK_g] = 0; }
+//if (gVar.pKeys[SDL_SCANCODE_G]) { pSpe->sFrontC[0].nLife = 0; pSpe->sFrontC[1].nLife = 0; gVar.pKeys[SDL_SCANCODE_g] = 0; }
 
-		if (gShoot.nDeathFlag) pSpe->nShotFrm = 32;		// Si héros mort, stoppe les tirs.
+		if (gShoot.nDeathFlag) pSpe->nShotFrm = 32;		// Si hï¿½ros mort, stoppe les tirs.
 
 		// Gestion des canons frontaux.
 		B2A_FrontC_Manage(pMst);
@@ -1082,7 +1082,7 @@ if (gVar.pKeys[SDLK_j])
 		{
 			pMst->nSpd = 0x470;		// Spd empirique pour seconde avance.
 			pMst->nPhase = e_MstB2A_Avance2;
-			pSpe->nShotFrm = 32;	// Init ici, la valeur doit être bonne pendant la phase e_MstB2A_Avance2.
+			pSpe->nShotFrm = 32;	// Init ici, la valeur doit ï¿½tre bonne pendant la phase e_MstB2A_Avance2.
 			pSpe->nPilotsTarget = 4 << 4;
 		}
 
@@ -1097,12 +1097,12 @@ if (gVar.pKeys[SDLK_j])
 		break;
 
 	case e_MstB2A_Phase2:	// Tourelles.
-//if (gVar.pKeys[SDLK_g]) { pSpe->sTurret[0].nLife = 0; pSpe->sTurret[1].nLife = 0; gVar.pKeys[SDLK_g] = 0; }
+//if (gVar.pKeys[SDL_SCANCODE_G]) { pSpe->sTurret[0].nLife = 0; pSpe->sTurret[1].nLife = 0; gVar.pKeys[SDL_SCANCODE_g] = 0; }
 
-		nTurretTouch = 1;	// Gestion du touché sur les tourelles.
+		nTurretTouch = 1;	// Gestion du touchï¿½ sur les tourelles.
 		pSpe->nShotFrm++;	// Frame cnt pour les tirs.
 
-		if (gShoot.nDeathFlag) pSpe->nShotFrm = 32;		// Si héros mort, stoppe les tirs.
+		if (gShoot.nDeathFlag) pSpe->nShotFrm = 32;		// Si hï¿½ros mort, stoppe les tirs.
 
 		// Plus de vie ?
 		if (pSpe->sTurret[0].nLife == 0 && pSpe->sTurret[1].nLife == 0)
@@ -1137,22 +1137,22 @@ if (gVar.pKeys[SDLK_j])
 		pMst->nPosX += 0x80;
 		if (pMst->nPosX >= gScrollPos.nPosX + ((SCR_Width + 72) << 8))
 		{
-			// On libère les anims.
+			// On libï¿½re les anims.
 			if (pSpe->nFrontCannonAnm != -1) AnmReleaseSlot(pSpe->nFrontCannonAnm);
 			for (i = 0; i < 2; i++)
 			{
 				if (pSpe->sFrontC[i].nShotAnm != -1) AnmReleaseSlot(pSpe->sFrontC[i].nShotAnm);
 				if (pSpe->sTurret[i].nShotAnm != -1) AnmReleaseSlot(pSpe->sTurret[i].nShotAnm);
 			}
-			// On relâche le scroll.
+			// On relï¿½che le scroll.
 			gpMstQuestItems[MST_QUEST_ITEM_MST32]--;
 /*
-			// On génère le Boss 2B.
+			// On gï¿½nï¿½re le Boss 2B.
 			{
 				/ *
 				[mst20] Boss
 				No = 0:3: Boss1 - Boss2A - Boss2B -
-				Wait itm = 8:15:		; Item de quête attendu.
+				Wait itm = 8:15:		; Item de quï¿½te attendu.
 				RESERVED1 = 16:31:
 				* /
 				u32	nPrm = 2;
@@ -1182,7 +1182,7 @@ if (gVar.pKeys[SDLK_j])
 			SprDisplay(gpBoss2ASpr[pSpe->nDecayState][i] | nFlagHit, (pMst->nPosX >> 8) + gpBoss2AOffsX[i], (pMst->nPosY >> 8) + gpBoss2AOffsY[i], e_Prio_Ennemies);
 
 	// Les pilotes.
-	static u8 pnPilotsAdd[] = { 6,5,4, 0, 7,8,9, 0,1,2,3 };		// 0-2: Haut > neutre / 3: neutre / 4-6: neutre > Bas // 7-10: neutre > arrière.
+	static u8 pnPilotsAdd[] = { 6,5,4, 0, 7,8,9, 0,1,2,3 };		// 0-2: Haut > neutre / 3: neutre / 4-6: neutre > Bas // 7-10: neutre > arriï¿½re.
 	i = (u32)pnPilotsAdd[(pSpe->nPilotsCur >> 4) + 3];
 	SprDisplay((e_Spr_Boss2Front_PilotTop + i) | nFlagHit, (pMst->nPosX >> 8) - 52, (pMst->nPosY >> 8) - 14, e_Prio_Ennemies-1);
 	SprDisplay((e_Spr_Boss2Front_PilotBottom + i) | nFlagHit, (pMst->nPosX >> 8) - 52, (pMst->nPosY >> 8) + 67, e_Prio_Ennemies-1);
@@ -1236,12 +1236,12 @@ enum
 	e_MstB2B_Death,
 };
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst20_Boss2B
 {
 	u8	nReserved_Boss0;	// Pour mappage sur le Mst20 container.
 	//
-	u8	nDecayState;		// Etat de délabrement [0;1].
+	u8	nDecayState;		// Etat de dï¿½labrement [0;1].
 	u8	nHitCnt;
 	u8	nLife;
 	u8	nSensY;
@@ -1296,7 +1296,7 @@ s32 Mst20_Main_Boss2B(struct SMstCommon *pMst)
 {
 	struct SMst20_Boss2B	*pSpe = (struct SMst20_Boss2B *)pMst->pData;
 
-	// Table de tous les sprites composant le boss, 2 états.
+	// Table de tous les sprites composant le boss, 2 ï¿½tats.
 	static u32	gpBoss2BSpr[][BOSS2B_PIECESNB] =
 	{
 		{ e_Spr_Boss2Back_P0_0, e_Spr_Boss2Back_P1_0, e_Spr_Boss2Back_P2_0, e_Spr_Boss2Back_P3_0, e_Spr_Boss2Back_TailTop+4, e_Spr_Boss2Back_TailBottom+4, e_Spr_Boss2Back_BodyTailBottomPiece2, e_Spr_Boss2Back_WingTop, e_Spr_Boss2Back_WingBottom },
@@ -1313,9 +1313,9 @@ s32 Mst20_Main_Boss2B(struct SMstCommon *pMst)
 
 /*
 // tst pour suite.
-if (gVar.pKeys[SDLK_j])
+if (gVar.pKeys[SDL_SCANCODE_J])
 {
-	gVar.pKeys[SDLK_j] = 0;
+	gVar.pKeys[SDL_SCANCODE_J] = 0;
 	gpMstQuestItems[MST_QUEST_ITEM_MST32]--;	// Relache le scroll.
 	if (pSpe->nFlameShotAnm != -1) AnmReleaseSlot(pSpe->nFlameShotAnm);
 	return (e_MstState_Dead);
@@ -1327,12 +1327,12 @@ if (gVar.pKeys[SDLK_j])
 	{
 		s32	nPlayerSpdX_sav = gShoot.nPlayerSpdX;
 		Mst_PlayerBlock(pMst->nPosX + (164 << 8), 1);
-		if (nPlayerSpdX_sav > 0) gShoot.nPlayerSpdX = nPlayerSpdX_sav;	// Si vitesse négative, on la remet (évite le "collé").
+		if (nPlayerSpdX_sav > 0) gShoot.nPlayerSpdX = nPlayerSpdX_sav;	// Si vitesse nï¿½gative, on la remet (ï¿½vite le "collï¿½").
 	}
 
 	switch (pMst->nPhase)
 	{
-	case e_MstB2B_ComeDistance:	// L'avion traverse l'écran au loin.
+	case e_MstB2B_ComeDistance:	// L'avion traverse l'ï¿½cran au loin.
 		// Display.
 		i = (gnFrame >> 2) & 3;
 		SprDisplay(e_Spr_Boss2_InTheDistance_HalfHealth + i, pMst->nPosX >> 8, pMst->nPosY >> 8, e_Prio_EnnemiesBg);
@@ -1347,7 +1347,7 @@ if (gVar.pKeys[SDLK_j])
 			//
 			pMst->nPosX = gScrollPos.nPosX - (162 << 8);
 			pMst->nPosY = gScrollPos.nPosY + ((SCR_Height / 2) << 8);
-			pMst->nSpd = 0x920;		// Spd empirique pour première avance.
+			pMst->nSpd = 0x920;		// Spd empirique pour premiï¿½re avance.
 		}
 		return (e_MstState_Managed);
 		//break;
@@ -1362,8 +1362,8 @@ if (gVar.pKeys[SDLK_j])
 
 		pSpe->nFlameShotAnm = AnmSetIfNew(gAnm_Boss2B_FlameShot, pSpe->nFlameShotAnm);
 
-		// Restart du tir quand l'anim arrive à la fin.
-		// Fait comme ça car l'anim qui boucle pose un problème lors de la coupure (l'anim de flammes n'est pas interrompue sur la fin, seulement si il y a un rectangle de col).
+		// Restart du tir quand l'anim arrive ï¿½ la fin.
+		// Fait comme ï¿½a car l'anim qui boucle pose un problï¿½me lors de la coupure (l'anim de flammes n'est pas interrompue sur la fin, seulement si il y a un rectangle de col).
 		if (pSpe->nFlameShotAnm != -1)
 		if (AnmCheckEnd(pSpe->nFlameShotAnm))
 		pSpe->nFlameShotAnm = AnmSet(gAnm_Boss2B_FlameShot, pSpe->nFlameShotAnm);
@@ -1373,7 +1373,7 @@ if (gVar.pKeys[SDLK_j])
 	case e_MstB2B_Phase2:		// Largage de mines.
 		if (pSpe->nExplo) break;
 
-		// Lâcher de mini bombes.
+		// Lï¿½cher de mini bombes.
 		pSpe->nFrmCnt++;
 		if ((pSpe->nFrmCnt & 7) == 0 && (pSpe->nFrmCnt & 64))
 			FireAdd(e_Shot_Enemy_HairBusterRibert_Mine, pMst->nPosX - (56 << 8), pMst->nPosY - (28 << 8), 0 + (rand() & 15) + (pSpe->nSensY ? -15 : 0));
@@ -1389,7 +1389,7 @@ if (gVar.pKeys[SDLK_j])
 		pSpe->nTailTarget = 0;
 		// Fin ?
 		if (pSpe->nExplo < 100) pSpe->nDecayState = 1;
-		if (pSpe->nExplo < 60) gpMstQuestItems[MST_QUEST_ITEM_NEXT_LEVEL] |= 1;	// Item de quête : Fin de niveau.
+		if (pSpe->nExplo < 60) gpMstQuestItems[MST_QUEST_ITEM_NEXT_LEVEL] |= 1;	// Item de quï¿½te : Fin de niveau.
 		break;
 	}
 
@@ -1397,7 +1397,7 @@ if (gVar.pKeys[SDLK_j])
 	{
 		if (pSpe->nExplo == 0)
 		{
-			nTouch = 1;		// Prise en compte des touchés.
+			nTouch = 1;		// Prise en compte des touchï¿½s.
 			// Haut/Bas.
 			Boss2_UpDown(&pMst->nPosY, BOSS2B_POSY_MIN, BOSS2B_POSY_MAX, 0x80, &pSpe->nSensY);
 			// 'Angle' de la queue.
@@ -1421,7 +1421,7 @@ if (gVar.pKeys[SDLK_j])
 	struct SSprRect sRect1;
 	// Se prend un tir ?
 	{
-		// On créé un rectangle de collision.
+		// On crï¿½ï¿½ un rectangle de collision.
 		sRect1.nType = e_SprRect_Rect;
 		sRect1.nX1 = -96;
 		sRect1.nX2 = -42;
@@ -1430,7 +1430,7 @@ if (gVar.pKeys[SDLK_j])
 
 		if (nTouch)
 		{
-			// Test des tirs, avec dégats minimisés.
+			// Test des tirs, avec dï¿½gats minimisï¿½s.
 			if (Mst_ShotCheckLifeRect2(&sRect1, pMst->nPosX, pMst->nPosY, &pSpe->nHitCnt, &pSpe->nLife, e_ShotCheck_MinimizedDamage))
 			{
 				if (--pSpe->nCurState == 0)
@@ -1439,7 +1439,7 @@ if (gVar.pKeys[SDLK_j])
 					pMst->nPhase = e_MstB2B_Death;
 					// Retire les tirs ennemis.
 					FireRemoveFromList((1<<31) | e_ShotOrg_Enemy);
-					gpMstQuestItems[MST_QUEST_ITEM_NEXT_LEVEL] |= 2;	// Item de quête : Victory.
+					gpMstQuestItems[MST_QUEST_ITEM_NEXT_LEVEL] |= 2;	// Item de quï¿½te : Victory.
 					pSpe->nExplo = 255;//65 + MEDIUMEXPLO_ANM_DURATION;
 				}
 				else
@@ -1462,14 +1462,14 @@ if (gVar.pKeys[SDLK_j])
 		}
 		else
 		{
-			// Interception des tirs sans dégats.
+			// Interception des tirs sans dï¿½gats.
 			u8	nHitCnt, nLife;
 			nLife = 0;
 			Mst_ShotCheckLifeRect2(&sRect1, pMst->nPosX, pMst->nPosY, &nHitCnt, &nLife, 0);
 		}
 	}
 
-	// Touché du joueur avec les flammes.
+	// Touchï¿½ du joueur avec les flammes.
 	if (pSpe->nFlameShotAnm != -1 && AnmCheckEnd(pSpe->nFlameShotAnm) == 0)
 	{
 		//if (pSpe->nFlameShotAnm != -1)
@@ -1546,12 +1546,12 @@ struct SB3Ufo
 	u8	nLR;
 };
 
-// Structure spécifique.
+// Structure spï¿½cifique.
 struct SMst20_Boss3
 {
 	u8	nReserved_Boss0;	// Pour mappage sur le Mst20 container.
 	//
-	u8	nDecayState;		// Etat de délabrement [0;1].
+	u8	nDecayState;		// Etat de dï¿½labrement [0;1].
 	u8	nHitCnt;
 	u8	nLife;
 	u8	nExplo;
@@ -1625,7 +1625,7 @@ void B3C_Manage(struct SMstCommon *pMst)
 	case e_MstB3_Cannon_Move:
 		{
 
-		// Déplacement vers le joueur.
+		// Dï¿½placement vers le joueur.
 		static u16	gpB3C_Spd[BOSS3_DECAY_MAX + 1] = { 0x100, 0x140, 0x180, 0 };
 		u32	nMaxSpd = (u32)gpB3C_Spd[pSpe->nDecayState];
 		nDiff = gShoot.nPlayerPosX - pCan->nPosX;
@@ -1633,9 +1633,9 @@ void B3C_Manage(struct SMstCommon *pMst)
 		if (ABS(nDiff) > nMaxSpd) nDiff = SGN(nDiff) * nMaxSpd;
 		pCan->nPosX += nDiff;
 
-		// Déclenchement du tir.
+		// Dï¿½clenchement du tir.
 		static u8	gpB3C_ShotSeq[BOSS3_DECAY_MAX + 1] = { 0x11, 0x33, 0x77, 0 };
-		if (MST_SHOT_COND == 0)		// Ne tire pas quand héros mort.
+		if (MST_SHOT_COND == 0)		// Ne tire pas quand hï¿½ros mort.
 			pCan->nShotCnt = -1;
 		else
 		if (++pCan->nShotCnt >= 20)//24)
@@ -1655,7 +1655,7 @@ void B3C_Manage(struct SMstCommon *pMst)
 	// Tir ?
 	if (AnmGetKey(pCan->nAnm) == e_AnmKey_Enemy_Key3)
 		if (AnmCheckNewImgFlag(pCan->nAnm))
-		{	// Déclenchement du tir ?
+		{	// Dï¿½clenchement du tir ?
 			struct SSprRect sRect1;
 			if (SprGetRect(nSpr, e_SprRectZone_ShotOrg, &sRect1))
 			if (sRect1.nType == e_SprRect_Point)
@@ -1706,7 +1706,7 @@ void B3U_Manage(struct SMstCommon *pMst)
 
 	switch (pUfo->nPhase)
 	{
-	case e_MstB3_Ufo_Arrival:	// Arrivée.
+	case e_MstB3_Ufo_Arrival:	// Arrivï¿½e.
 		if (Transit2D_CheckEnd() == 0) return;
 
 		nDiff = (gScrollPos.nPosY + ((SCR_Height / 2) << 8)) - pUfo->nPosY;
@@ -1716,12 +1716,12 @@ void B3U_Manage(struct SMstCommon *pMst)
 		if (nDiff < 0x40)
 		{
 			pUfo->nPhase = e_MstB3_Ufo_Wait;	// Passage en mode normal.
-			pSpe->sB3Cannon.nPhase = e_MstB3_Cannon_Move;	// Démarrage du canon.
+			pSpe->sB3Cannon.nPhase = e_MstB3_Cannon_Move;	// Dï¿½marrage du canon.
 		}
 		break;
 
 	case e_MstB3_Ufo_Wait:
-		// Touché ? On part de l'autre côté.
+		// Touchï¿½ ? On part de l'autre cï¿½tï¿½.
 		if (pUfo->nHitCnt)
 		{
 			pUfo->nLR = (pUfo->nPosX > gScrollPos.nPosX + ((SCR_Width / 2) << 8) ? 0 : 1);
@@ -1730,18 +1730,18 @@ void B3U_Manage(struct SMstCommon *pMst)
 		break;
 
 	case e_MstB3_Ufo_Move:
-		// Déplacement vers l'autre côté.
+		// Dï¿½placement vers l'autre cï¿½tï¿½.
 		nDiff = (gScrollPos.nPosX + ((pUfo->nLR ? 4 * SCR_Width / 5 : SCR_Width / 5) << 8)) - pUfo->nPosX;
 		nDiff /= 4;
 		if (ABS(nDiff) > 0x400) nDiff = SGN(nDiff) * 0x400;
 		pUfo->nPosX += nDiff;
 
-		// Arrivé à destination ?
+		// Arrivï¿½ ï¿½ destination ?
 		if (ABS(nDiff) < 0x80) pUfo->nPhase = e_MstB3_Ufo_Wait;
 		break;
 
 	case e_MstB3_Ufo_Dead:
-		// Tourne le joueur vers le centre de l'écran (çàd vers le Monoeye).
+		// Tourne le joueur vers le centre de l'ï¿½cran (ï¿½ï¿½d vers le Monoeye).
 		if (gShoot.nPlayerGnd && gShoot.nPlayerAnmTop == -1)
 			gShoot.nPlayerDir = (gShoot.nPlayerPosX > gScrollPos.nPosX + ((SCR_Width / 2) << 8) ? 1 : 0);
 		return;
@@ -1762,7 +1762,7 @@ void B3U_Manage(struct SMstCommon *pMst)
 			// Retire les tirs ennemis.
 			FireRemoveFromList((1<<31) | e_ShotOrg_Enemy);
 			//
-			pSpe->sB3Cannon.nPhase = e_MstB3_Cannon_Wait;	// Arrêt du canon (et du tir en cours).
+			pSpe->sB3Cannon.nPhase = e_MstB3_Cannon_Wait;	// Arrï¿½t du canon (et du tir en cours).
 			gShoot.nVehicleAutoPilot = 0x80;	// Immobilise le joueur.
 			//
 			pUfo->nPhase = e_MstB3_Ufo_Dead;	// Ufo.
@@ -1819,7 +1819,7 @@ s32 Mst20_Main_Boss3(struct SMstCommon *pMst)
 		nTouch = !pSpe->nExplo;
 
 //		nSpr2 = (pMst->nAnm == -1 ? e_Spr_Core_CoreGlow : AnmGetImage(pMst->nAnm));
-		// Glow + truc de lamer pour accélérer l'anim.
+		// Glow + truc de lamer pour accï¿½lï¿½rer l'anim.
 		nSpr2 = e_Spr_Core_CoreGlow;
 		if (pMst->nAnm != -1)
 		{
@@ -1834,10 +1834,10 @@ s32 Mst20_Main_Boss3(struct SMstCommon *pMst)
 		break;
 
 	case e_MstB3_Dead:	// Mort.
-		// Après la dernière explosion....
+		// Aprï¿½s la derniï¿½re explosion....
 		if (pSpe->nExplo == 1)
 		{
-			// On génère un Monoeye (place holder).
+			// On gï¿½nï¿½re un Monoeye (place holder).
 			/*
 			[mst48] Jokes
 			Type = 0:6: Rebel Sunbath - L11 Mothership - L2 Clouds - L6 Main Door - L6 Computer - L8 Wagon Door - L17 Monoeye -
@@ -1859,7 +1859,7 @@ s32 Mst20_Main_Boss3(struct SMstCommon *pMst)
 	// Se prend un tir ?
 	if (nTouch)
 	{
-		// Test des tirs, avec dégats minimisés.
+		// Test des tirs, avec dï¿½gats minimisï¿½s.
 		if (Mst_ShotCheckLife2(e_Spr_Core_Base, pMst->nPosX, pMst->nPosY, &pSpe->nHitCnt, &pSpe->nLife, e_ShotCheck_MinimizedDamage))
 		{
 			pSpe->nExplo = 65 + MEDIUMEXPLO_ANM_DURATION;
@@ -1882,7 +1882,7 @@ s32 Mst20_Main_Boss3(struct SMstCommon *pMst)
 	}
 	else
 	{
-		// Interception des tirs sans dégats.
+		// Interception des tirs sans dï¿½gats.
 		u8	nHitCnt, nLife;
 		nLife = 0;
 		Mst_ShotCheckLife2(e_Spr_Core_Base, pMst->nPosX, pMst->nPosY, &nHitCnt, &nLife, 0);
@@ -1911,13 +1911,13 @@ s32 Mst20_Main_Boss3(struct SMstCommon *pMst)
 /*
 [mst20] Boss
 No = 0:3: Boss1 - Boss2A - Boss2B - Boss3 -
-Wait itm = 8:15:		; Item de quête attendu.
+Wait itm = 8:15:		; Item de quï¿½te attendu.
 RESERVED1 = 16:31:
 */
 
 struct SMst20_Boss0
 {
-	u8	nBossNo;		// N° du boss.
+	u8	nBossNo;		// Nï¿½ du boss.
 };
 
 void Mst20_Init_Boss0(struct SMstCommon *pMst, u8 *pData)
@@ -1956,7 +1956,7 @@ assert(sizeof(struct SAAF) < MST_COMMON_DATA_SZ);
 */
 
 #ifndef NDEBUG
-// Debug, vérification de la taille des structures.
+// Debug, vï¿½rification de la taille des structures.
 void BossesCheckStructSizes(void)
 {
 	assert(sizeof(struct SMst20_Boss0) < MST_COMMON_DATA_SZ);

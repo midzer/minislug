@@ -5,7 +5,7 @@
 
 struct SSfxGene
 {
-	u8	nInit;		// Son initialisé (1) ou pas (0).
+	u8	nInit;		// Son initialisï¿½ (1) ou pas (0).
 
 	SDL_AudioSpec	sAudioSpec;
     SDL_AudioCVT	pCvt[e_Sfx_LAST];
@@ -21,13 +21,13 @@ struct SSample
 	u8	*pData;
 	u32	nDPos;
 	u32	nDLen;
-	u8	nPrio;	// Priorité du son en cours.
+	u8	nPrio;	// Prioritï¿½ du son en cours.
 	u8	nSfxNo;
 } gpSounds[SFX_MAX_SOUNDS];
 
 
 
-// Démarre/redémarre une musique YM.
+// Dï¿½marre/redï¿½marre une musique YM.
 void Music_Start(s32 nMusicNo, u32 nForceRestart)
 {
 	if (!gSfx.nInit) return;
@@ -46,14 +46,14 @@ void Music_Start(s32 nMusicNo, u32 nForceRestart)
 	}
 }
 
-// Renvoie le n° de la musique en cours. e_YmMusic_NoMusic (-1) si aucune.
+// Renvoie le nï¿½ de la musique en cours. e_YmMusic_NoMusic (-1) si aucune.
 s32 Music_GetMusicNo(void)
 {
 	if (!gSfx.nInit) return (e_YmMusic_NoMusic);
 	return (gSfx.nMusicNo);
 }
 
-// Renvoie 1 si la musique en cours est terminée. (Toujours faux si loop !).
+// Renvoie 1 si la musique en cours est terminï¿½e. (Toujours faux si loop !).
 u32 Music_IsOver(void)
 {
 	if (!gSfx.nInit) return (0);
@@ -64,18 +64,25 @@ u32 Music_IsOver(void)
 
 #define	SFX_SAMPLES_CH	(512)
 
-// Mixer, appelé par SDL.
+// Mixer, appelï¿½ par SDL.
 void Sfx_MixAudio(void *unused, u8 *stream, int len)
 {
+    memset(stream, 0, len);
+
 	// YM replay.
-	static s16	pYmBuffer[SFX_SAMPLES_CH];
-	if (gSfx.nMusicNo >= 0)
-	{
-		int nbSample = len / sizeof(ymsample);
-		ymMusicCompute((void*)gSfx.ppMusic[gSfx.nMusicNo], (ymsample *)pYmBuffer, nbSample);
-	}
-	else
-		memset(pYmBuffer, 0, SFX_SAMPLES_CH * sizeof(pYmBuffer[0]));
+    if (gSfx.nMusicNo >= 0)
+    {
+		int nbSample = len / sizeof(s16);
+		static s16 *pYmBuffer = NULL;
+		static int pYmBufferLen = 0;
+		if (nbSample > pYmBufferLen) {
+			if (pYmBuffer) free(pYmBuffer);
+			pYmBuffer = (s16 *)malloc(nbSample * sizeof(s16));
+			pYmBufferLen = nbSample;
+		}
+		ymMusicCompute(gSfx.ppMusic[gSfx.nMusicNo], pYmBuffer, nbSample);
+		memcpy(stream, pYmBuffer, nbSample * sizeof(s16));
+    }
 
 	// Canaux de Sfx.
 	int	i;
@@ -87,13 +94,13 @@ void Sfx_MixAudio(void *unused, u8 *stream, int len)
 	for (i = 0; i < (int)(len / sizeof(s16)); i++)
 	{
 //		nOutput = 0;
-		nOutput = pYmBuffer[i];
+		nOutput = ((s16 *)stream)[i];
 
 		for (k = 0; k < SFX_MAX_SOUNDS; k++)
 		{
 			if (gpSounds[k].nDPos < gpSounds[k].nDLen)
 			{
-				nOutput += (*(s16 *)&gpSounds[k].pData[gpSounds[k].nDPos]);// / 4;//2;		// / 2 pour réduire la saturation.
+				nOutput += (*(s16 *)&gpSounds[k].pData[gpSounds[k].nDPos]);// / 4;//2;		// / 2 pour rï¿½duire la saturation.
 				gpSounds[k].nDPos += 2;
 			}
 		}
@@ -243,7 +250,7 @@ void Sfx_SoundInit(void)
 
 }
 
-// Sound on. !!! Attention, appel à l'init, ce n'est pas fait pour couper/remettre le son !!!
+// Sound on. !!! Attention, appel ï¿½ l'init, ce n'est pas fait pour couper/remettre le son !!!
 void Sfx_SoundOn(void)
 {
 	if (!gSfx.nInit) return;
@@ -251,7 +258,7 @@ void Sfx_SoundOn(void)
 
 }
 
-// Sound off. !!! Attention, appel à l'init, ce n'est pas fait pour couper/remettre le son !!!
+// Sound off. !!! Attention, appel ï¿½ l'init, ce n'est pas fait pour couper/remettre le son !!!
 void Sfx_SoundOff(void)
 {
 	if (!gSfx.nInit) return;
@@ -337,7 +344,7 @@ void Sfx_LoadWavFiles(void)
 
 }
 
-// Libère les ressources occupées par les fichiers WAV.
+// Libï¿½re les ressources occupï¿½es par les fichiers WAV.
 void Sfx_FreeWavFiles(void)
 {
 	u32	i;
@@ -400,7 +407,7 @@ void Sfx_LoadYMFiles(void)
 
 }
 
-// Libère les ressources des YMs.
+// Libï¿½re les ressources des YMs.
 void Sfx_FreeYMFiles(void)
 {
 	u32	i;
@@ -418,9 +425,9 @@ void Sfx_FreeYMFiles(void)
 // Joue un son.
 // Le minimum :
 // On commence par chercher un canal vide.
-// Si il n'y en a pas, on note celui qui à la priorité la plus faible.
-// Si plusieurs ont la même priorité, on note celui qui est le plus proche de la fin.
-// Enfin, si la prio du son à jouer est ok, on le joue dans le canal noté.
+// Si il n'y en a pas, on note celui qui ï¿½ la prioritï¿½ la plus faible.
+// Si plusieurs ont la mï¿½me prioritï¿½, on note celui qui est le plus proche de la fin.
+// Enfin, si la prio du son ï¿½ jouer est ok, on le joue dans le canal notï¿½.
 void Sfx_PlaySfx(u32 nSfxNo, u32 nSfxPrio)
 {
 	u32	index;
@@ -431,12 +438,12 @@ void Sfx_PlaySfx(u32 nSfxNo, u32 nSfxPrio)
 	u32	nPrioMinPos = 0;
 	u32	nPrioMinDiff = (u32)-1;
 
-	if (nSfxNo >= e_Sfx_LAST) return;	// Sécurité.
+	if (nSfxNo >= e_Sfx_LAST) return;	// Sï¿½curitï¿½.
 
 	// Look for an empty (or finished) sound slot.
 	for (index = 0; index < SFX_MAX_SOUNDS; index++)
 	{
-		if (gpSounds[index].nSfxNo == nSfxNo) break;	// Même wav (+ son interruptible), on redémarre le sfx sur ce canal.
+		if (gpSounds[index].nSfxNo == nSfxNo) break;	// Mï¿½me wav (+ son interruptible), on redï¿½marre le sfx sur ce canal.
 
 		if (gpSounds[index].nDPos >= gpSounds[index].nDLen) break;
 		//
@@ -458,10 +465,10 @@ void Sfx_PlaySfx(u32 nSfxNo, u32 nSfxPrio)
 
 	}
 
-	// On a trouvé un emplacement libre ?
+	// On a trouvï¿½ un emplacement libre ?
 	if (index == SFX_MAX_SOUNDS)
 	{
-		// Non, la prio demandée est > ou == à la prio mini en cours ?
+		// Non, la prio demandï¿½e est > ou == ï¿½ la prio mini en cours ?
 		if (nSfxPrio < nPrioMinVal) return;
 		index = nPrioMinPos;
 	}
@@ -482,7 +489,7 @@ void Sfx_StopSfx(u32 nSfxNo)
 {
 	u32	i;
 
-	if (nSfxNo >= e_Sfx_LAST) return;	// Sécurité.
+	if (nSfxNo >= e_Sfx_LAST) return;	// Sï¿½curitï¿½.
 
 	// Recherche du son.
 	for (i = 0; i < SFX_MAX_SOUNDS; i++)
@@ -498,12 +505,12 @@ void Sfx_StopSfx(u32 nSfxNo)
 
 }
 
-// Teste si un son est en train d'être joué.
+// Teste si un son est en train d'ï¿½tre jouï¿½.
 u32 Sfx_IsPlaying(u32 nSfxNo)
 {
 	u32	i;
 
-	if (nSfxNo >= e_Sfx_LAST) return (0);	// Sécurité.
+	if (nSfxNo >= e_Sfx_LAST) return (0);	// Sï¿½curitï¿½.
 
 	// Recherche du son.
 	for (i = 0; i < SFX_MAX_SOUNDS; i++)
@@ -515,7 +522,7 @@ u32 Sfx_IsPlaying(u32 nSfxNo)
 }
 
 
-// Exemples là :
+// Exemples lï¿½ :
 // http://www.libsdl.org/intro.fr/usingsoundfr.html
 // http://www.libsdl.org/intro.fr/usingsoundfr.html
 

@@ -5,15 +5,15 @@
 
 //=============================================================================
 
-// Déprotège un fichier PSD si nécessaire.
+// Dï¿½protï¿½ge un fichier PSD si nï¿½cessaire.
 void PSD_Unprotect(u8 *pBuf)
 {
-	char	pNorm[4] = { '8'^0x80,'B'^0x81,'P'^0x82,'S'^0x83 };		// Avec un xor pour masquer la chaîne dans l'exe.
+	char	pNorm[4] = { '8'^0x80,'B'^0x81,'P'^0x82,'S'^0x83 };		// Avec un xor pour masquer la chaï¿½ne dans l'exe.
 	char	pProt[4] = { '8'^0x80,'b'^0x81,'p'^0x82,'s'^0x83 };
 	u32	i;
 	u8	nVar8;
 
-	// Enlève le masque.
+	// Enlï¿½ve le masque.
 	for (i = 0; i < 4; i++)
 	{
 		pNorm[i] ^= 0x80 + i;
@@ -22,7 +22,7 @@ void PSD_Unprotect(u8 *pBuf)
 	// Comparaison.
 	if (strncmp((char *)pBuf, pProt, 4) != 0) return;
 
-	// ** Le fichier est protégé, on retire la protection.
+	// ** Le fichier est protï¿½gï¿½, on retire la protection.
 
 	// 4 premiers octets.
 	strncpy((char *)pBuf, pNorm, 4);
@@ -100,7 +100,7 @@ struct SPSDPicture * PSDLoad(char *pPSDFilename)
 		fprintf(stderr, "PSDLoad(): Read error. %d bytes expected / %d bytes loaded.\n", (int)nSz, (int)nSz2);
 		goto _PSDErr;
 	}
-	//< Fichier chargé.
+	//< Fichier chargï¿½.
 
 	// Alloue un "objet" SPSDPicture.
 	if ((pPic = (struct SPSDPicture *)malloc(sizeof(struct SPSDPicture))) == NULL)
@@ -110,7 +110,7 @@ struct SPSDPicture * PSDLoad(char *pPSDFilename)
 	}
 	pPic->pPlanes = NULL;
 
-	PSD_Unprotect(pBuf);	// Si fichier PSD protégé, retire la protection.
+	PSD_Unprotect(pBuf);	// Si fichier PSD protï¿½gï¿½, retire la protection.
 
 	// Tests sur le header.
 	pPtr = pBuf;
@@ -158,7 +158,7 @@ struct SPSDPicture * PSDLoad(char *pPSDFilename)
 	if (nDepth != 8 || nMode != 2)
 		{ fprintf(stderr, "PSDLoad(): Unsupported format. Depth = %d, Mode = %d\n", (int)nDepth, (int)nMode); goto _PSDErr; }
 
-	// Color mode data section. Pour le mode "2", toujours 768 bytes, non entremélés => 256 R, 256 G, 256 B.
+	// Color mode data section. Pour le mode "2", toujours 768 bytes, non entremï¿½lï¿½s => 256 R, 256 G, 256 B.
 //	printf("\nColor mode data section\n");
 	nTmp = ReadBigEndianU32(pPtr);
 	pSection = pPtr + 4;
@@ -202,7 +202,7 @@ struct SPSDPicture * PSDLoad(char *pPSDFilename)
 	// Comp ok ?
 	if (nComp != 0)
 		{ fprintf(stderr, "PSDLoad(): Unsupported Compression method. Comp = %d\n", (int)nComp); goto _PSDErr; }
-	// Allocation d'un buffer pour l'image (0 = RAW non compressé).
+	// Allocation d'un buffer pour l'image (0 = RAW non compressï¿½).
 	u8	*pPlanesBuf;
 	if ((pPlanesBuf = (u8 *)malloc(sPic.nNbPlanes * sPic.nWidth * sPic.nHeight)) == NULL)
 	{
@@ -219,28 +219,28 @@ struct SPSDPicture * PSDLoad(char *pPSDFilename)
 	if (nComp != 1)
 		{ fprintf(stderr, "PSDLoad(): Unsupported Compression method. (Comp = %d).\n", (int)nComp); goto _PSDErr; }
 
-//	// Allocation du gros buffer de décompression (w*h*nb planes*3(R+G+B)).
+//	// Allocation du gros buffer de dï¿½compression (w*h*nb planes*3(R+G+B)).
 //	if ((pPic->pPlanes = (u8 *)malloc(pPic->nNbPlanes * pPic->nWidth * pPic->nHeight * 3)) == NULL)
-	// Allocation du gros buffer de décompression (w*h*nb planes).
+	// Allocation du gros buffer de dï¿½compression (w*h*nb planes).
 	if ((pPic->pPlanes = (u8 *)malloc(pPic->nNbPlanes * pPic->nWidth * pPic->nHeight)) == NULL)
 		{ fprintf(stderr, "PSDLoad(): Error allocating decompression buffer.\n"); goto _PSDErr; }
 
 	// PackBits :
 	//Header byte    Data following the header byte
 	//0 to 127       (1 + n) literal bytes of data
-	//-1 to -127     One byte of data, repeated (1 – n) times in the decompressed output
+	//-1 to -127     One byte of data, repeated (1 ï¿½ n) times in the decompressed output
 	//-128           No operation (skip and treat next byte as a header byte)
 
 	// Depack.
 	u8	*pDst = pPic->pPlanes;
 
-	u8	*pBytesPerLines = pPtr;		// Un ptr sur une table de ht * nb de plans de u16, contenant le nombre d'octets à dépacker sur chaque ligne.
+	u8	*pBytesPerLines = pPtr;		// Un ptr sur une table de ht * nb de plans de u16, contenant le nombre d'octets ï¿½ dï¿½packer sur chaque ligne.
 	u8	*pSrc = pPtr + (pPic->nHeight * pPic->nNbPlanes * 2);	// Ensuite, les datas des lignes.
 
 	// Plan 0 : w*h*R / w*h*G / w*h*B
 	// Plan 1 : w*h*R / w*h*G / w*h*B
 	// etc...
-	// En mode indexé, 1 seul w*h (et pas R puis G puis B).
+	// En mode indexï¿½, 1 seul w*h (et pas R puis G puis B).
 
 	u32	nCurLn;
 	for (nCurLn = 0; nCurLn < pPic->nHeight * pPic->nNbPlanes; nCurLn++)
@@ -321,7 +321,7 @@ SDL_Surface * PSDLoadToSDLSurf(char *pPSDFilename)
 	else
 	{
 		// Recopie de la palette.
-		SDL_SetColors(pSDLSurf, pPic->pColors, 0, 256);
+		SDL_SetPaletteColors(pSDLSurf->format->palette, pPic->pColors, 0, 256);
 		// Recopie du premier plan.
 		SDL_LockSurface(pSDLSurf);
 		for (i = 0; i < pPic->nHeight; i++)

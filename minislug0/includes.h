@@ -2,7 +2,7 @@
 // Includes.
 #include <stdlib.h>
 #include <unistd.h>
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include <math.h>
 #include <time.h>
 #include <assert.h>
@@ -10,7 +10,7 @@
 #include "ctypes.h"
 
 #define	MAP_PLANES_MAX	4//3//2//1
-#define LEVEL_MAX	18	// (0 à 17)
+#define LEVEL_MAX	18	// (0 ï¿½ 17)
 
 //#define DEBUG_DISP	1	// Pour affichage du debug (nb de mst, d'anims, de tirs...).
 
@@ -60,16 +60,16 @@
 // Types de variables.
 struct SGene
 {
-	SDL_Surface *pScreen;	// Ptr sur le buffer écran.
+	SDL_Surface *pScreen;	// Ptr sur le buffer ï¿½cran.
 
 	SDL_Surface *pBackground;		// Ptr sur l'image de fond des menus.
-//	SDL_Rect	*pBkgRect;			// Ptr sur le rect pour déplacer le blit.
-//	SDL_Rect	sBkgRect;			// Rect pour déplacer le blit.
+//	SDL_Rect	*pBkgRect;			// Ptr sur le rect pour dï¿½placer le blit.
+//	SDL_Rect	sBkgRect;			// Rect pour dï¿½placer le blit.
 	SDL_Surface *pBkg[MENU_NbBkg];	// Les images de fond.
-	struct SGIFFile	*pGif;			// Gif animé (Présentation).
+	struct SGIFFile	*pGif;			// Gif animï¿½ (Prï¿½sentation).
 
-	u8	*pKeysSDL;			// Pointeur sur le buffer clavier de la SDL.
-	u8	pKeys[SDLK_LAST];	// Buffer clavier.
+	const Uint8 *pKeysSDL;			// Pointeur sur le buffer clavier de la SDL.
+	u8 pKeys[SDL_NUM_SCANCODES];	// Buffer clavier.
 
 	SDL_Joystick	*pJoystick;
 	u16	nJoystickState;		// 8 bits pour la croix (la fct de Hat renvoie un u8) et les boutons sur les 8 bits de poids fort.
@@ -77,7 +77,7 @@ struct SGene
 	u8	nJoystickNoAxes;	// Pas de stick analogique ?
 
 //	u8	nScreenMode;		// 0 = Windowed / 1 = Full screen.
-	s8	nCreditsToUse;		// Nb de crédits à utiliser dans la partie.
+	s8	nCreditsToUse;		// Nb de crï¿½dits ï¿½ utiliser dans la partie.
 
 //	s16	pSinCos[256 + 64];	// Table contenant les sin et cos * 256, sur 256 angles.
 	s16	*pSin;			// Ptrs sur les tables.
@@ -97,10 +97,10 @@ struct SCheatCodes
 	char	nTb[CHEATCODES_TBSZMAX + 1];
 	u8	nIdx;		// Index case en cours.
 	u8	nCnt;		// Compteur pour reset idx.
-	u8	nEnter;		// Mode entrée.
+	u8	nEnter;		// Mode entrï¿½e.
 	u8	nLevel;		// Level en cours pour selecteur de niveau.
 
-	u8	nCheat;		// Les cheats à tester.
+	u8	nCheat;		// Les cheats ï¿½ tester.
 };
 
 enum
@@ -117,7 +117,7 @@ enum
 
 //=====================================
 
-// Variables générales.
+// Variables gï¿½nï¿½rales.
 extern struct SGene gVar;
 extern struct SCheatCodes	gCCodes;
 
